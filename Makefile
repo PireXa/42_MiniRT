@@ -1,0 +1,38 @@
+SRCS		=	main/ray_tracer.c \
+				utils/put_pxl.c utils/vector.c utils/ft_split.c utils/ft_atoi.c utils/ft_itoa.c\
+				utils/fps.c \
+				controls/controls.c \
+				parsing/parsing.c \
+				gnl/get_next_line.c gnl/get_next_line_utils.c \
+				raytracer/shading.c raytracer/background.c \
+
+OBJS		=	$(addprefix objs/,$(SRCS:.c=.o))
+
+CFLAGS		= 	-g
+
+RM		=	rm -f
+
+NAME		=	minirt
+
+all:		$(NAME)
+
+objs/%.o: srcs/%.c
+			@mkdir -p objs
+			@mkdir -p objs/main
+			@mkdir -p objs/utils
+			@mkdir -p objs/controls
+			@mkdir -p objs/parsing
+			@mkdir -p objs/gnl
+			@mkdir -p objs/raytracer
+			$(CC) $(CFLAGS) -I/usr/include -Imlx_linux -O3 -c $< -o $@
+
+$(NAME): 	$(OBJS)
+			$(CC) $(OBJS) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
+
+clean:
+			@$(RM) $(OBJS)
+
+fclean:		clean
+			@$(RM) $(NAME)
+
+re:		fclean all
