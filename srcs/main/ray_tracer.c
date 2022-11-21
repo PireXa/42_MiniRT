@@ -61,9 +61,9 @@ void	ray_tracer(t_data *data)
 			ray.origin = data->camera;
 			ray.direction = vector_from_points(data->camera, screen);
 			normalize_vector(&ray.direction);
-			while(++i < data->num_spheres)
+			while(++i < data->nb_objs->nb_spheres)
 			{
-				t = intersect_ray_sphere(ray, data->sphere[i], screen);
+				t = intersect_ray_sphere(ray, data->scene->spheres[i], screen);
 				if (t)
 				{
 					if (t < t_min)
@@ -75,7 +75,7 @@ void	ray_tracer(t_data *data)
 			}
 			if (closest_obj != -1)
 			{
-				color = shading(data->sphere[closest_obj], ray, t_min, data->light[0]);
+				color = shading(data->scene->spheres[closest_obj], ray, t_min, data->light[0]);
 				closest_obj = -1;
 				t_min = 4535320;
 			}
@@ -121,9 +121,11 @@ int main(int argc, char **argv)
 	data->mlx_win = mlx_new_window(data->mlx, WIND_W, WIND_H, "MiniRT");
 	data->img.img = mlx_new_image(data->mlx, WIND_W, WIND_H);
 	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bi_per_pxl, &data->img.line_length, &data->img.endian);
-	data->num_spheres = sphere_counter(argv[1]);
-	data->sphere = (t_sphere *)malloc(sizeof(t_sphere) * data->num_spheres);
-	parser(argv[1], data->sphere);
+	data->nb_objs = malloc(sizeof(t_nb_objs));
+	data->nb_objs->nb_spheres = sphere_counter(argv[1]);
+	data->scene = (t_scene *)malloc(sizeof(t_scene));
+	data->scene->spheres = (t_sphere *)malloc(sizeof(t_sphere) * data->nb_objs->nb_spheres);
+	parser(argv[1], data->scene->spheres);
 	data->camera.x = (WIND_W / 2);
 	data->camera.y = (WIND_H / 2);
 	data->camera.z = -10000;

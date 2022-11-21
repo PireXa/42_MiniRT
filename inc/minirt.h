@@ -122,6 +122,16 @@ typedef struct s_scene
 	t_camera	*cameras;
 }				t_scene;
 
+typedef struct s_nb_objs {
+	int			nb_spheres;
+	int			nb_planes;
+	int			nb_squares;
+	int			nb_cylinders;
+	int			nb_triangles;
+	int			nb_lights;
+	int			nb_cameras;
+}				t_nb_objs;
+
 typedef struct	s_animation {
 	long int	time;
 }				t_animation;
@@ -132,8 +142,8 @@ typedef struct s_data
 	void	*mlx_win;
 	t_img	img;
 	t_vector	camera;
-	t_sphere	*sphere;
-	int 		num_spheres;
+	t_scene		*scene;
+	t_nb_objs	*nb_objs;
 	t_light		*light;
 	t_fps		fps;
 	t_animation	animation;
