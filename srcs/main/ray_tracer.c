@@ -1,5 +1,14 @@
 #include "../../inc/minirt.h"
 
+void	light_animation(t_data *data)
+{
+	if (data->animation.time < time(NULL))
+	{
+		data->animation.time = time(NULL);
+		data->light->origin.x += 200;
+	}
+}
+
 float	intersect_ray_sphere(t_ray ray, t_sphere sphere, t_vector screen)
 {
 	t_vector oc;
@@ -34,16 +43,20 @@ void	ray_tracer(t_data *data)
 	int color;
 	int i;
 	float t;
+	float t_min;
+	int 	closest_obj;
 
 	x = 0;
 	y = 0;
 	i = -1;
-	while (x < WIND_W)
+	t_min = 4535320;
+	closest_obj = -1;
+	while (x < (int)WIND_W)
 	{
-		while (y < WIND_H)
+		while (y < (int)WIND_H)
 		{
-			screen.x = x;
-			screen.y = y;
+			screen.x = (float)x;
+			screen.y = (float)y;
 			screen.z = 0;
 			ray.origin = data->camera;
 			ray.direction = vector_from_points(data->camera, screen);
@@ -53,13 +66,21 @@ void	ray_tracer(t_data *data)
 				t = intersect_ray_sphere(ray, data->sphere[i], screen);
 				if (t)
 				{
-					color = shading(data->sphere[i], ray, t, data->light[0]);
-					//color = data->sphere[i].color;
-					break;
+					if (t < t_min)
+					{
+						t_min = t;
+						closest_obj = i;
+					}
 				}
-				else
-					color = background_color(y, BACKGROUND1, BACKGROUND2);
 			}
+			if (closest_obj != -1)
+			{
+				color = shading(data->sphere[closest_obj], ray, t_min, data->light[0]);
+				closest_obj = -1;
+				t_min = 4535320;
+			}
+			else
+				color = background_color(y, BACKGROUND1, BACKGROUND2);
 			i = -1;
 			put_pxl(&data->img, x, y, color);
 			y++;
@@ -71,6 +92,7 @@ void	ray_tracer(t_data *data)
 
 int render(t_data *data)
 {
+	light_animation(data);
 	ray_tracer(data);
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
 	fps(data);
@@ -108,7 +130,7 @@ int main(int argc, char **argv)
 	data->light = malloc(sizeof(t_light));
 	data->light->origin.x = -100;
 	data->light->origin.y = -700;
-	data->light->origin.z = 3000;
+	data->light->origin.z = 1500;
 	data->light->intensity = 1;
 	data->light->color = 0xFFFFFF;
 	data->fps.frame_time = time(NULL);

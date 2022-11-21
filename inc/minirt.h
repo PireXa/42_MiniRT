@@ -10,16 +10,17 @@
 # include <ctype.h>
 # include <time.h>
 # include <sys/time.h>
+# include <stdint.h>
 # include "mlx.h"
 # include "get_next_line.h"
 
-# define	WIND_W		1024.00f
-# define	WIND_H		736.00f
+# define	WIND_W		1920.00f
+# define	WIND_H		1080.00f
 # define	GREEN		0x00FF00
 # define	BLUE		0x0000FF
 # define	RED			0xFF0000
-# define	BACKGROUND1	0xFFFFFF
-# define 	BACKGROUND2	0x000000
+# define	BACKGROUND1	0xF525E0
+# define 	BACKGROUND2	0x03CFFC
 # define	FOV			60
 
 # define 	WORLD_SIZE	2000
@@ -121,6 +122,10 @@ typedef struct s_scene
 	t_camera	*cameras;
 }				t_scene;
 
+typedef struct	s_animation {
+	long int	time;
+}				t_animation;
+
 typedef struct s_data
 {
 	void	*mlx;
@@ -131,6 +136,7 @@ typedef struct s_data
 	int 		num_spheres;
 	t_light		*light;
 	t_fps		fps;
+	t_animation	animation;
 }				t_data;
 
 //GRAPHICS

@@ -5,9 +5,12 @@ int	sphere_counter(char *file)
 	int	fd;
 	int	count;
 	char	*line;
+	char 	*path;
 
 	count = 0;
-	fd = open(file, O_RDONLY);
+	path = ft_strjoin("./scenes/", file);
+	fd = open(path, O_RDONLY);
+	free(path);
 	while ((line = get_next_line(fd)))
 	{
 		count++;
@@ -45,9 +48,12 @@ void	parser(char *file, t_sphere *sphere)
 	int		i;
 	char	*line;
 	char 	**params;
+	char 	*path;
 
 	i = 0;
-	fd = open(file, O_RDONLY);
+	path = ft_strjoin("scenes/", file);
+	fd = open(path, O_RDONLY);
+	free(path);
 	while ((line = get_next_line(fd)))
 	{
 		params = ft_split(line, ' ');
