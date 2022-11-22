@@ -133,7 +133,7 @@ void	ray_tracer(t_data *data)
 
 int render(t_data *data)
 {
-	light_animation(data);
+	//light_animation(data);
 	ray_tracer(data);
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
 	fps(data);
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 	data->camera.y = (WIND_H / 2) - 200;
 	data->camera.z = -1000;
 	data->light = malloc(sizeof(t_light));
-	data->light->origin.x = 100;
+	data->light->origin.x = 500;
 	data->light->origin.y = 100;
 	data->light->origin.z = -100;
 	data->light->intensity = 1;
