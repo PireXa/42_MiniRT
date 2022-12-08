@@ -13,7 +13,7 @@ void	fps(t_data * data)
 	}
 	fps = ft_itoa(data->fps.fps);
 	fps_str = ft_strjoin("FPS: ", fps);
-	mlx_string_put(data->mlx, data->mlx_win, 10, 10, 0x000000, fps_str);
+	mlx_string_put(data->mlx, data->mlx_win, 10, 100, 0x000000, fps_str);
 	free(fps);
 	free(fps_str);
 	data->fps.frame_ctr++;

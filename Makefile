@@ -1,10 +1,11 @@
-SRCS		=	main/ray_tracer.c \
+SRCS		=	main/main.c \
 				utils/put_pxl.c utils/vector.c utils/ft_split.c utils/ft_atoi.c utils/ft_itoa.c\
 				utils/fps.c \
 				controls/controls.c \
 				parsing/parsing.c \
 				gnl/get_next_line.c gnl/get_next_line_utils.c \
-				raytracer/shading.c raytracer/background.c \
+				raytracer/ray_tracer.c raytracer/shading.c raytracer/background.c \
+				raytracer/intersections.c \
 
 OBJS		=	$(addprefix objs/,$(SRCS:.c=.o))
 

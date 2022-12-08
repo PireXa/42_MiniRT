@@ -35,15 +35,6 @@ float	vector_length(t_vector v)
 	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
 }
 
-/*
-float	vector_length(t_vector v1, t_vector v2)
-{
-	float	length;
-
-	length = sqrt(pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2) + pow(v2.z - v1.z, 2));
-	return (length);
-}*/
-
 t_vector	vector_from_points(t_vector point1, t_vector point2)
 {
 	t_vector	vector;

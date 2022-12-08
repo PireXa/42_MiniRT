@@ -150,35 +150,38 @@ typedef struct s_data
 }				t_data;
 
 //GRAPHICS
-void		put_pxl(t_img *img, int x, int y, int color);
-void		fps(t_data * data);
-int			shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light);
-int			calc_color_intensity(int color, float intensity);
-float		light_intens_by_dist(t_light light, t_plane plane, t_ray ray, float t);
 int			background_color(int y, int color1, int color2);
-float		intersect_ray_sphere(t_ray ray, t_sphere sphere);
+int			calc_color_intensity(int color, float intensity);
 int			check_shadow(t_data *data, t_ray ray, float t, t_light light);
+void		fps(t_data * data);
+float		intersect_ray_sphere(t_ray ray, t_sphere sphere);
+float 		intersect_ray_plane(t_ray ray, t_plane plane, t_vector screen);
+float		light_intens_by_dist(t_light light, t_ray ray, float t);
+void		put_pxl(t_img *img, int x, int y, int color);
+void		ray_tracer(t_data *data);
+int			shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light);
 
 //CONTROLS
 void		controls(t_data *data);
 
 //PARSING
-int			sphere_counter(char *file);
-int			plane_counter(char *file);
 void		parser(char *file, t_scene *scene);
+int			plane_counter(char *file);
+int			sphere_counter(char *file);
 
 //VECTOR UTILS
 float		dot_product(t_vector vector1, t_vector vector2);
-t_vector	vector_from_points(t_vector point1, t_vector point2);
 void		normalize_vector(t_vector *vector);
 t_vector	vector_add(t_vector v1, t_vector v2);
-t_vector	vector_scale(t_vector v, float scale);
+t_vector	vector_from_points(t_vector point1, t_vector point2);
 float		vector_length(t_vector v);
+t_vector	vector_scale(t_vector v, float scale);
 
 //UTILS
 int			ft_atoi(const char *str);
-char 		**ft_split(char const *s, char c);
-//char		*ft_strjoin(char const *s1, char const *s2);
 char		*ft_itoa(int n);
+char 		**ft_split(char const *s, char c);
+
+//char		*ft_strjoin(char const *s1, char const *s2);
 
 #endif
