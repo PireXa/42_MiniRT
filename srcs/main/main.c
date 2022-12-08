@@ -64,9 +64,9 @@ int main(int argc, char **argv)
 	data->camera.y = (WIND_H / 2) - 200;
 	data->camera.z = -1000;
 	data->light = malloc(sizeof(t_light));
-	data->light->origin.x = 500;
-	data->light->origin.y = 800;
-	data->light->origin.z = 400;
+	data->light->origin.x = 200;
+	data->light->origin.y = 600;
+	data->light->origin.z = 300;
 	data->light->intensity = 1;
 	data->light->color = 0xFFFFFF;
 	data->fps.frame_time = time(NULL);

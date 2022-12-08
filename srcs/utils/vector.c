@@ -20,6 +20,16 @@ t_vector	vector_add(t_vector v1, t_vector v2)
 	return (v3);
 }
 
+t_vector	vector_sub(t_vector v1, t_vector v2)
+{
+	t_vector	v3;
+
+	v3.x = v1.x - v2.x;
+	v3.y = v1.y - v2.y;
+	v3.z = v1.z - v2.z;
+	return (v3);
+}
+
 void	normalize_vector(t_vector *vector)
 {
 	float	magnitude;

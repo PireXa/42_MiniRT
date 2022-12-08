@@ -53,20 +53,36 @@ int check_shadow(t_data *data, t_ray ray, float t, t_light light)
 	return (0);
 }
 
+float phong_shading(t_vector normal, t_vector light_dir, t_vector view_dir)
+{
+	float	ambient;
+	float	diffuse;
+	float	specular;
+	float	phong;
+	t_vector	half_vector;
+
+	ambient = 0.1;
+	diffuse = 0.6 * fmax(0, dot_product(normal, light_dir));
+	half_vector = vector_add(light_dir, view_dir);
+	normalize_vector(&half_vector);
+	specular = 0.3 * pow(fmax(0, dot_product(normal, half_vector)), 250);
+	phong = ambient + diffuse + specular;
+	return (phong);
+}
+
 int shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light)
 {
 	t_vector hit_point;
 	t_vector normal;
 	t_vector light_dir;
-	float intensity;
+	t_vector view_dir;
 
 	hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
+	view_dir = vector_from_points(hit_point, ray.origin);
+	normalize_vector(&view_dir);
 	normal = vector_from_points(sphere.center, hit_point);
 	normalize_vector(&normal);
 	light_dir = vector_from_points(hit_point, light.origin);
 	normalize_vector(&light_dir);
-	intensity = dot_product(normal, light_dir);
-	if (intensity < 0)
-		intensity = 0;
-	return (calc_color_intensity(sphere.color, intensity * light_intens_by_dist(light, ray, t)));
+	return (calc_color_intensity(sphere.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
 }
