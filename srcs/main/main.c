@@ -18,13 +18,13 @@ void	light_animation(t_data *data)
 		ray_tracer(data);
 		data->animation.time = current_time + 10;
 		data->light->origin.x += 30;
-		data->light->origin.y = sin(data->light->origin.x / 70) * 300;
+		data->light->origin.y = sin(data->light->origin.x / 70) * 300 + 300;
 	}
 }
 
 int render(t_data *data)
 {
-	//light_animation(data);
+	//	light_animation(data);
 	//ray_tracer(data);
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
 	fps(data);
@@ -56,9 +56,11 @@ int main(int argc, char **argv)
 	data->nb_objs = malloc(sizeof(t_nb_objs));
 	data->nb_objs->nb_spheres = sphere_counter(argv[1]);
 	data->nb_objs->nb_planes = plane_counter(argv[1]);
+	data->nb_objs->nb_cylinders = cylinder_counter(argv[1]);
 	data->scene = (t_scene *)malloc(sizeof(t_scene));
 	data->scene->spheres = (t_sphere *)malloc(sizeof(t_sphere) * data->nb_objs->nb_spheres);
 	data->scene->planes = (t_plane *)malloc(sizeof(t_plane) * data->nb_objs->nb_planes);
+	data->scene->cylinders = (t_cylinder *)malloc(sizeof(t_cylinder) * data->nb_objs->nb_cylinders);
 	parser(argv[1], data->scene);
 	data->camera.x = (WIND_W / 2);
 	data->camera.y = (WIND_H / 2) - 200;

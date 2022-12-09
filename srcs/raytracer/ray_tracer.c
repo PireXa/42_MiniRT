@@ -13,6 +13,7 @@ void	ray_tracer(t_data *data)
 	float t_min;
 	int 	closest_sphere;
 	int 	closest_plane;
+	int 	closest_cylinder;
 
 	x = 0;
 	y = 0;
@@ -20,6 +21,7 @@ void	ray_tracer(t_data *data)
 	t_min = 4535320;
 	closest_sphere = -1;
 	closest_plane = -1;
+	closest_cylinder = -1;
 	while (x < (int)WIND_W)
 	{
 		while (y < (int)WIND_H)
@@ -45,7 +47,7 @@ void	ray_tracer(t_data *data)
 			i = -1;
 			while(++i < data->nb_objs->nb_planes)
 			{
-				t = intersect_ray_plane(ray, data->scene->planes[i], screen);
+				t = intersect_ray_plane(ray, data->scene->planes[i]);
 				if (t)
 				{
 					if (t < t_min)
@@ -53,6 +55,21 @@ void	ray_tracer(t_data *data)
 						t_min = t;
 						closest_plane = i;
 						closest_sphere = -1;
+					}
+				}
+			}
+			i = -1;
+			while(++i < data->nb_objs->nb_cylinders)
+			{
+				t = intersect_ray_cylinder(ray, data->scene->cylinders[i]);
+				if (t)
+				{
+					if (t < t_min)
+					{
+						t_min = t;
+						closest_cylinder = i;
+						closest_sphere = -1;
+						closest_plane = -1;
 					}
 				}
 			}
@@ -69,6 +86,13 @@ void	ray_tracer(t_data *data)
 				else
 					color = calc_color_intensity(data->scene->planes[closest_plane].color, 0.01f);
 				closest_plane = -1;
+				t_min = 4535320;
+			}
+			else if (closest_cylinder != -1)
+			{
+				//color = shading_cylinder(data->scene->cylinders[closest_cylinder], ray, t_min, data->light[0]);
+				color = data->scene->cylinders[closest_cylinder].color;
+				closest_cylinder = -1;
 				t_min = 4535320;
 			}
 			else

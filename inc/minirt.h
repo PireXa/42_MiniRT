@@ -22,6 +22,7 @@
 # define	BACKGROUND1	0xF525E0
 # define 	BACKGROUND2	0x03CFFC
 # define	FOV			60
+# define	LUMENS		500000
 
 # define 	WORLD_SIZE	2000
 # define 	CAM_X		1000 //(WORLD_SIZE / 2)
@@ -154,8 +155,9 @@ int			background_color(int y, int color1, int color2);
 int			calc_color_intensity(int color, float intensity);
 int			check_shadow(t_data *data, t_ray ray, float t, t_light light);
 void		fps(t_data * data);
+float 		intersect_ray_cylinder(t_ray ray, t_cylinder cylinder);
+float 		intersect_ray_plane(t_ray ray, t_plane plane);
 float		intersect_ray_sphere(t_ray ray, t_sphere sphere);
-float 		intersect_ray_plane(t_ray ray, t_plane plane, t_vector screen);
 float		light_intens_by_dist(t_light light, t_ray ray, float t);
 void		put_pxl(t_img *img, int x, int y, int color);
 void		ray_tracer(t_data *data);
@@ -165,6 +167,7 @@ int			shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light);
 void		controls(t_data *data);
 
 //PARSING
+int 		cylinder_counter(char *file);
 void		parser(char *file, t_scene *scene);
 int			plane_counter(char *file);
 int			sphere_counter(char *file);

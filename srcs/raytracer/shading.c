@@ -26,7 +26,7 @@ float light_intens_by_dist(t_light light, t_ray ray, float t)
 	t_vector hit_point;
 
 	hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
-	intensity = 800000 / (get_light_dist(light, hit_point) * get_light_dist(light, hit_point));
+	intensity = LUMENS / (get_light_dist(light, hit_point) * get_light_dist(light, hit_point));
 	if (intensity > 1)
 		intensity = 1;
 	return (intensity);
@@ -65,7 +65,7 @@ float phong_shading(t_vector normal, t_vector light_dir, t_vector view_dir)
 	diffuse = 0.6 * fmax(0, dot_product(normal, light_dir));
 	half_vector = vector_add(light_dir, view_dir);
 	normalize_vector(&half_vector);
-	specular = 0.3 * pow(fmax(0, dot_product(normal, half_vector)), 250);
+	specular = 0.3 * pow(fmax(0, dot_product(normal, half_vector)), 50);
 	phong = ambient + diffuse + specular;
 	return (phong);
 }

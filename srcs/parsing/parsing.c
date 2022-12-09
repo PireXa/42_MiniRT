@@ -44,6 +44,28 @@ int plane_counter(char *file)
 	return (count);
 }
 
+int cylinder_counter(char *file)
+{
+	int	fd;
+	int	count;
+	char	*line;
+	char 	*path;
+
+	count = 0;
+	path = ft_strjoin("./scenes/", file);
+	fd = open(path, O_RDONLY);
+	free(path);
+	while ((line = get_next_line(fd)))
+	{
+		if (line[0] == 'c' && line[1] == 'y')
+			count++;
+		free(line);
+	}
+	free(line);
+	close(fd);
+	return (count);
+}
+
 int	hex_to_int(char *hex)
 {
 	int	i;
@@ -80,12 +102,14 @@ void	parser(char *file, t_scene *scene)
 	int		fd;
 	int		i;
 	int 	j;
+	int 	k;
 	char	*line;
 	char 	**params;
 	char 	*path;
 
 	i = 0;
 	j = 0;
+	k = 0;
 	path = ft_strjoin("scenes/", file);
 	fd = open(path, O_RDONLY);
 	free(path);
@@ -111,6 +135,19 @@ void	parser(char *file, t_scene *scene)
 			scene->planes[j].normal.z = ft_atoi(params[6]);
 			scene->planes[j].color = hex_to_int(params[7]);
 			j++;
+		}
+		else if (params[0][0] == 'c' && params[0][1] == 'y')
+		{
+			scene->cylinders[j].center.x = ft_atoi(params[1]);
+			scene->cylinders[j].center.y = ft_atoi(params[2]);
+			scene->cylinders[j].center.z = ft_atoi(params[3]);
+			scene->cylinders[j].normal.x = ft_atoi(params[4]);
+			scene->cylinders[j].normal.y = ft_atoi(params[5]);
+			scene->cylinders[j].normal.z = ft_atoi(params[6]);
+			scene->cylinders[j].diameter = atof(params[7]);
+			scene->cylinders[j].height = atof(params[8]);
+			scene->cylinders[j].color = hex_to_int(params[9]);
+			k++;
 		}
 		free_double_array(params);
 		free(line);
