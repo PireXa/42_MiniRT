@@ -50,6 +50,20 @@ int check_shadow(t_data *data, t_ray ray, float t, t_light light)
 		if (intersect > 0.0001 && intersect < light_dist)
 			return (1);
 	}
+	i = -1;
+	while (++i < data->nb_objs->nb_cylinders)
+	{
+		intersect = intersect_ray_cylinder(shadow_ray, data->scene->cylinders[i]);
+		intersect = define_cylinder_height(data->scene->cylinders[i], shadow_ray, intersect);
+		if (intersect > 0.0001 && intersect < light_dist)
+			return (1);
+		intersect = intersect_ray_cylinder_top(shadow_ray, data->scene->cylinders[i]);
+		if (intersect > 0.0001 && intersect < light_dist)
+			return (1);
+		intersect = intersect_ray_cylinder_bottom(shadow_ray, data->scene->cylinders[i]);
+		if (intersect > 0.0001 && intersect < light_dist)
+			return (1);
+	}
 	return (0);
 }
 
@@ -85,4 +99,66 @@ int shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light)
 	light_dir = vector_from_points(hit_point, light.origin);
 	normalize_vector(&light_dir);
 	return (calc_color_intensity(sphere.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
+}
+
+t_vector normal_cylinder(t_cylinder cylinder, t_vector hit_point)
+{
+	float		m;
+	t_vector	normal;
+	t_vector	axis_point;
+
+	m = dot_product(vector_from_points(cylinder.base_center, hit_point), cylinder.normal);
+	axis_point = vector_add(cylinder.base_center, vector_scale(cylinder.normal, m));
+	normal = vector_from_points(axis_point, hit_point);
+	normalize_vector(&normal);
+	return (normal);
+}
+
+int shading_cylinder(t_cylinder cylinder, t_ray ray, float t, t_light light)
+{
+	t_vector hit_point;
+	t_vector normal;
+	t_vector light_dir;
+	t_vector view_dir;
+
+	hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
+	normal = normal_cylinder(cylinder, hit_point);
+	view_dir = vector_from_points(hit_point, ray.origin);
+	normalize_vector(&view_dir);
+	light_dir = vector_from_points(hit_point, light.origin);
+	normalize_vector(&light_dir);
+	return (calc_color_intensity(cylinder.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
+
+}
+
+int	shading_cylinder_top(t_cylinder cylinder, t_ray ray, float t, t_light light)
+{
+	t_vector light_dir;
+	t_vector view_dir;
+	t_vector normal;
+	t_vector hit_point;
+
+	normal = cylinder.normal;
+	hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
+	view_dir = vector_from_points(hit_point, ray.origin);
+	normalize_vector(&view_dir);
+	light_dir = vector_from_points(hit_point, light.origin);
+	normalize_vector(&light_dir);
+	return(calc_color_intensity(cylinder.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
+}
+
+int	shading_cylinder_bottom(t_cylinder cylinder, t_ray ray, float t, t_light light)
+{
+	t_vector light_dir;
+	t_vector view_dir;
+	t_vector normal;
+	t_vector hit_point;
+
+	normal = vector_scale(cylinder.normal, -1);
+	hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
+	view_dir = vector_from_points(hit_point, ray.origin);
+	normalize_vector(&view_dir);
+	light_dir = vector_from_points(hit_point, light.origin);
+	normalize_vector(&light_dir);
+	return(calc_color_intensity(cylinder.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
 }

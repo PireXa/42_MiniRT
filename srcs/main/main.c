@@ -24,8 +24,8 @@ void	light_animation(t_data *data)
 
 int render(t_data *data)
 {
-	//	light_animation(data);
-	//ray_tracer(data);
+	light_animation(data);
+	ray_tracer(data);
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
 	fps(data);
 	return (0);
@@ -34,7 +34,9 @@ int render(t_data *data)
 void	loop(t_data *data)
 {
 	controls(data);
-	mlx_loop_hook(data->mlx, render, data);
+	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
+	printf("Render time: %ld ms\n", current_time_millis() - data->start_render_time);
+	//	mlx_loop_hook(data->mlx, render, data);
 	mlx_loop(data->mlx);
 }
 
@@ -66,14 +68,15 @@ int main(int argc, char **argv)
 	data->camera.y = (WIND_H / 2) - 200;
 	data->camera.z = -1000;
 	data->light = malloc(sizeof(t_light));
-	data->light->origin.x = 200;
+	data->light->origin.x = 600;
 	data->light->origin.y = 600;
-	data->light->origin.z = 300;
+	data->light->origin.z = 100;
 	data->light->intensity = 1;
 	data->light->color = 0xFFFFFF;
 	data->fps.frame_time = time(NULL);
 	data->fps.frame_ctr = 0;
 	data->fps.fps = 0;
+	data->start_render_time = current_time_millis();
 	ray_tracer(data);
 	loop(data);
 }

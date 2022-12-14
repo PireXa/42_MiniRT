@@ -83,7 +83,7 @@ typedef struct s_square
 
 typedef struct s_cylinder
 {
-	t_vector	center;
+	t_vector	base_center;
 	t_vector	normal;
 	float		diameter;
 	float		height;
@@ -137,32 +137,47 @@ typedef struct	s_animation {
 	long int	time;
 }				t_animation;
 
+typedef struct s_near_obj {
+	float		t_min;
+	int			closest_sphere;
+	int			closest_plane;
+	int			closest_cylinder;
+	int			cylinder_face;
+}				t_near_obj;
+
 typedef struct s_data
 {
-	void	*mlx;
-	void	*mlx_win;
-	t_img	img;
+	void		*mlx;
+	void		*mlx_win;
+	t_img		img;
 	t_vector	camera;
 	t_scene		*scene;
 	t_nb_objs	*nb_objs;
 	t_light		*light;
 	t_fps		fps;
 	t_animation	animation;
+	long int	start_render_time;
 }				t_data;
 
 //GRAPHICS
 int			background_color(int y, int color1, int color2);
 int			calc_color_intensity(int color, float intensity);
 int			check_shadow(t_data *data, t_ray ray, float t, t_light light);
+float		define_cylinder_height(t_cylinder  cylinder, t_ray ray, float t);
 void		fps(t_data * data);
+t_near_obj	get_closest_intersection(t_data *data, t_ray ray);
 float 		intersect_ray_cylinder(t_ray ray, t_cylinder cylinder);
-float 		intersect_ray_plane(t_ray ray, t_plane plane);
+float		intersect_ray_cylinder_bottom(t_ray ray, t_cylinder cylinder);
+float		intersect_ray_cylinder_top(t_ray ray, t_cylinder cylinder);
+float		intersect_ray_plane(t_ray ray, t_plane plane);
 float		intersect_ray_sphere(t_ray ray, t_sphere sphere);
 float		light_intens_by_dist(t_light light, t_ray ray, float t);
 void		put_pxl(t_img *img, int x, int y, int color);
 void		ray_tracer(t_data *data);
 int			shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light);
-
+int			shading_cylinder(t_cylinder cylinder, t_ray ray, float t, t_light light);
+int			shading_cylinder_top(t_cylinder cylinder, t_ray ray, float t, t_light light);
+int			shading_cylinder_bottom(t_cylinder cylinder, t_ray ray, float t, t_light light);
 //CONTROLS
 void		controls(t_data *data);
 
@@ -183,6 +198,7 @@ t_vector	vector_sub(t_vector v1, t_vector v2);
 
 //UTILS
 int			ft_atoi(const char *str);
+float		ft_atof(char *str);
 char		*ft_itoa(int n);
 char 		**ft_split(char const *s, char c);
 

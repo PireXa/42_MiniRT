@@ -43,25 +43,83 @@ float intersect_ray_plane(t_ray ray, t_plane plane)
 	return (0);
 }
 
-float intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
+t_near_obj 	get_closest_intersection(t_data *data, t_ray ray)
 {
-	float a;
-	float b;
-	float c;
-	float discriminant;
-	float t;
+	int			i;
+	float		t;
+	t_near_obj	hit;
 
-	a = pow(ray.direction.x, 2) + pow(ray.direction.y, 2);
-	b = 2 * (ray.direction.x * (ray.origin.x - cylinder.center.x) + ray.direction.y * (ray.origin.y - cylinder.center.y));
-	c = pow(ray.origin.x - cylinder.center.x, 2) + pow(ray.origin.y - cylinder.center.y, 2) - pow(cylinder.diameter / 2, 2) - 1;
-	discriminant = pow(b, 2) - 4 * a * c;
-	if (discriminant < 0)
-		return (0);
-	t = (-b - sqrt(discriminant)) / (2.0 * a);
-	if (t > 0.0001f)
-		return (t);
-	t = (-b + sqrt(discriminant)) / (2.0 * a);
-	if (t > 0.0001f)
-		return (t);
-	return (0);
+	i = -1;
+	hit.t_min = 4535320;
+	t = 0;
+	hit.closest_sphere = -1;
+	hit.closest_plane = -1;
+	hit.closest_cylinder = -1;
+	while(++i < data->nb_objs->nb_spheres)
+	{
+		t = intersect_ray_sphere(ray, data->scene->spheres[i]);
+		if (t)
+		{
+			if (t < hit.t_min)
+			{
+				hit.t_min = t;
+				hit.closest_sphere = i;
+			}
+		}
+	}
+	i = -1;
+	while(++i < data->nb_objs->nb_planes)
+	{
+		t = intersect_ray_plane(ray, data->scene->planes[i]);
+		if (t)
+		{
+			if (t < hit.t_min)
+			{
+				hit.t_min = t;
+				hit.closest_plane = i;
+				hit.closest_sphere = -1;
+			}
+		}
+	}
+	i = -1;
+	while(++i < data->nb_objs->nb_cylinders)
+	{
+		t = intersect_ray_cylinder(ray, data->scene->cylinders[i]);
+		if (t)
+		{
+			t = define_cylinder_height(data->scene->cylinders[i], ray, t);
+			if (t && t < hit.t_min)
+			{
+				hit.t_min = t;
+				hit.cylinder_face = 0;
+				hit.closest_cylinder = i;
+				hit.closest_sphere = -1;
+				hit.closest_plane = -1;
+			}
+			else
+			{
+				t = intersect_ray_cylinder_top(ray, data->scene->cylinders[i]);
+				if (t) {
+					if (t < hit.t_min) {
+						hit.t_min = t;
+						hit.cylinder_face = 2;
+						hit.closest_cylinder = i;
+						hit.closest_sphere = -1;
+						hit.closest_plane = -1;
+					}
+				}
+				t = intersect_ray_cylinder_bottom(ray, data->scene->cylinders[i]);
+				if (t) {
+					if (t < hit.t_min) {
+						hit.t_min = t;
+						hit.cylinder_face = 1;
+						hit.closest_cylinder = i;
+						hit.closest_sphere = -1;
+						hit.closest_plane = -1;
+					}
+				}
+			}
+		}
+	}
+	return (hit);
 }

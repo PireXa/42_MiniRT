@@ -118,35 +118,41 @@ void	parser(char *file, t_scene *scene)
 		params = ft_split(line, ' ');
 		if (params[0][0] == 's' && params[0][1] == 'p')
 		{
-			scene->spheres[i].center.x = ft_atoi(params[1]);
-			scene->spheres[i].center.y = ft_atoi(params[2]);
-			scene->spheres[i].center.z = ft_atoi(params[3]);
-			scene->spheres[i].radius = atof(params[4]);
+			scene->spheres[i].center.x = ft_atof(params[1]);
+			scene->spheres[i].center.y = ft_atof(params[2]);
+			scene->spheres[i].center.z = ft_atof(params[3]);
+			scene->spheres[i].radius = ft_atof(params[4]);
 			scene->spheres[i].color = hex_to_int(params[5]);
 			i++;
 		}
 		else if (params[0][0] == 'p' && params[0][1] == 'l')
 		{
-			scene->planes[j].point.x = ft_atoi(params[1]);
-			scene->planes[j].point.y = ft_atoi(params[2]);
-			scene->planes[j].point.z = ft_atoi(params[3]);
-			scene->planes[j].normal.x = ft_atoi(params[4]);
-			scene->planes[j].normal.y = ft_atoi(params[5]);
-			scene->planes[j].normal.z = ft_atoi(params[6]);
+			scene->planes[j].point.x = ft_atof(params[1]);
+			scene->planes[j].point.y = ft_atof(params[2]);
+			scene->planes[j].point.z = ft_atof(params[3]);
+			scene->planes[j].normal.x = ft_atof(params[4]);
+			scene->planes[j].normal.y = ft_atof(params[5]);
+			scene->planes[j].normal.z = ft_atof(params[6]);
 			scene->planes[j].color = hex_to_int(params[7]);
 			j++;
 		}
 		else if (params[0][0] == 'c' && params[0][1] == 'y')
 		{
-			scene->cylinders[j].center.x = ft_atoi(params[1]);
-			scene->cylinders[j].center.y = ft_atoi(params[2]);
-			scene->cylinders[j].center.z = ft_atoi(params[3]);
-			scene->cylinders[j].normal.x = ft_atoi(params[4]);
-			scene->cylinders[j].normal.y = ft_atoi(params[5]);
-			scene->cylinders[j].normal.z = ft_atoi(params[6]);
-			scene->cylinders[j].diameter = atof(params[7]);
-			scene->cylinders[j].height = atof(params[8]);
-			scene->cylinders[j].color = hex_to_int(params[9]);
+			t_vector v1;
+
+			v1.x = ft_atof(params[4]);
+			v1.y = ft_atof(params[5]);
+			v1.z = ft_atof(params[6]);
+			normalize_vector(&v1);
+			scene->cylinders[k].base_center.x = ft_atof(params[1]);
+			scene->cylinders[k].base_center.y = ft_atof(params[2]);
+			scene->cylinders[k].base_center.z = ft_atof(params[3]);
+			scene->cylinders[k].normal.x = v1.x;
+			scene->cylinders[k].normal.y = v1.y;
+			scene->cylinders[k].normal.z = v1.z;
+			scene->cylinders[k].diameter = ft_atof(params[7]);
+			scene->cylinders[k].height = ft_atof(params[8]);
+			scene->cylinders[k].color = hex_to_int(params[9]);
 			k++;
 		}
 		free_double_array(params);
