@@ -38,32 +38,16 @@ int check_shadow(t_data *data, t_ray ray, float t, t_light light)
 	float	light_dist;
 	float	intersect;
 	t_ray	shadow_ray;
+	t_near_obj	hit;
 
 	i = -1;
-	shadow_ray.origin = vector_add(ray.origin, vector_scale(ray.direction, t));
+	shadow_ray.origin = vector_add(ray.origin, vector_scale(ray.direction, t - 0.001f));
 	shadow_ray.direction = vector_from_points(shadow_ray.origin, light.origin);
 	normalize_vector(&shadow_ray.direction);
 	light_dist = get_light_dist(light, shadow_ray.origin);
-	while (++i < data->nb_objs->nb_spheres)
-	{
-		intersect = intersect_ray_sphere(shadow_ray, data->scene->spheres[i]);
-		if (intersect > 0.0001 && intersect < light_dist)
-			return (1);
-	}
-	i = -1;
-	while (++i < data->nb_objs->nb_cylinders)
-	{
-		intersect = intersect_ray_cylinder(shadow_ray, data->scene->cylinders[i]);
-		intersect = define_cylinder_height(data->scene->cylinders[i], shadow_ray, intersect);
-		if (intersect > 0.0001 && intersect < light_dist)
-			return (1);
-		intersect = intersect_ray_cylinder_top(shadow_ray, data->scene->cylinders[i]);
-		if (intersect > 0.0001 && intersect < light_dist)
-			return (1);
-		intersect = intersect_ray_cylinder_bottom(shadow_ray, data->scene->cylinders[i]);
-		if (intersect > 0.0001 && intersect < light_dist)
-			return (1);
-	}
+	hit = get_closest_intersection(data, shadow_ray);
+	if (hit.t_min > 0.0001 && hit.t_min < light_dist)
+		return (1);
 	return (0);
 }
 
@@ -161,4 +145,29 @@ int	shading_cylinder_bottom(t_cylinder cylinder, t_ray ray, float t, t_light lig
 	light_dir = vector_from_points(hit_point, light.origin);
 	normalize_vector(&light_dir);
 	return(calc_color_intensity(cylinder.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
+}
+
+t_vector	normal_triangle(t_triangle triangle)
+{
+	t_vector	normal;
+
+	normal = cross_product(vector_from_points(triangle.p1, triangle.p2), vector_from_points(triangle.p1, triangle.p3));
+	normalize_vector(&normal);
+	return (normal);
+}
+
+int	shading_triangle(t_triangle triangle, t_ray ray, float t, t_light light)
+{
+	t_vector hit_point;
+	t_vector normal;
+	t_vector light_dir;
+	t_vector view_dir;
+
+	hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
+	normal = normal_triangle(triangle);
+	view_dir = vector_from_points(hit_point, ray.origin);
+	normalize_vector(&view_dir);
+	light_dir = vector_from_points(hit_point, light.origin);
+	normalize_vector(&light_dir);
+	return (calc_color_intensity(triangle.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
 }

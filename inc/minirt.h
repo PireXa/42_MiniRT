@@ -92,9 +92,9 @@ typedef struct s_cylinder
 
 typedef struct s_triangle
 {
-	t_vector	point1;
-	t_vector	point2;
-	t_vector	point3;
+	t_vector	p1;
+	t_vector	p2;
+	t_vector	p3;
 	int			color;
 }				t_triangle;
 
@@ -143,6 +143,7 @@ typedef struct s_near_obj {
 	int			closest_plane;
 	int			closest_cylinder;
 	int			cylinder_face;
+	int			closest_triangle;
 }				t_near_obj;
 
 typedef struct s_data
@@ -178,6 +179,8 @@ int			shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light);
 int			shading_cylinder(t_cylinder cylinder, t_ray ray, float t, t_light light);
 int			shading_cylinder_top(t_cylinder cylinder, t_ray ray, float t, t_light light);
 int			shading_cylinder_bottom(t_cylinder cylinder, t_ray ray, float t, t_light light);
+int			shading_triangle(t_triangle triangle, t_ray ray, float t, t_light light);
+
 //CONTROLS
 void		controls(t_data *data);
 
@@ -186,9 +189,11 @@ int 		cylinder_counter(char *file);
 void		parser(char *file, t_scene *scene);
 int			plane_counter(char *file);
 int			sphere_counter(char *file);
+int			triangle_counter(char *file);
 
 //VECTOR UTILS
 float		dot_product(t_vector vector1, t_vector vector2);
+t_vector	cross_product(t_vector vector1, t_vector vector2);
 void		normalize_vector(t_vector *vector);
 t_vector	vector_add(t_vector v1, t_vector v2);
 t_vector	vector_from_points(t_vector point1, t_vector point2);

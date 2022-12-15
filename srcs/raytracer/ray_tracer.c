@@ -45,6 +45,10 @@ void	ray_tracer(t_data *data)
 					//color = 0x0000FF;
 					color = shading_cylinder_bottom(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->light[0]);
 			}
+			else if (hit.closest_triangle != -1)
+			{
+				color = shading_triangle(data->scene->triangles[hit.closest_triangle], ray, hit.t_min, data->light[0]);
+			}
 			else
 				color = background_color(y, BACKGROUND1, BACKGROUND2);
 			put_pxl(&data->img, x, y, color);

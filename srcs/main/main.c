@@ -59,10 +59,13 @@ int main(int argc, char **argv)
 	data->nb_objs->nb_spheres = sphere_counter(argv[1]);
 	data->nb_objs->nb_planes = plane_counter(argv[1]);
 	data->nb_objs->nb_cylinders = cylinder_counter(argv[1]);
+	data->nb_objs->nb_triangles = triangle_counter(argv[1]);
 	data->scene = (t_scene *)malloc(sizeof(t_scene));
 	data->scene->spheres = (t_sphere *)malloc(sizeof(t_sphere) * data->nb_objs->nb_spheres);
 	data->scene->planes = (t_plane *)malloc(sizeof(t_plane) * data->nb_objs->nb_planes);
 	data->scene->cylinders = (t_cylinder *)malloc(sizeof(t_cylinder) * data->nb_objs->nb_cylinders);
+	data->scene->triangles = (t_triangle *)malloc(sizeof(t_triangle) * data->nb_objs->nb_triangles);
+	printf("Parsing scene...\n");
 	parser(argv[1], data->scene);
 	data->camera.x = (WIND_W / 2);
 	data->camera.y = (WIND_H / 2) - 200;
@@ -77,6 +80,7 @@ int main(int argc, char **argv)
 	data->fps.frame_ctr = 0;
 	data->fps.fps = 0;
 	data->start_render_time = current_time_millis();
+	printf("Rendering...\n");
 	ray_tracer(data);
 	loop(data);
 }
