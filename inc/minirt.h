@@ -201,12 +201,16 @@ float		vector_length(t_vector v);
 t_vector	vector_scale(t_vector v, float scale);
 t_vector	vector_sub(t_vector v1, t_vector v2);
 
+//TIME
+long int	current_time_millis();
+
+//DATA INITIALIZATION
+void		init_data(t_data *data, char *scene_file);
+
 //UTILS
 int			ft_atoi(const char *str);
 float		ft_atof(char *str);
 char		*ft_itoa(int n);
 char 		**ft_split(char const *s, char c);
-
-//char		*ft_strjoin(char const *s1, char const *s2);
 
 #endif

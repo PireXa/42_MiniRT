@@ -80,7 +80,7 @@ t_near_obj 	get_closest_intersection(t_data *data, t_ray ray)
 	t_near_obj	hit;
 
 	i = -1;
-	hit.t_min = 4535320;
+	hit.t_min = 45353203223;
 	t = 0;
 	hit.closest_sphere = -1;
 	hit.closest_plane = -1;

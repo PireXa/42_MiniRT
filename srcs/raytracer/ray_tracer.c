@@ -17,8 +17,8 @@ void	ray_tracer(t_data *data)
 		while (y < (int)WIND_H)
 		{
 			screen.x = (float)x;
-			screen.y = (float)y;
-			screen.z = 0;
+			screen.y = -500;
+			screen.z = WIND_H - (float)y;
 			ray.origin = data->camera;
 			ray.direction = vector_from_points(data->camera, screen);
 			normalize_vector(&ray.direction);
