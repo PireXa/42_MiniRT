@@ -17,8 +17,9 @@ void	light_animation(t_data *data)
 	{
 		ray_tracer(data);
 		data->animation.time = current_time + 10;
-		data->light->origin.x += 30;
-		data->light->origin.y = sin(data->light->origin.x / 70) * 300 + 300;
+		data->scene->cameras[0].normal.x += 0.1;
+		/*data->light->origin.x += 1;
+		data->light->origin.y = sin(data->light->origin.x / 70);*/
 	}
 }
 
@@ -43,7 +44,7 @@ void	loop(t_data *data)
 	init_graphics(data);
 	controls(data);
 	printf("Render time: %ld ms\n", current_time_millis() - data->start_render_time);
-	//	mlx_loop_hook(data->mlx, render, data);
+	//mlx_loop_hook(data->mlx, render, data);
 	mlx_loop(data->mlx);
 }
 

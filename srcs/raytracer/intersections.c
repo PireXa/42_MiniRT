@@ -9,11 +9,13 @@ float	intersect_ray_sphere(t_ray ray, t_sphere sphere)
 	float c;
 	float discriminant;
 	float t;
+	float radius;
 
+	radius = sphere.diameter / 2;
 	oc = vector_from_points(sphere.center, ray.origin);
 	a = dot_product(ray.direction, ray.direction);
 	b = 2.0 * dot_product(oc, ray.direction);
-	c = dot_product(oc, oc) - sphere.radius * sphere.radius;
+	c = dot_product(oc, oc) - radius * radius;
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 		return (0);

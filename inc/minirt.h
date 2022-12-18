@@ -14,15 +14,15 @@
 # include "mlx.h"
 # include "get_next_line.h"
 
-# define	WIND_W		1920.00f
-# define	WIND_H		1080.00f
+# define	WIND_W		840.00f//1920.00f
+# define	WIND_H		680.00f//1080.00f
 # define	GREEN		0x00FF00
 # define	BLUE		0x0000FF
 # define	RED			0xFF0000
 # define	BACKGROUND1	0xF525E0
 # define 	BACKGROUND2	0x03CFFC
-# define	FOV			60
-# define	LUMENS		500000
+# define	FOV			70
+# define	LUMENS		10000
 
 # define 	WORLD_SIZE	2000
 # define 	CAM_X		1000 //(WORLD_SIZE / 2)
@@ -44,8 +44,6 @@ typedef struct s_fps {
 	long int	frame_time;
 }				t_fps;
 
-//Raytracing by Copilot
-
 typedef struct s_vector
 {
 	float	x;
@@ -62,7 +60,7 @@ typedef struct s_ray
 typedef struct s_sphere
 {
 	t_vector	center;
-	float		radius;
+	float		diameter;
 	int			color;
 }				t_sphere;
 
@@ -109,6 +107,7 @@ typedef struct s_camera
 {
 	t_vector	origin;
 	t_vector	normal;
+	float		**view_matrix;
 	float		fov;
 }				t_camera;
 

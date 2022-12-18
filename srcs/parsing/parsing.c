@@ -153,7 +153,7 @@ void	parser(char *file, t_scene *scene)
 			scene->spheres[i].center.y = ft_atof(sub_params[1]);
 			scene->spheres[i].center.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
-			scene->spheres[i].radius = ft_atof(params[2]);
+			scene->spheres[i].diameter = ft_atof(params[2]);
 			sub_params = ft_split(params[3], ',');
 			scene->spheres[i].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
