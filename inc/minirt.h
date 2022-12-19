@@ -184,7 +184,9 @@ int			shading_triangle(t_triangle triangle, t_ray ray, float t, t_light light);
 void		controls(t_data *data);
 
 //PARSING
+int			camera_counter(char *file);
 int 		cylinder_counter(char *file);
+int			light_counter(char *file);
 void		parser(char *file, t_scene *scene);
 int			plane_counter(char *file);
 int			sphere_counter(char *file);
@@ -205,6 +207,7 @@ long int	current_time_millis();
 
 //DATA INITIALIZATION
 void		init_data(t_data *data, char *scene_file);
+float		**set_camera_to_world_transformation_matrix(t_camera camera, t_vector up);
 
 //UTILS
 int			ft_atoi(const char *str);

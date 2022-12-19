@@ -88,25 +88,48 @@ int	triangle_counter(char *file)
 	return (count);
 }
 
-int	hex_to_int(char *hex)
+int	camera_counter(char *file)
 {
-	int	i;
-	int	color;
+	int	fd;
+	int	count;
+	char	*line;
+	char 	*path;
 
-	i = 0;
-	color = 0;
-	while (hex[i])
+	count = 0;
+	path = ft_strjoin("./scenes/", file);
+	fd = open(path, O_RDONLY);
+	free(path);
+	while ((line = get_next_line(fd)))
 	{
-		color *= 16;
-		if (hex[i] >= '0' && hex[i] <= '9')
-			color += hex[i] - '0';
-		else if (hex[i] >= 'a' && hex[i] <= 'f')
-			color += hex[i] - 'a' + 10;
-		else if (hex[i] >= 'A' && hex[i] <= 'F')
-			color += hex[i] - 'A' + 10;
-		i++;
+		if (line[0] == 'c' && line[1] == ' ')
+			count++;
+		free(line);
 	}
-	return (color);
+	free(line);
+	close(fd);
+	return (count);
+}
+
+int	light_counter(char *file)
+{
+	int	fd;
+	int	count;
+	char	*line;
+	char 	*path;
+
+	count = 0;
+	path = ft_strjoin("./scenes/", file);
+	fd = open(path, O_RDONLY);
+	free(path);
+	while ((line = get_next_line(fd)))
+	{
+		if (line[0] == 'l' && line[1] == ' ')
+			count++;
+		free(line);
+	}
+	free(line);
+	close(fd);
+	return (count);
 }
 
 int	rgb_to_int(int r, int g, int b)
@@ -131,6 +154,8 @@ void	parser(char *file, t_scene *scene)
 	int 	j;
 	int 	k;
 	int 	l;
+	int 	m;
+	int 	n;
 	char	*line;
 	char 	**params;
 	char 	**sub_params;
@@ -140,6 +165,8 @@ void	parser(char *file, t_scene *scene)
 	j = 0;
 	k = 0;
 	l = 0;
+	m = 0;
+	n = 0;
 	path = ft_strjoin("scenes/", file);
 	fd = open(path, O_RDONLY);
 	free(path);
@@ -220,6 +247,35 @@ void	parser(char *file, t_scene *scene)
 			scene->triangles[l].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			l++;
+		}
+		else if (params[0][0] == 'c')
+		{
+			sub_params = ft_split(params[1], ',');
+			scene->cameras[m].origin.x = ft_atof(sub_params[0]);
+			scene->cameras[m].origin.y = ft_atof(sub_params[1]);
+			scene->cameras[m].origin.z = ft_atof(sub_params[2]);
+			free_double_array(sub_params);
+			sub_params = ft_split(params[2], ',');
+			scene->cameras[m].normal.x = -ft_atof(sub_params[0]);
+			scene->cameras[m].normal.y = ft_atof(sub_params[1]);
+			scene->cameras[m].normal.z = -ft_atof(sub_params[2]);
+			normalize_vector(&scene->cameras[m].normal);
+			free_double_array(sub_params);
+			scene->cameras[m].view_matrix = set_camera_to_world_transformation_matrix(scene->cameras[m], (t_vector){0, 1, 0});
+			m++;
+		}
+		else if (params[0][0] == 'l')
+		{
+			sub_params = ft_split(params[1], ',');
+			scene->lights[n].origin.x = ft_atof(sub_params[0]);
+			scene->lights[n].origin.y = ft_atof(sub_params[1]);
+			scene->lights[n].origin.z = ft_atof(sub_params[2]);
+			free_double_array(sub_params);
+			scene->lights[n].intensity = ft_atof(params[2]);
+			sub_params = ft_split(params[3], ',');
+			scene->lights[n].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
+			free_double_array(sub_params);
+			n++;
 		}
 		free_double_array(params);
 		free(line);

@@ -48,39 +48,32 @@ void	ray_tracer(t_data *data)
 	{
 		while (y < (int)WIND_H)
 		{
-			/*screen.x = (float)x;
-			screen.y = -500;
-			screen.z = WIND_H - (float)y;
-			ray.origin = data->camera;
-			ray.direction = vector_from_points(data->camera, screen);
-			normalize_vector(&ray.direction);*/
+			printf("\rRendering: %d%%", (int)((float)x / WIND_W * 100));
 			ray = get_ray(data, x, y);
 			hit = get_closest_intersection(data, ray);
 			if (hit.closest_sphere != -1)
 			{
-				color = shading_sphere(data->scene->spheres[hit.closest_sphere], ray, hit.t_min, data->light[0]);
+				color = shading_sphere(data->scene->spheres[hit.closest_sphere], ray, hit.t_min, data->scene->lights[0]);
 			}
 			else if (hit.closest_plane != -1)
 			{
-				if (!check_shadow(data, ray, hit.t_min, data->light[0]))
-					color = calc_color_intensity(data->scene->planes[hit.closest_plane].color, light_intens_by_dist(data->light[0], ray, hit.t_min));
+				if (!check_shadow(data, ray, hit.t_min, data->scene->lights[0]))
+					color = calc_color_intensity(data->scene->planes[hit.closest_plane].color, light_intens_by_dist(data->scene->lights[0], ray, hit.t_min));
 				else
 					color = calc_color_intensity(data->scene->planes[hit.closest_plane].color, 0.1f);
 			}
 			else if (hit.closest_cylinder != -1)
 			{
 				if (hit.cylinder_face == 0)
-					color = shading_cylinder(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->light[0]);
+					color = shading_cylinder(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->scene->lights[0]);
 				else if (hit.cylinder_face == 2)
-					//color = 0xFFFFFF;
-					color = shading_cylinder_top(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->light[0]);
+					color = shading_cylinder_top(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->scene->lights[0]);
 				else if (hit.cylinder_face == 1)
-					//color = 0x0000FF;
-					color = shading_cylinder_bottom(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->light[0]);
+					color = shading_cylinder_bottom(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->scene->lights[0]);
 			}
 			else if (hit.closest_triangle != -1)
 			{
-				color = shading_triangle(data->scene->triangles[hit.closest_triangle], ray, hit.t_min, data->light[0]);
+				color = shading_triangle(data->scene->triangles[hit.closest_triangle], ray, hit.t_min, data->scene->lights[0]);
 			}
 			else
 				color = background_color(y, BACKGROUND1, BACKGROUND2);
@@ -90,4 +83,5 @@ void	ray_tracer(t_data *data)
 		y = 0;
 		x++;
 	}
+	printf("\rRendering: 100%%\n");
 }
