@@ -8,7 +8,7 @@ long int	current_time_millis()
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-void	light_animation(t_data *data)
+/*void	light_animation(t_data *data)
 {
 	long int	current_time;
 
@@ -18,8 +18,8 @@ void	light_animation(t_data *data)
 		ray_tracer(data);
 		data->animation.time = current_time + 10;
 		data->scene->cameras[0].normal.x += 0.1;
-		/*data->light->origin.x += 1;
-		data->light->origin.y = sin(data->light->origin.x / 70);*/
+		*//*data->light->origin.x += 1;
+		data->light->origin.y = sin(data->light->origin.x / 70);*//*
 	}
 }
 
@@ -30,7 +30,7 @@ int render(t_data *data)
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
 	fps(data);
 	return (0);
-}
+}*/
 
 void	init_graphics(t_data *data)
 {
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		printf("Correct usage: ./minirt (scene.rt)\n");
+		printf("Correct usage: ./minirt scenes/(scene.rt)\n");
 		return (0);
 	}
 	data = (t_data *)malloc(sizeof(t_data));

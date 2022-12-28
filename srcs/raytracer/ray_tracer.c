@@ -5,15 +5,15 @@ t_vector	transform_vector(t_vector v, float **matrix)
 {
 	t_vector	result;
 
-	result.x = v.x * matrix[0][0] + v.y * matrix[0][1] + v.z * matrix[0][2] ;
-	result.y = v.x * matrix[1][0] + v.y * matrix[1][1] + v.z * matrix[1][2];
-	result.z = v.x * matrix[2][0] + v.y * matrix[2][1] + v.z * matrix[2][2];
+	result.x = v.x * matrix[0][0] + v.y * matrix[1][0] + v.z * matrix[2][0];
+	result.y = v.x * matrix[0][1] + v.y * matrix[1][1] + v.z * matrix[2][1];
+	result.z = v.x * matrix[0][2] + v.y * matrix[1][2] + v.z * matrix[2][2];
 	return (result);
 }
 
 float	deg_to_rad(float degrees)
 {
-	return (degrees * M_PI / 180);
+	return (degrees * M_PI / 180.00f);
 }
 
 t_ray	get_ray(t_data *data, int x, int y)
@@ -28,6 +28,7 @@ t_ray	get_ray(t_data *data, int x, int y)
 	camera.z = 1;
 	normalize_vector(&camera);
 	ray.origin = data->scene->cameras[0].origin;
+//	ray.direction = look_at(camera, data->scene->cameras[0].normal);
 	ray.direction = transform_vector(camera, data->scene->cameras[0].view_matrix);
 //	ray.direction = camera;
 	normalize_vector(&ray.direction);

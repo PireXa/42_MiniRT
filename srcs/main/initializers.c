@@ -12,16 +12,13 @@ float	**set_camera_to_world_transformation_matrix(t_camera camera, t_vector up)
 	matrix[1] = malloc(sizeof(float) * 4);
 	matrix[2] = malloc(sizeof(float) * 4);
 	matrix[3] = malloc(sizeof(float) * 4);
-//	z_axis = vector_sub(camera.origin, camera.normal);
 	z_axis.x = camera.normal.x;
 	z_axis.y = camera.normal.y;
 	z_axis.z = camera.normal.z;
-	printf("z_axis: %f, %f, %f\n", z_axis.x, z_axis.y, z_axis.z);
+	normalize_vector(&z_axis);
 	x_axis = cross_product(up, z_axis);
 	normalize_vector(&x_axis);
 	y_axis = cross_product(z_axis, x_axis);
-	printf("x_axis: %f, %f, %f\n", x_axis.x, x_axis.y, x_axis.z);
-	printf("y_axis: %f, %f, %f\n", y_axis.x, y_axis.y, y_axis.z);
 	normalize_vector(&y_axis);
 	matrix[0][0] = x_axis.x;
 	matrix[0][1] = x_axis.y;
