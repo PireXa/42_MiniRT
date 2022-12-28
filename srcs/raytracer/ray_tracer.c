@@ -5,9 +5,9 @@ t_vector	transform_vector(t_vector v, float **matrix)
 {
 	t_vector	result;
 
-	result.x = v.x * matrix[0][0] + v.y * matrix[0][1] + v.z * matrix[0][2] + matrix[0][3];
-	result.y = v.x * matrix[1][0] + v.y * matrix[1][1] + v.z * matrix[1][2] + matrix[1][3];
-	result.z = v.x * matrix[2][0] + v.y * matrix[2][1] + v.z * matrix[2][2] + matrix[2][3];
+	result.x = v.x * matrix[0][0] + v.y * matrix[0][1] + v.z * matrix[0][2] ;
+	result.y = v.x * matrix[1][0] + v.y * matrix[1][1] + v.z * matrix[1][2];
+	result.z = v.x * matrix[2][0] + v.y * matrix[2][1] + v.z * matrix[2][2];
 	return (result);
 }
 
@@ -23,9 +23,10 @@ t_ray	get_ray(t_data *data, int x, int y)
 	t_ray		ray;
 
 	aspect_ratio = WIND_W / WIND_H;
-	camera.x = (2 * (x + 0.5) / WIND_W - 1) * aspect_ratio * tan(deg_to_rad(FOV) / 2);
+	camera.x = -(2 * (x + 0.5) / WIND_W - 1) * aspect_ratio * tan(deg_to_rad(FOV) / 2);
 	camera.y = (1 - 2 * (y + 0.5) / WIND_H) * tan(deg_to_rad(FOV) / 2);
-	camera.z = -1;
+	camera.z = 1;
+	normalize_vector(&camera);
 	ray.origin = data->scene->cameras[0].origin;
 	ray.direction = transform_vector(camera, data->scene->cameras[0].view_matrix);
 //	ray.direction = camera;

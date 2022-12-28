@@ -14,8 +14,8 @@
 # include "mlx.h"
 # include "get_next_line.h"
 
-# define	WIND_W		840.00f//1920.00f
-# define	WIND_H		680.00f//1080.00f
+# define	WIND_W		400.00f//840.00f//1920.00f
+# define	WIND_H		400.00f//680.00f//1080.00f
 # define	GREEN		0x00FF00
 # define	BLUE		0x0000FF
 # define	RED			0xFF0000

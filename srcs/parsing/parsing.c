@@ -5,12 +5,12 @@ int	sphere_counter(char *file)
 	int	fd;
 	int	count;
 	char	*line;
-	char 	*path;
 
 	count = 0;
-	path = ft_strjoin("./scenes/", file);
+	/*path = ft_strjoin("./scenes/", file);
 	fd = open(path, O_RDONLY);
-	free(path);
+	free(path);*/
+	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
 		if (line[0] == 's' && line[1] == 'p')
@@ -27,12 +27,13 @@ int plane_counter(char *file)
 	int	fd;
 	int	count;
 	char	*line;
-	char 	*path;
+//	char 	*path;
 
 	count = 0;
-	path = ft_strjoin("./scenes/", file);
+	/*path = ft_strjoin("./scenes/", file);
 	fd = open(path, O_RDONLY);
-	free(path);
+	free(path);*/
+	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
 		if (line[0] == 'p' && line[1] == 'l')
@@ -49,12 +50,13 @@ int cylinder_counter(char *file)
 	int	fd;
 	int	count;
 	char	*line;
-	char 	*path;
+//	char 	*path;
 
 	count = 0;
-	path = ft_strjoin("./scenes/", file);
+	/*path = ft_strjoin("./scenes/", file);
 	fd = open(path, O_RDONLY);
-	free(path);
+	free(path);*/
+	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
 		if (line[0] == 'c' && line[1] == 'y')
@@ -71,12 +73,13 @@ int	triangle_counter(char *file)
 	int	fd;
 	int	count;
 	char	*line;
-	char 	*path;
+//	char 	*path;
 
 	count = 0;
-	path = ft_strjoin("./scenes/", file);
+	/*path = ft_strjoin("./scenes/", file);
 	fd = open(path, O_RDONLY);
-	free(path);
+	free(path);*/
+	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
 		if (line[0] == 't' && line[1] == 'r')
@@ -93,12 +96,13 @@ int	camera_counter(char *file)
 	int	fd;
 	int	count;
 	char	*line;
-	char 	*path;
+//	char 	*path;
 
 	count = 0;
-	path = ft_strjoin("./scenes/", file);
+	/*path = ft_strjoin("./scenes/", file);
 	fd = open(path, O_RDONLY);
-	free(path);
+	free(path);*/
+	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
 		if (line[0] == 'c' && line[1] == ' ')
@@ -115,12 +119,13 @@ int	light_counter(char *file)
 	int	fd;
 	int	count;
 	char	*line;
-	char 	*path;
+//	char 	*path;
 
 	count = 0;
-	path = ft_strjoin("./scenes/", file);
+	/*path = ft_strjoin("./scenes/", file);
 	fd = open(path, O_RDONLY);
-	free(path);
+	free(path);*/
+	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
 		if (line[0] == 'l' && line[1] == ' ')
@@ -159,7 +164,7 @@ void	parser(char *file, t_scene *scene)
 	char	*line;
 	char 	**params;
 	char 	**sub_params;
-	char 	*path;
+//	char 	*path;
 
 	i = 0;
 	j = 0;
@@ -167,9 +172,10 @@ void	parser(char *file, t_scene *scene)
 	l = 0;
 	m = 0;
 	n = 0;
-	path = ft_strjoin("scenes/", file);
+	/*path = ft_strjoin("scenes/", file);
 	fd = open(path, O_RDONLY);
-	free(path);
+	free(path);*/
+	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
 		params = ft_split(line, ' ');
@@ -256,9 +262,9 @@ void	parser(char *file, t_scene *scene)
 			scene->cameras[m].origin.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			sub_params = ft_split(params[2], ',');
-			scene->cameras[m].normal.x = -ft_atof(sub_params[0]);
+			scene->cameras[m].normal.x = ft_atof(sub_params[0]);
 			scene->cameras[m].normal.y = ft_atof(sub_params[1]);
-			scene->cameras[m].normal.z = -ft_atof(sub_params[2]);
+			scene->cameras[m].normal.z = ft_atof(sub_params[2]);
 			normalize_vector(&scene->cameras[m].normal);
 			free_double_array(sub_params);
 			scene->cameras[m].view_matrix = set_camera_to_world_transformation_matrix(scene->cameras[m], (t_vector){0, 1, 0});
