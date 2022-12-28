@@ -174,6 +174,7 @@ float		intersect_ray_sphere(t_ray ray, t_sphere sphere);
 float		light_intens_by_dist(t_light light, t_ray ray, float t);
 void		put_pxl(t_img *img, int x, int y, int color);
 void		ray_tracer(t_data *data);
+int 		shading_plane(t_plane plane, t_ray ray, float t, t_light light);
 int			shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light);
 int			shading_cylinder(t_cylinder cylinder, t_ray ray, float t, t_light light);
 int			shading_cylinder_top(t_cylinder cylinder, t_ray ray, float t, t_light light);

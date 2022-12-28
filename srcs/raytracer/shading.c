@@ -85,6 +85,23 @@ int shading_sphere(t_sphere sphere, t_ray ray, float t, t_light light)
 	return (calc_color_intensity(sphere.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
 }
 
+int shading_plane(t_plane plane, t_ray ray, float t, t_light light)
+{
+	t_vector hit_point;
+	t_vector normal;
+	t_vector light_dir;
+	t_vector view_dir;
+
+	hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
+	view_dir = vector_from_points(hit_point, ray.origin);
+	normalize_vector(&view_dir);
+	normal = plane.normal;
+	normalize_vector(&normal);
+	light_dir = vector_from_points(hit_point, light.origin);
+	normalize_vector(&light_dir);
+	return (calc_color_intensity(plane.color, light_intens_by_dist(light, ray, t) * phong_shading(normal, light_dir, view_dir)));
+}
+
 t_vector normal_cylinder(t_cylinder cylinder, t_vector hit_point)
 {
 	float		m;
