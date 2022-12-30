@@ -1,6 +1,6 @@
 SRCS		=	main/main.c main/initializers.c \
 				utils/put_pxl.c utils/vector.c utils/ft_split.c utils/ft_atoi.c utils/ft_itoa.c\
-				utils/fps.c utils/ft_atof.c \
+				utils/fps.c utils/ft_atof.c utils/render_progress_bar.c \
 				controls/controls.c \
 				parsing/parsing.c \
 				gnl/get_next_line.c gnl/get_next_line_utils.c \

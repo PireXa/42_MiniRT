@@ -28,9 +28,7 @@ t_ray	get_ray(t_data *data, int x, int y)
 	camera.z = 1;
 	normalize_vector(&camera);
 	ray.origin = data->scene->cameras[0].origin;
-//	ray.direction = look_at(camera, data->scene->cameras[0].normal);
 	ray.direction = transform_vector(camera, data->scene->cameras[0].view_matrix);
-//	ray.direction = camera;
 	normalize_vector(&ray.direction);
 	return (ray);
 }
@@ -38,71 +36,49 @@ t_ray	get_ray(t_data *data, int x, int y)
 void	ray_tracer(t_data *data)
 {
 	t_ray ray;
+	t_vector hit_point;
 	int x;
 	int y;
 	int color;
-	int i;
-	int left_i;
 	t_near_obj	hit;
 
 	x = 0;
 	y = 0;
-	i = 0;
 	while (x < (int)WIND_W)
 	{
-		printf("Progress: %d%% | ", (int)((float)x / WIND_W * 100));
-		i = (int)((float)x / WIND_W * 50);
-		left_i = 50 - i - 1;
-		while (i--)
-			printf("#");
-		while (left_i--)
-			printf("-");
-		printf("\r");
+		render_progress_bar(x);
 		while (y < (int)WIND_H)
 		{
 			ray = get_ray(data, x, y);
 			hit = get_closest_intersection(data, ray);
+			if (hit.t_min < 4535320)
+				hit_point = vector_add(ray.origin, vector_scale(ray.direction, hit.t_min));
 			if (hit.closest_sphere != -1)
 			{
-				if (!check_shadow(data, ray, hit.t_min, data->scene->lights[0]))
-					color = shading_sphere(data->scene->spheres[hit.closest_sphere], ray, hit.t_min, data->scene->lights[0]);
-				else
-					color = calc_color_intensity(data->scene->spheres[hit.closest_sphere].color, 0.1f);
+					color = shading_sphere(data->scene->spheres[hit.closest_sphere], ray, hit_point, data);
 			}
 			else if (hit.closest_plane != -1)
 			{
-				if (!check_shadow(data, ray, hit.t_min, data->scene->lights[0]))
-					color = shading_plane(data->scene->planes[hit.closest_plane], ray, hit.t_min, data->scene->lights[0]);
-				else
-					color = calc_color_intensity(data->scene->planes[hit.closest_plane].color, 0.1f);
+					color = shading_plane(data->scene->planes[hit.closest_plane], ray, hit_point, data);
 			}
 			else if (hit.closest_cylinder != -1)
 			{
 				if (hit.cylinder_face == 0)
 				{
-					if (!check_shadow(data, ray, hit.t_min, data->scene->lights[0]))
-						color = shading_cylinder(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->scene->lights[0]);
-					else
-						color = calc_color_intensity(data->scene->cylinders[hit.closest_cylinder].color, 0.1f);
+						color = shading_cylinder(data->scene->cylinders[hit.closest_cylinder], ray, hit_point, data);
 				}
 				else if (hit.cylinder_face == 2)
 				{
-					if (!check_shadow(data, ray, hit.t_min, data->scene->lights[0]))
-						color = shading_cylinder_top(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->scene->lights[0]);
-					else
-						color = calc_color_intensity(data->scene->cylinders[hit.closest_cylinder].color, 0.1f);
+						color = shading_cylinder_top(data->scene->cylinders[hit.closest_cylinder], ray, hit_point, data);
 				}
 				else if (hit.cylinder_face == 1)
 				{
-					if (!check_shadow(data, ray, hit.t_min, data->scene->lights[0]))
-						color = shading_cylinder_bottom(data->scene->cylinders[hit.closest_cylinder], ray, hit.t_min, data->scene->lights[0]);
-					else
-						color = calc_color_intensity(data->scene->cylinders[hit.closest_cylinder].color, 0.1f);
+						color = shading_cylinder_bottom(data->scene->cylinders[hit.closest_cylinder], ray, hit_point, data);
 				}
 			}
 			else if (hit.closest_triangle != -1)
 			{
-				color = shading_triangle(data->scene->triangles[hit.closest_triangle], ray, hit.t_min, data->scene->lights[0]);
+				color = shading_triangle(data->scene->triangles[hit.closest_triangle], ray, hit_point, data);
 			}
 			else
 				color = background_color(y, BACKGROUND1, BACKGROUND2);
