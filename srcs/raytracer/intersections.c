@@ -75,11 +75,11 @@ float	intersect_ray_triangle(t_ray ray, t_triangle triangle) //Möller Trumbore 
 	return (0);
 }
 
-t_near_obj 	get_closest_intersection(t_data *data, t_ray ray)
+t_hit_obj 	get_closest_intersection(t_data *data, t_ray ray)
 {
 	int			i;
 	float		t;
-	t_near_obj	hit;
+	t_hit_obj	hit;
 
 	i = -1;
 	hit.t_min = 4535320;
@@ -88,6 +88,9 @@ t_near_obj 	get_closest_intersection(t_data *data, t_ray ray)
 	hit.closest_plane = -1;
 	hit.closest_cylinder = -1;
 	hit.closest_triangle = -1;
+	hit.color = 0;
+	hit.normal = (t_vector){0, 0, 0};
+	hit.hit_point = (t_vector){0, 0, 0};
 	//CHECK SPHERES
 	while(++i < data->nb_objs->nb_spheres)
 	{
@@ -135,8 +138,10 @@ t_near_obj 	get_closest_intersection(t_data *data, t_ray ray)
 			else
 			{
 				t = intersect_ray_cylinder_top(ray, data->scene->cylinders[i]);
-				if (t) {
-					if (t < hit.t_min) {
+				if (t)
+				{
+					if (t < hit.t_min)
+					{
 						hit.t_min = t;
 						hit.cylinder_face = 2;
 						hit.closest_cylinder = i;
@@ -145,8 +150,10 @@ t_near_obj 	get_closest_intersection(t_data *data, t_ray ray)
 					}
 				}
 				t = intersect_ray_cylinder_bottom(ray, data->scene->cylinders[i]);
-				if (t) {
-					if (t < hit.t_min) {
+				if (t)
+				{
+					if (t < hit.t_min)
+					{
 						hit.t_min = t;
 						hit.cylinder_face = 1;
 						hit.closest_cylinder = i;
@@ -172,6 +179,36 @@ t_near_obj 	get_closest_intersection(t_data *data, t_ray ray)
 				hit.closest_plane = -1;
 				hit.closest_cylinder = -1;
 			}
+		}
+	}
+	if (hit.t_min < 4535320)
+	{
+		hit.hit_point = vector_add(ray.origin, vector_scale(ray.direction, hit.t_min));
+		if (hit.closest_sphere != -1)
+		{
+			hit.normal = vector_from_points(data->scene->spheres[hit.closest_sphere].center, hit.hit_point);
+			normalize_vector(&hit.normal);
+			hit.color = data->scene->spheres[hit.closest_sphere].color;
+		}
+		else if (hit.closest_plane != -1)
+		{
+			hit.normal = data->scene->planes[hit.closest_plane].normal;
+			hit.color = data->scene->planes[hit.closest_plane].color;
+		}
+		else if (hit.closest_cylinder != -1)
+		{
+			if (hit.cylinder_face == 0)
+				hit.normal = normal_cylinder(data->scene->cylinders[hit.closest_cylinder], hit.hit_point);
+			else if (hit.cylinder_face == 2)
+				hit.normal = data->scene->cylinders[hit.closest_cylinder].normal;
+			else if (hit.cylinder_face == 1)
+				hit.normal = vector_scale(data->scene->cylinders[hit.closest_cylinder].normal, -1);
+			hit.color = data->scene->cylinders[hit.closest_cylinder].color;
+		}
+		else if (hit.closest_triangle != -1)
+		{
+			hit.normal = normal_triangle(data->scene->triangles[hit.closest_triangle]);
+			hit.color = data->scene->triangles[hit.closest_triangle].color;
 		}
 	}
 	return (hit);

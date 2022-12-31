@@ -36,11 +36,10 @@ t_ray	get_ray(t_data *data, int x, int y)
 void	ray_tracer(t_data *data)
 {
 	t_ray ray;
-	t_vector hit_point;
 	int x;
 	int y;
 	int color;
-	t_near_obj	hit;
+	t_hit_obj	hit;
 
 	x = 0;
 	y = 0;
@@ -52,33 +51,9 @@ void	ray_tracer(t_data *data)
 			ray = get_ray(data, x, y);
 			hit = get_closest_intersection(data, ray);
 			if (hit.t_min < 4535320)
-				hit_point = vector_add(ray.origin, vector_scale(ray.direction, hit.t_min));
-			if (hit.closest_sphere != -1)
 			{
-					color = shading_sphere(data->scene->spheres[hit.closest_sphere], ray, hit_point, data);
-			}
-			else if (hit.closest_plane != -1)
-			{
-					color = shading_plane(data->scene->planes[hit.closest_plane], ray, hit_point, data);
-			}
-			else if (hit.closest_cylinder != -1)
-			{
-				if (hit.cylinder_face == 0)
-				{
-						color = shading_cylinder(data->scene->cylinders[hit.closest_cylinder], ray, hit_point, data);
-				}
-				else if (hit.cylinder_face == 2)
-				{
-						color = shading_cylinder_top(data->scene->cylinders[hit.closest_cylinder], ray, hit_point, data);
-				}
-				else if (hit.cylinder_face == 1)
-				{
-						color = shading_cylinder_bottom(data->scene->cylinders[hit.closest_cylinder], ray, hit_point, data);
-				}
-			}
-			else if (hit.closest_triangle != -1)
-			{
-				color = shading_triangle(data->scene->triangles[hit.closest_triangle], ray, hit_point, data);
+				hit.color = reflection_refraction(data, ray, hit);
+				color = shading(hit, ray, data);
 			}
 			else
 				color = background_color(y, BACKGROUND1, BACKGROUND2);

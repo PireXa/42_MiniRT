@@ -34,14 +34,14 @@ int check_shadow(t_data *data, t_ray ray, t_vector hit_point, t_light light)
 {
 	float	light_dist;
 	t_ray	shadow_ray;
-	t_near_obj	hit;
+	t_hit_obj	hit;
 
 	shadow_ray.origin = vector_add(hit_point, vector_scale(ray.direction, -0.001f));
 	shadow_ray.direction = vector_from_points(shadow_ray.origin, light.origin);
 	normalize_vector(&shadow_ray.direction);
 	light_dist = get_light_dist(light, shadow_ray.origin);
 	hit = get_closest_intersection(data, shadow_ray);
-	if (hit.t_min > 0.0001 && hit.t_min < light_dist)
+	if (hit.t_min > 0.0001f && hit.t_min < light_dist)
 		return (1);
 	return (0);
 }
@@ -61,56 +61,6 @@ float phong_shading(t_vector normal, t_vector light_dir, t_vector view_dir)
 	return (phong);
 }
 
-int shading_sphere(t_sphere sphere, t_ray ray, t_vector hit_point, t_data *data)
-{
-	t_vector normal;
-	t_vector light_dir;
-	t_vector view_dir;
-	float intensity;
-	int i;
-
-	i = -1;
-	intensity = 0;
-	view_dir = vector_from_points(hit_point, ray.origin);
-	normalize_vector(&view_dir);
-	normal = vector_from_points(sphere.center, hit_point);
-	normalize_vector(&normal);
-	while (++i < data->nb_objs->nb_lights)
-	{
-		light_dir = vector_from_points(hit_point, data->scene->lights[i].origin);
-		normalize_vector(&light_dir);
-		if (check_shadow(data, ray, hit_point, data->scene->lights[i]) == 0)
-			intensity += light_intens_by_dist(data->scene->lights[i], hit_point) * phong_shading(normal, light_dir, view_dir);
-	}
-	return (calc_color_intensity(sphere.color, intensity));
-}
-
-int shading_plane(t_plane plane, t_ray ray, t_vector hit_point, t_data *data)
-{
-	t_vector normal;
-	t_vector light_dir;
-	t_vector view_dir;
-	float intensity;
-	int i;
-
-	i = -1;
-	intensity = 0;
-	view_dir = vector_from_points(hit_point, ray.origin);
-	normalize_vector(&view_dir);
-	normal = plane.normal;
-	normalize_vector(&normal);
-	while (++i < data->nb_objs->nb_lights)
-	{
-		light_dir = vector_from_points(hit_point, data->scene->lights[i].origin);
-		normalize_vector(&light_dir);
-		if (check_shadow(data, ray, hit_point, data->scene->lights[i]) == 0)
-			intensity += light_intens_by_dist(data->scene->lights[i], hit_point) * phong_shading(normal, light_dir, view_dir);
-	}
-	if (intensity >= 1)
-		intensity = 1;
-	return (calc_color_intensity(plane.color, intensity));
-}
-
 t_vector normal_cylinder(t_cylinder cylinder, t_vector hit_point)
 {
 	float		m;
@@ -124,75 +74,6 @@ t_vector normal_cylinder(t_cylinder cylinder, t_vector hit_point)
 	return (normal);
 }
 
-int shading_cylinder(t_cylinder cylinder, t_ray ray, t_vector hit_point, t_data *data)
-{
-	t_vector normal;
-	t_vector light_dir;
-	t_vector view_dir;
-	float intensity;
-	int i;
-
-	i = -1;
-	intensity = 0;
-	normal = normal_cylinder(cylinder, hit_point);
-	view_dir = vector_from_points(hit_point, ray.origin);
-	normalize_vector(&view_dir);
-	while (++i < data->nb_objs->nb_lights)
-	{
-		light_dir = vector_from_points(hit_point, data->scene->lights[i].origin);
-		normalize_vector(&light_dir);
-		if (check_shadow(data, ray, hit_point, data->scene->lights[i]) == 0)
-			intensity += light_intens_by_dist(data->scene->lights[i], hit_point) * phong_shading(normal, light_dir, view_dir);
-	}
-	return (calc_color_intensity(cylinder.color, intensity));
-}
-
-int	shading_cylinder_top(t_cylinder cylinder, t_ray ray, t_vector hit_point, t_data *data)
-{
-	t_vector light_dir;
-	t_vector view_dir;
-	t_vector normal;
-	float intensity;
-	int i;
-
-	i = -1;
-	intensity = 0;
-	normal = cylinder.normal;
-	view_dir = vector_from_points(hit_point, ray.origin);
-	normalize_vector(&view_dir);
-	while (++i < data->nb_objs->nb_lights)
-	{
-		light_dir = vector_from_points(hit_point, data->scene->lights[i].origin);
-		normalize_vector(&light_dir);
-		if (check_shadow(data, ray, hit_point, data->scene->lights[i]) == 0)
-			intensity += light_intens_by_dist(data->scene->lights[i], hit_point) * phong_shading(normal, light_dir, view_dir);
-	}
-	return (calc_color_intensity(cylinder.color, intensity));
-}
-
-int	shading_cylinder_bottom(t_cylinder cylinder, t_ray ray, t_vector hit_point, t_data *data)
-{
-	t_vector light_dir;
-	t_vector view_dir;
-	t_vector normal;
-	float intensity;
-	int i;
-
-	i = -1;
-	intensity = 0;
-	normal = vector_scale(cylinder.normal, -1);
-	view_dir = vector_from_points(hit_point, ray.origin);
-	normalize_vector(&view_dir);
-	while (++i < data->nb_objs->nb_lights)
-	{
-		light_dir = vector_from_points(hit_point, data->scene->lights[i].origin);
-		normalize_vector(&light_dir);
-		if (check_shadow(data, ray, hit_point, data->scene->lights[i]) == 0)
-			intensity += light_intens_by_dist(data->scene->lights[i], hit_point) * phong_shading(normal, light_dir, view_dir);
-	}
-	return (calc_color_intensity(cylinder.color, intensity));
-}
-
 t_vector	normal_triangle(t_triangle triangle)
 {
 	t_vector	normal;
@@ -202,27 +83,25 @@ t_vector	normal_triangle(t_triangle triangle)
 	return (normal);
 }
 
-int	shading_triangle(t_triangle triangle, t_ray ray, t_vector hit_point, t_data *data)
+int shading(t_hit_obj hit, t_ray ray, t_data *data)
 {
-	t_vector normal;
 	t_vector light_dir;
 	t_vector view_dir;
-	float intensity;
+	float	intensity;
 	int i;
 
 	i = -1;
 	intensity = 0;
-	view_dir = vector_from_points(hit_point, ray.origin);
+	view_dir = vector_from_points(hit.hit_point, ray.origin);
 	normalize_vector(&view_dir);
-	normal = normal_triangle(triangle);
 	while (++i < data->nb_objs->nb_lights)
 	{
-		light_dir = vector_from_points(hit_point, data->scene->lights[i].origin);
+		light_dir = vector_from_points(hit.hit_point, data->scene->lights[i].origin);
 		normalize_vector(&light_dir);
-		if (check_shadow(data, ray, hit_point, data->scene->lights[i]) == 0)
-			intensity += light_intens_by_dist(data->scene->lights[i], hit_point) * phong_shading(normal, light_dir, view_dir);
+		if (check_shadow(data, ray, hit.hit_point, data->scene->lights[i]) == 0)
+			intensity += light_intens_by_dist(data->scene->lights[i], hit.hit_point) * phong_shading(hit.normal, light_dir, view_dir);
 	}
 	if (intensity >= 1)
 		intensity = 1;
-	return (calc_color_intensity(triangle.color, intensity));
+	return (calc_color_intensity(hit.color, intensity));
 }

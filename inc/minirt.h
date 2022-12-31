@@ -14,8 +14,8 @@
 # include "mlx.h"
 # include "get_next_line.h"
 
-# define	WIND_W		840.00f//1920.00f
-# define	WIND_H		680.00f//1080.00f
+# define	WIND_W		840.00f/*1920.00f*/
+# define	WIND_H		680.00f/*1080.00f*/
 # define	GREEN		0x00FF00
 # define	BLUE		0x0000FF
 # define	RED			0xFF0000
@@ -143,7 +143,10 @@ typedef struct s_near_obj {
 	int			closest_cylinder;
 	int			cylinder_face;
 	int			closest_triangle;
-}				t_near_obj;
+	t_vector	normal;
+	t_vector	hit_point;
+	int 		color;
+}				t_hit_obj;
 
 typedef struct s_data
 {
@@ -165,15 +168,19 @@ int			calc_color_intensity(int color, float intensity);
 int			check_shadow(t_data *data, t_ray ray, t_vector hit_point, t_light light);
 float		define_cylinder_height(t_cylinder  cylinder, t_ray ray, float t);
 void		fps(t_data * data);
-t_near_obj	get_closest_intersection(t_data *data, t_ray ray);
+t_hit_obj	get_closest_intersection(t_data *data, t_ray ray);
 float 		intersect_ray_cylinder(t_ray ray, t_cylinder cylinder);
 float		intersect_ray_cylinder_bottom(t_ray ray, t_cylinder cylinder);
 float		intersect_ray_cylinder_top(t_ray ray, t_cylinder cylinder);
 float		intersect_ray_plane(t_ray ray, t_plane plane);
 float		intersect_ray_sphere(t_ray ray, t_sphere sphere);
 float		light_intens_by_dist(t_light light, t_vector hit_point);
+t_vector 	normal_cylinder(t_cylinder cylinder, t_vector hit_point);
+t_vector	normal_triangle(t_triangle triangle);
 void		put_pxl(t_img *img, int x, int y, int color);
 void		ray_tracer(t_data *data);
+int			reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit);
+int			shading(t_hit_obj hit, t_ray ray, t_data *data);
 int 		shading_plane(t_plane plane, t_ray ray, t_vector hit_point, t_data *data);
 int			shading_sphere(t_sphere sphere, t_ray, t_vector hit_point, t_data *data);
 int			shading_cylinder(t_cylinder cylinder, t_ray ray, t_vector hit_point, t_data *data);
@@ -194,6 +201,7 @@ int			sphere_counter(char *file);
 int			triangle_counter(char *file);
 
 //VECTOR UTILS
+void		vector_rand(t_vector *reflect_dir, float randomness);
 float		dot_product(t_vector vector1, t_vector vector2);
 t_vector	cross_product(t_vector vector1, t_vector vector2);
 void		normalize_vector(t_vector *vector);
@@ -211,7 +219,7 @@ void		init_data(t_data *data, char *scene_file);
 float		**set_camera_to_world_transformation_matrix(t_camera camera, t_vector up);
 
 //RENDER INFORMATION
-void	render_progress_bar(int x);
+void		render_progress_bar(int x);
 
 //UTILS
 int			ft_atoi(const char *str);

@@ -5,7 +5,7 @@ SRCS		=	main/main.c main/initializers.c \
 				parsing/parsing.c \
 				gnl/get_next_line.c gnl/get_next_line_utils.c \
 				raytracer/ray_tracer.c raytracer/shading.c raytracer/background.c \
-				raytracer/intersections.c raytracer/cylinder.c \
+				raytracer/intersections.c raytracer/cylinder.c raytracer/reflection_refraction.c \
 
 OBJS		=	$(addprefix objs/,$(SRCS:.c=.o))
 
