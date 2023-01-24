@@ -1,10 +1,10 @@
 #include "../../inc/minirt.h"
 
-int	sphere_counter(char *file)
+int    sphere_counter(char *file)
 {
-	int	fd;
-	int	count;
-	char	*line;
+	int    fd;
+	int    count;
+	char   *line;
 
 	count = 0;
 	/*path = ft_strjoin("./scenes/", file);
@@ -24,10 +24,10 @@ int	sphere_counter(char *file)
 
 int plane_counter(char *file)
 {
-	int	fd;
-	int	count;
-	char	*line;
-//	char 	*path;
+	int    fd;
+	int    count;
+	char   *line;
+// char   *path;
 
 	count = 0;
 	/*path = ft_strjoin("./scenes/", file);
@@ -47,10 +47,10 @@ int plane_counter(char *file)
 
 int cylinder_counter(char *file)
 {
-	int	fd;
-	int	count;
-	char	*line;
-//	char 	*path;
+	int    fd;
+	int    count;
+	char   *line;
+// char   *path;
 
 	count = 0;
 	/*path = ft_strjoin("./scenes/", file);
@@ -68,12 +68,12 @@ int cylinder_counter(char *file)
 	return (count);
 }
 
-int	triangle_counter(char *file)
+int    triangle_counter(char *file)
 {
-	int	fd;
-	int	count;
-	char	*line;
-//	char 	*path;
+	int    fd;
+	int    count;
+	char   *line;
+// char   *path;
 
 	count = 0;
 	/*path = ft_strjoin("./scenes/", file);
@@ -91,12 +91,12 @@ int	triangle_counter(char *file)
 	return (count);
 }
 
-int	camera_counter(char *file)
+int    camera_counter(char *file)
 {
-	int	fd;
-	int	count;
-	char	*line;
-//	char 	*path;
+	int    fd;
+	int    count;
+	char   *line;
+// char   *path;
 
 	count = 0;
 	/*path = ft_strjoin("./scenes/", file);
@@ -114,12 +114,12 @@ int	camera_counter(char *file)
 	return (count);
 }
 
-int	light_counter(char *file)
+int    light_counter(char *file)
 {
-	int	fd;
-	int	count;
-	char	*line;
-//	char 	*path;
+	int    fd;
+	int    count;
+	char   *line;
+// char   *path;
 
 	count = 0;
 	/*path = ft_strjoin("./scenes/", file);
@@ -137,14 +137,14 @@ int	light_counter(char *file)
 	return (count);
 }
 
-int	rgb_to_int(int r, int g, int b)
+int    rgb_to_int(int r, int g, int b)
 {
 	return (r << 16 | g << 8 | b);
 }
 
-void	free_double_array(char **array)
+void   free_double_array(char **array)
 {
-	int	i;
+	int    i;
 
 	i = -1;
 	while (array[++i])
@@ -152,19 +152,18 @@ void	free_double_array(char **array)
 	free(array);
 }
 
-void	parser(char *file, t_scene *scene)
+void   parser(char *file, t_scene *scene)
 {
-	int		fd;
-	int		i;
-	int 	j;
-	int 	k;
-	int 	l;
-	int 	m;
-	int 	n;
-	char	*line;
-	char 	**params;
-	char 	**sub_params;
-//	char 	*path;
+	int       fd;
+	int       i;
+	int    j;
+	int    k;
+	int    l;
+	int    m;
+	int    n;
+	char   *line;
+	char   **params;
+	char   **sub_params;
 
 	i = 0;
 	j = 0;
@@ -172,13 +171,11 @@ void	parser(char *file, t_scene *scene)
 	l = 0;
 	m = 0;
 	n = 0;
-	/*path = ft_strjoin("scenes/", file);
-	fd = open(path, O_RDONLY);
-	free(path);*/
 	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
-		params = ft_split(line, ' ');
+//    params = ft_split(line, ' ');
+		params = tab_space_split(line);
 		if (params[0][0] == 's' && params[0][1] == 'p')
 		{
 			sub_params = ft_split(params[1], ',');
@@ -187,7 +184,8 @@ void	parser(char *file, t_scene *scene)
 			scene->spheres[i].center.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			scene->spheres[i].diameter = ft_atof(params[2]);
-			sub_params = ft_split(params[3], ',');
+			scene->spheres[i].light_absorb_ratio = ft_atof(params[3]);
+			sub_params = ft_split(params[4], ',');
 			scene->spheres[i].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			i++;
@@ -204,7 +202,8 @@ void	parser(char *file, t_scene *scene)
 			scene->planes[j].normal.y = ft_atof(sub_params[1]);
 			scene->planes[j].normal.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
-			sub_params = ft_split(params[3], ',');
+			scene->planes[j].light_absorb_ratio = ft_atof(params[3]);
+			sub_params = ft_split(params[4], ',');
 			scene->planes[j].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			j++;
@@ -227,7 +226,8 @@ void	parser(char *file, t_scene *scene)
 			scene->cylinders[k].normal = v1;
 			scene->cylinders[k].diameter = ft_atof(params[3]);
 			scene->cylinders[k].height = ft_atof(params[4]);
-			sub_params = ft_split(params[5], ',');
+			scene->cylinders[k].light_absorb_ratio = ft_atof(params[5]);
+			sub_params = ft_split(params[6], ',');
 			scene->cylinders[k].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			k++;
@@ -249,6 +249,7 @@ void	parser(char *file, t_scene *scene)
 			scene->triangles[l].p3.y = ft_atof(sub_params[1]);
 			scene->triangles[l].p3.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
+			scene->triangles[l].light_absorb_ratio = ft_atof(params[3]);
 			sub_params = ft_split(params[4], ',');
 			scene->triangles[l].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);

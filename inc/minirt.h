@@ -23,7 +23,8 @@
 # define 	BACKGROUND2	0x03CFFC
 # define	FOV			70
 # define	LUMENS		10000
-
+# define	AMBIENT_LIGHT	0.3f
+# define	REFLECTION_DEPTH	5
 # define 	WORLD_SIZE	2000
 # define 	CAM_X		1000 //(WORLD_SIZE / 2)
 # define 	CAM_Y		(-50)
@@ -62,6 +63,7 @@ typedef struct s_sphere
 	t_vector	center;
 	float		diameter;
 	int			color;
+	float 		light_absorb_ratio;
 }				t_sphere;
 
 typedef struct s_plane
@@ -69,6 +71,7 @@ typedef struct s_plane
 	t_vector	point;
 	t_vector	normal;
 	int			color;
+	float 		light_absorb_ratio;
 }				t_plane;
 
 typedef struct s_square
@@ -77,6 +80,7 @@ typedef struct s_square
 	t_vector	normal;
 	float		side;
 	int			color;
+	float 		light_absorb_ratio;
 }				t_square;
 
 typedef struct s_cylinder
@@ -86,6 +90,7 @@ typedef struct s_cylinder
 	float		diameter;
 	float		height;
 	int			color;
+	float 		light_absorb_ratio;
 }				t_cylinder;
 
 typedef struct s_triangle
@@ -94,6 +99,7 @@ typedef struct s_triangle
 	t_vector	p2;
 	t_vector	p3;
 	int			color;
+	float 		light_absorb_ratio;
 }				t_triangle;
 
 typedef struct s_light
@@ -146,6 +152,7 @@ typedef struct s_near_obj {
 	t_vector	normal;
 	t_vector	hit_point;
 	int 		color;
+	float 		light_absorb_ratio;
 }				t_hit_obj;
 
 typedef struct s_data
@@ -179,7 +186,7 @@ t_vector 	normal_cylinder(t_cylinder cylinder, t_vector hit_point);
 t_vector	normal_triangle(t_triangle triangle);
 void		put_pxl(t_img *img, int x, int y, int color);
 void		ray_tracer(t_data *data);
-int			reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit);
+int			reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, float intensity);
 int			shading(t_hit_obj hit, t_ray ray, t_data *data);
 int 		shading_plane(t_plane plane, t_ray ray, t_vector hit_point, t_data *data);
 int			shading_sphere(t_sphere sphere, t_ray, t_vector hit_point, t_data *data);
@@ -226,5 +233,6 @@ int			ft_atoi(const char *str);
 float		ft_atof(char *str);
 char		*ft_itoa(int n);
 char 		**ft_split(char const *s, char c);
+char		**tab_space_split(char const *s);
 
 #endif

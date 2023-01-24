@@ -1,6 +1,5 @@
 
 #include "../../inc/minirt.h"
-
 float	intersect_ray_sphere(t_ray ray, t_sphere sphere)
 {
 	t_vector oc;
@@ -10,7 +9,6 @@ float	intersect_ray_sphere(t_ray ray, t_sphere sphere)
 	float discriminant;
 	float t;
 	float radius;
-
 	radius = sphere.diameter / 2;
 	oc = vector_from_points(sphere.center, ray.origin);
 	a = dot_product(ray.direction, ray.direction);
@@ -27,13 +25,11 @@ float	intersect_ray_sphere(t_ray ray, t_sphere sphere)
 		return (t);
 	return (0);
 }
-
 float intersect_ray_plane(t_ray ray, t_plane plane)
 {
 	float t;
 	float denom;
 	t_vector p0l0;
-
 	denom = dot_product(plane.normal, ray.direction);
 	if (fabs(denom) > 0.0001f)
 	{
@@ -44,7 +40,6 @@ float intersect_ray_plane(t_ray ray, t_plane plane)
 	}
 	return (0);
 }
-
 float	intersect_ray_triangle(t_ray ray, t_triangle triangle) //Möller Trumbore Algorithm
 {
 	float t;
@@ -57,7 +52,6 @@ float	intersect_ray_triangle(t_ray ray, t_triangle triangle) //Möller Trumbore 
 	t_vector tvec;
 	float u;
 	float v;
-
 	edge1 = vector_from_points(triangle.p1, triangle.p2);
 	edge2 = vector_from_points(triangle.p1, triangle.p3);
 	pvec = cross_product(ray.direction, edge2);
@@ -74,13 +68,11 @@ float	intersect_ray_triangle(t_ray ray, t_triangle triangle) //Möller Trumbore 
 	}
 	return (0);
 }
-
 t_hit_obj 	get_closest_intersection(t_data *data, t_ray ray)
 {
 	int			i;
 	float		t;
 	t_hit_obj	hit;
-
 	i = -1;
 	hit.t_min = 4535320;
 	t = 0;
@@ -91,6 +83,7 @@ t_hit_obj 	get_closest_intersection(t_data *data, t_ray ray)
 	hit.color = 0;
 	hit.normal = (t_vector){0, 0, 0};
 	hit.hit_point = (t_vector){0, 0, 0};
+	hit.light_absorb_ratio = 1;
 	//CHECK SPHERES
 	while(++i < data->nb_objs->nb_spheres)
 	{
@@ -189,11 +182,13 @@ t_hit_obj 	get_closest_intersection(t_data *data, t_ray ray)
 			hit.normal = vector_from_points(data->scene->spheres[hit.closest_sphere].center, hit.hit_point);
 			normalize_vector(&hit.normal);
 			hit.color = data->scene->spheres[hit.closest_sphere].color;
+			hit.light_absorb_ratio = data->scene->spheres[hit.closest_sphere].light_absorb_ratio;
 		}
 		else if (hit.closest_plane != -1)
 		{
 			hit.normal = data->scene->planes[hit.closest_plane].normal;
 			hit.color = data->scene->planes[hit.closest_plane].color;
+			hit.light_absorb_ratio = data->scene->planes[hit.closest_plane].light_absorb_ratio;
 		}
 		else if (hit.closest_cylinder != -1)
 		{
@@ -204,11 +199,13 @@ t_hit_obj 	get_closest_intersection(t_data *data, t_ray ray)
 			else if (hit.cylinder_face == 1)
 				hit.normal = vector_scale(data->scene->cylinders[hit.closest_cylinder].normal, -1);
 			hit.color = data->scene->cylinders[hit.closest_cylinder].color;
+			hit.light_absorb_ratio = data->scene->cylinders[hit.closest_cylinder].light_absorb_ratio;
 		}
 		else if (hit.closest_triangle != -1)
 		{
 			hit.normal = normal_triangle(data->scene->triangles[hit.closest_triangle]);
 			hit.color = data->scene->triangles[hit.closest_triangle].color;
+			hit.light_absorb_ratio = data->scene->triangles[hit.closest_triangle].light_absorb_ratio;
 		}
 	}
 	return (hit);

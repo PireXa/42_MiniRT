@@ -52,7 +52,7 @@ void	ray_tracer(t_data *data)
 			hit = get_closest_intersection(data, ray);
 			if (hit.t_min < 4535320)
 			{
-				hit.color = reflection_refraction(data, ray, hit);
+				hit.color = reflection_refraction(data, ray, hit, REFLECTION_DEPTH, 1.0f);
 				color = shading(hit, ray, data);
 			}
 			else

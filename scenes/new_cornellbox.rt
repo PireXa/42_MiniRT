@@ -1,0 +1,37 @@
+#R  3840   2700
+#R 1440   1080
+R  1920   1080
+
+A  0.2       255,255,255
+
+c 0,1.5,0   0,0,1 70
+
+l 0,3.6,4.5 0.4 255,255,255
+l 0,1.5,1 0.101 255,255,255
+
+
+##################       SPEC RFL  RFR  TEXTURE COLOR
+
+#  Sphere Center       Diameter   Light Absortion       Texture Color
+
+sp	1,0.75,5			1.5			0.8					82,255,255
+
+sp	-0.8,0.75,4			1.5			0.1					255,255,65
+
+# Plane       Point        Normal    Light Absortion       Texture Color
+
+pl              0,0,0        0,1,0     0.9                255,255,65
+
+pl              0,0,6        0,0,-1    0.9                210,210,210
+
+pl              0,4,0        0,-1,0    0.9                0,0,0
+
+pl				-2.5,0,0      1,0,0     0.9                208,56,56
+
+pl				2.5,0,0          -1,0,0    0.9                27,89,195
+
+pl				0,0,0        0,0,1     0.9                0,150,150
+
+# Cylinder Point        Axis      Radius    Height    Light Absortion       Texture Color
+
+cy				0,4,4.5          0,-1,0    0.6          0.101     0.9             255,255,255

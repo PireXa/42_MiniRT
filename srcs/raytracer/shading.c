@@ -27,7 +27,7 @@ float light_intens_by_dist(t_light light, t_vector hit_point)
 	intensity = LUMENS / (get_light_dist(light, hit_point) * get_light_dist(light, hit_point));
 	if (intensity > 1)
 		intensity = 1;
-	return (intensity);
+	return (intensity + AMBIENT_LIGHT);
 }
 
 int check_shadow(t_data *data, t_ray ray, t_vector hit_point, t_light light)
