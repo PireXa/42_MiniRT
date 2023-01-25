@@ -24,7 +24,7 @@
 # define	FOV			70
 # define	LUMENS		10000
 # define	AMBIENT_LIGHT	0.3f
-# define	REFLECTION_DEPTH	5
+# define	REFLECTION_DEPTH	25
 # define 	WORLD_SIZE	2000
 # define 	CAM_X		1000 //(WORLD_SIZE / 2)
 # define 	CAM_Y		(-50)

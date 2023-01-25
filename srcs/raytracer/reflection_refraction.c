@@ -55,9 +55,9 @@ int reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, flo
 	normalize_vector(&reflected_ray.direction);
 	reflected_ray.origin = hit.hit_point;
 	reflected_hit = get_reflected_color(data, reflected_ray, hit);
-	reflected_hit.color = blend_colors(hit.color, reflected_hit.color, hit.light_absorb_ratio / light_intensity);
-//	reflected_hit.light_absorb_ratio = hit.light_absorb_ratio;
+	reflected_hit.color = blend_colors(hit.color, reflected_hit.color, hit.light_absorb_ratio / pow(light_intensity, 2));
 	light_intensity *= (1.0f - hit.light_absorb_ratio);
+//	reflected_hit.light_absorb_ratio = hit.light_absorb_ratio;
 	if (depth > 1 && light_intensity > 0.01f)
 		return (reflection_refraction(data, reflected_ray, reflected_hit, depth - 1, light_intensity));
 	return (reflected_hit.color);

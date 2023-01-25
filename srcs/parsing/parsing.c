@@ -184,8 +184,16 @@ void   parser(char *file, t_scene *scene)
 			scene->spheres[i].center.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			scene->spheres[i].diameter = ft_atof(params[2]);
-			scene->spheres[i].light_absorb_ratio = ft_atof(params[3]);
-			sub_params = ft_split(params[4], ',');
+			if (params[4])
+			{
+				scene->spheres[i].light_absorb_ratio = ft_atof(params[3]);
+				sub_params = ft_split(params[4], ',');
+			}
+			else
+			{
+				scene->spheres[i].light_absorb_ratio = 1;
+				sub_params = ft_split(params[3], ',');
+			}
 			scene->spheres[i].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			i++;
@@ -202,8 +210,16 @@ void   parser(char *file, t_scene *scene)
 			scene->planes[j].normal.y = ft_atof(sub_params[1]);
 			scene->planes[j].normal.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
-			scene->planes[j].light_absorb_ratio = ft_atof(params[3]);
-			sub_params = ft_split(params[4], ',');
+			if (params[4])
+			{
+				scene->planes[j].light_absorb_ratio = ft_atof(params[3]);
+				sub_params = ft_split(params[4], ',');
+			}
+			else
+			{
+				scene->planes[j].light_absorb_ratio = 1;
+				sub_params = ft_split(params[3], ',');
+			}
 			scene->planes[j].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			j++;
@@ -226,8 +242,16 @@ void   parser(char *file, t_scene *scene)
 			scene->cylinders[k].normal = v1;
 			scene->cylinders[k].diameter = ft_atof(params[3]);
 			scene->cylinders[k].height = ft_atof(params[4]);
-			scene->cylinders[k].light_absorb_ratio = ft_atof(params[5]);
-			sub_params = ft_split(params[6], ',');
+			if (params[6])
+			{
+				scene->cylinders[k].light_absorb_ratio = ft_atof(params[5]);
+				sub_params = ft_split(params[6], ',');
+			}
+			else
+			{
+				scene->cylinders[k].light_absorb_ratio = 1;
+				sub_params = ft_split(params[5], ',');
+			}
 			scene->cylinders[k].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			k++;
@@ -249,8 +273,16 @@ void   parser(char *file, t_scene *scene)
 			scene->triangles[l].p3.y = ft_atof(sub_params[1]);
 			scene->triangles[l].p3.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
-			scene->triangles[l].light_absorb_ratio = ft_atof(params[3]);
-			sub_params = ft_split(params[4], ',');
+			if (params[4])
+			{
+				scene->triangles[l].light_absorb_ratio = ft_atof(params[3]);
+				sub_params = ft_split(params[4], ',');
+			}
+			else
+			{
+				scene->triangles[l].light_absorb_ratio = 1;
+				sub_params = ft_split(params[3], ',');
+			}
 			scene->triangles[l].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			l++;
