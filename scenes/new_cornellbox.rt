@@ -16,22 +16,22 @@ l 0,1.5,1 0.101 255,255,255
 
 sp	1,0.75,5			1.5			0.8					82,255,255
 
-sp	-0.8,0.75,4			1.5			0.1					255,255,65
+sp	-0.8,0.75,4			1.5			0.03					255,255,255
 
-# Plane       Point        Normal    Light Absortion       Texture Color
+# Plane			Point		Normal		Light Absortion		Texture Color
 
-pl              0,0,0        0,1,0     0.9                255,255,65
+pl				0,0,0		0,1,0		0.9					255,255,65
 
-pl              0,0,6        0,0,-1    0.9                210,210,210
+pl				0,0,6		0,0,-1		0.9					210,210,210
 
-pl              0,4,0        0,-1,0    0.9                0,0,0
+pl				0,4,0		0,-1,0		0.9					0,0,0
 
-pl				-2.5,0,0      1,0,0     0.9                208,56,56
+pl				-2.5,0,0	1,0,0		0.9					208,56,56
 
-pl				2.5,0,0          -1,0,0    0.9                27,89,195
+pl				2.5,0,0		-1,0,0		0.9					27,89,195
 
-pl				0,0,0        0,0,1     0.9                0,150,150
+pl				0,0,0		0,0,1		0.9					0,150,150
 
-# Cylinder Point        Axis      Radius    Height    Light Absortion       Texture Color
+# Cylinder	Point			Axis		Radius		Height		Light Absortion			Texture Color
 
-cy				0,4,4.5          0,-1,0    0.6          0.101     0.9             255,255,255
+cy			0,4,4.5			0,-1,0		0.6			0.101		0.9						255,255,255
