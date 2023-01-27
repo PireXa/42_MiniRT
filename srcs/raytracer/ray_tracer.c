@@ -56,7 +56,10 @@ void	ray_tracer(t_data *data)
 				color = shading(hit, ray, data);
 			}
 			else
+			{
+//				color = background_color(y, 0x282828, 0xc13800);
 				color = background_color(y, BACKGROUND1, BACKGROUND2);
+			}
 			put_pxl(&data->img, x, y, color);
 			y++;
 		}

@@ -56,7 +56,7 @@ float phong_shading(t_vector normal, t_vector light_dir, t_vector view_dir)
 	diffuse = 0.3 * fmax(0, dot_product(normal, light_dir));
 	half_vector = vector_add(light_dir, view_dir);
 	normalize_vector(&half_vector);
-	specular = 0.3 * pow(fmax(0, dot_product(normal, half_vector)), 50);
+	specular = 0.5 * pow(fmax(0, dot_product(normal, half_vector)), 80);
 	phong = diffuse + specular;
 	return (phong);
 }
@@ -101,6 +101,7 @@ int shading(t_hit_obj hit, t_ray ray, t_data *data)
 		if (check_shadow(data, ray, hit.hit_point, data->scene->lights[i]) == 0)
 			intensity += light_intens_by_dist(data->scene->lights[i], hit.hit_point) * phong_shading(hit.normal, light_dir, view_dir);
 	}
+	intensity += AMBIENT_LIGHT;
 	if (intensity >= 1)
 		intensity = 1;
 	return (calc_color_intensity(hit.color, intensity));
