@@ -105,7 +105,7 @@ int    camera_counter(char *file)
 	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
-		if (line[0] == 'c' && line[1] == ' ')
+		if (line[0] == 'c')
 			count++;
 		free(line);
 	}
@@ -128,7 +128,7 @@ int    light_counter(char *file)
 	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
-		if (line[0] == 'l' && line[1] == ' ')
+		if (line[0] == 'l')
 			count++;
 		free(line);
 	}
@@ -150,6 +150,19 @@ void   free_double_array(char **array)
 	while (array[++i])
 		free(array[i]);
 	free(array);
+}
+
+void	print_double_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		printf("array[%d] = %s|\n", i, array[i]);
+		i++;
+	}
+	printf("\n");
 }
 
 void   parser(char *file, t_scene *scene)

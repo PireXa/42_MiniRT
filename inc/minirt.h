@@ -14,8 +14,10 @@
 # include "mlx.h"
 # include "get_next_line.h"
 
-# define	WIND_W		840.00f/*1920.00f*/
-# define	WIND_H		680.00f/*1080.00f*/
+# define	WIND_W		840.00f
+# define	WIND_H		680.00f
+/*# define	WIND_W		1920.00f
+# define	WIND_H		1080.00f*/
 # define	GREEN		0x00FF00
 # define	BLUE		0x0000FF
 # define	RED			0xFF0000
@@ -230,6 +232,7 @@ float		**set_camera_to_world_transformation_matrix(t_camera camera, t_vector up)
 void		render_progress_bar(int x);
 
 //UTILS
+int			blend_colors(int color1, int color2, float ratio);
 int			ft_atoi(const char *str);
 float		ft_atof(char *str);
 char		*ft_itoa(int n);
