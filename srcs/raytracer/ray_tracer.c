@@ -67,5 +67,5 @@ void	ray_tracer(t_data *data)
 		y = 0;
 		x++;
 	}
-	printf("\rRendering: 100%%\n");
+	printf("\rProgress: 100%% | \n");
 }
