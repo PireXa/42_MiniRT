@@ -8,6 +8,20 @@ t_vector	calc_reflected_ray(t_vector ray, t_vector normal)
 	return (reflected_ray);
 }
 
+t_vector	calc_refracted_ray(t_vector ray, t_vector normal)
+{
+	float		n;
+	float		c1;
+	float		c2;
+	t_vector	refracted_ray;
+
+	n = 1 / 1.3f;
+	c1 = dot_product(normal, ray);
+	c2 = sqrt(1 - n * n * (1 - c1 * c1));
+	refracted_ray = vector_add(vector_scale(ray, n), vector_scale(normal, n * c1 - c2));
+	return (refracted_ray);
+}
+
 t_hit_obj get_reflected_color(t_data *data, t_ray reflect_ray, t_hit_obj hit)
 {
 	t_hit_obj	reflect_hit;
@@ -18,6 +32,23 @@ t_hit_obj get_reflected_color(t_data *data, t_ray reflect_ray, t_hit_obj hit)
 	else
 		reflect_hit.color = hit.color;
 	return (reflect_hit);
+}
+
+t_hit_obj get_refracted_color(t_data *data, t_ray refract_ray, t_hit_obj hit)
+{
+	t_hit_obj	refract_hit;
+
+	refract_hit = get_closest_intersection(data, refract_ray);
+	printf("refract_hit.color: %d\n", refract_hit.color);
+	refract_ray.origin = vector_add(hit.hit_point, vector_scale(refract_ray.direction, refract_hit.t_min + 320));
+	refract_hit = get_closest_intersection(data, refract_ray);
+	printf("refract_hit.closest_sphere: %d\n", refract_hit.closest_sphere);
+	printf("refract_hit.color: %d\n\n", refract_hit.color);
+	if (refract_hit.t_min < 4535320)
+		refract_hit.color = shading(refract_hit, refract_ray, data);
+	else
+		refract_hit.color = hit.color;
+	return (refract_hit);
 }
 
 float get_random_number(float min, float max)
@@ -61,15 +92,21 @@ int reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, flo
 {
 	t_ray		reflected_ray;
 	t_hit_obj 	reflected_hit;
+	t_ray		refracted_ray;
+	t_hit_obj 	refracted_hit;
 	float		fresnel_ratio;
 
+	fresnel_ratio = fresnel(ray.direction, hit.normal, hit.light_absorb_ratio);
 	reflected_ray.direction = calc_reflected_ray(ray.direction, hit.normal);
 //	vector_rand(&reflected_ray, 0.1f);
 	normalize_vector(&reflected_ray.direction);
-	fresnel_ratio = fresnel(ray.direction, hit.normal, hit.light_absorb_ratio);
 	reflected_ray.origin = hit.hit_point;
 	reflected_hit = get_reflected_color(data, reflected_ray, hit);
-	reflected_hit.color = blend_colors(hit.color, reflected_hit.color, fresnel_ratio/*hit.light_absorb_ratio *//*+ (1 - light_intensity)*/);
+//	refracted_ray.direction = calc_refracted_ray(ray.direction, hit.normal);
+//	refracted_ray.origin = hit.hit_point;
+//	refracted_hit = get_refracted_color(data, refracted_ray, hit);
+//	reflected_hit.color = refracted_hit.color;
+	reflected_hit.color = blend_colors(hit.color, reflected_hit.color, fresnel_ratio/*hit.light_absorb_ratio *//**//*+ (1 - light_intensity)*/);
 	reflected_hit.color = blend_colors(reflected_hit.color, hit.color, light_intensity);
 	light_intensity = light_intensity - hit.light_absorb_ratio;
 	if (depth > 1 && light_intensity > 0.01f)

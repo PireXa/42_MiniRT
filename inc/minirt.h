@@ -189,7 +189,7 @@ t_vector 	normal_cylinder(t_cylinder cylinder, t_vector hit_point);
 t_vector	normal_triangle(t_triangle triangle);
 void		put_pxl(t_img *img, int x, int y, int color);
 void		ray_tracer(t_data *data);
-int			reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, float intensity);
+int 		reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, float intensity);
 int			shading(t_hit_obj hit, t_ray ray, t_data *data);
 int 		shading_plane(t_plane plane, t_ray ray, t_vector hit_point, t_data *data);
 int			shading_sphere(t_sphere sphere, t_ray, t_vector hit_point, t_data *data);
@@ -220,6 +220,7 @@ t_vector	vector_from_points(t_vector point1, t_vector point2);
 float		vector_length(t_vector v);
 t_vector	vector_scale(t_vector v, float scale);
 t_vector	vector_sub(t_vector v1, t_vector v2);
+void		vector_rand(t_vector *reflect_dir, float randomness);
 
 //TIME
 long int	current_time_millis();
