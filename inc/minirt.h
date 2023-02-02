@@ -27,7 +27,7 @@
 # define	LUMENS		10000
 # define	AMBIENT_LIGHT	0.15f
 # define	REFLECTION_DEPTH	25
-# define	MATERIAL_REFRACTION	1.2f
+# define	MATERIAL_REFRACTION	1.1f
 /*# define 	WORLD_SIZE	2000
 # define 	CAM_X		1000 //(WORLD_SIZE / 2)
 # define 	CAM_Y		(-50)
