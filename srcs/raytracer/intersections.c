@@ -68,7 +68,7 @@ float	intersect_ray_triangle(t_ray ray, t_triangle triangle) //Möller Trumbore 
 	}
 	return (0);
 }
-t_hit_obj 	get_closest_intersection(t_data *data, t_ray ray)
+t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 {
 	int			i;
 	float		t;

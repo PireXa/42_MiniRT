@@ -14,6 +14,8 @@
 # include "mlx.h"
 # include "get_next_line.h"
 
+/*# define	WIND_W		400.00f
+# define	WIND_H		300.00f*/
 # define	WIND_W		840.00f
 # define	WIND_H		680.00f
 /*# define	WIND_W		1920.00f
@@ -28,6 +30,7 @@
 # define	AMBIENT_LIGHT	0.15f
 # define	REFLECTION_DEPTH	25
 # define	MATERIAL_REFRACTION	1.1f
+# define	MATERIAL_TRANSPARENCY	0.0f
 /*# define 	WORLD_SIZE	2000
 # define 	CAM_X		1000 //(WORLD_SIZE / 2)
 # define 	CAM_Y		(-50)
