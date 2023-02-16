@@ -55,7 +55,7 @@ static char	*get_nl(int fd, char *buffer, char *str, char *save)
 
 char	*get_next_line(int fd)
 {
-	static char	*str;
+	static char	*str[1024];
 	char		*buffer;
 	char		*save;
 
@@ -65,9 +65,9 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	save = NULL;
-	str = get_nl(fd, buffer, str, save);
+	str[fd] = get_nl(fd, buffer, str[fd], save);
 	free(buffer);
-	save = ft_strnldup(str);
-	str = ft_exstrchr(str);
+	save = ft_strnldup(str[fd]);
+	str[fd] = ft_exstrchr(str[fd]);
 	return (save);
 }

@@ -70,6 +70,8 @@ typedef struct s_sphere
 	float		diameter;
 	int			color;
 	float 		light_absorb_ratio;
+	float 		refraction_index;
+	float 		light_absorb_distance;
 }				t_sphere;
 
 typedef struct s_plane
@@ -78,6 +80,8 @@ typedef struct s_plane
 	t_vector	normal;
 	int			color;
 	float 		light_absorb_ratio;
+	float 		refraction_index;
+	float 		light_absorb_distance;
 }				t_plane;
 
 typedef struct s_square
@@ -97,6 +101,8 @@ typedef struct s_cylinder
 	float		height;
 	int			color;
 	float 		light_absorb_ratio;
+	float 		refraction_index;
+	float 		light_absorb_distance;
 }				t_cylinder;
 
 typedef struct s_triangle
@@ -106,6 +112,8 @@ typedef struct s_triangle
 	t_vector	p3;
 	int			color;
 	float 		light_absorb_ratio;
+	float 		refraction_index;
+	float 		light_absorb_distance;
 }				t_triangle;
 
 typedef struct s_light
@@ -159,6 +167,8 @@ typedef struct s_near_obj {
 	t_vector	hit_point;
 	int 		color;
 	float 		light_absorb_ratio;
+	float 		refraction_index;
+	float 		light_absorb_distance;
 }				t_hit_obj;
 
 typedef struct s_data
@@ -192,7 +202,7 @@ t_vector 	normal_cylinder(t_cylinder cylinder, t_vector hit_point);
 t_vector	normal_triangle(t_triangle triangle);
 void		put_pxl(t_img *img, int x, int y, int color);
 void		ray_tracer(t_data *data);
-int 		reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, float intensity);
+int 		reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, float intensity, float ref_index);
 int			shading(t_hit_obj hit, t_ray ray, t_data *data);
 int 		shading_plane(t_plane plane, t_ray ray, t_vector hit_point, t_data *data);
 int			shading_sphere(t_sphere sphere, t_ray, t_vector hit_point, t_data *data);
@@ -241,6 +251,7 @@ int			ft_atoi(const char *str);
 float		ft_atof(char *str);
 char		*ft_itoa(int n);
 char 		**ft_split(char const *s, char c);
+int			ft_strncmp(char *s1, char *s2, int n);
 char		**tab_space_split(char const *s);
 
 #endif

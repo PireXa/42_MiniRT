@@ -16,14 +16,14 @@ float	ft_atof(char *str)
 		sign = -1;
 		i++;
 	}
-	while (str[i] && str[i] != '.')
+	while (str[i] && str[i] != '.' && str[i] != '\n')
 	{
 		result = result * 10 + str[i] - '0';
 		i++;
 	}
 	if (str[i] == '.')
 		i++;
-	while (str[i])
+	while (str[i] && str[i] != '\n')
 	{
 		decimal = decimal * 10 + str[i] - '0';
 		i++;

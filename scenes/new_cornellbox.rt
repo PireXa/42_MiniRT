@@ -6,7 +6,8 @@ A  0.2       255,255,255
 
 #	Camera Position		Camera Direction		Field of View
 
-c	0,1.5,0				0,0,1					70
+ c	0,1.5,0				0,0,1					70
+#c	-1,1.5,0				0.5,0,1					70
 
 #	Light Position		Light Intensity		Light Color
 
@@ -14,26 +15,29 @@ l	0,3.6,4.5			0.4					255,255,255
 
 l	0,1.5,1				0.101				255,255,255
 
-#  Sphere Center       Diameter   Light Absortion       Texture Color
+# l	1,1,5.5				0.101				255,255,255
 
-sp	1,0.75,5			1.5			0.9					82,255,255
+#  Sphere Center       Diameter		Texture Color		Material Reference
 
-sp	-0.8,0.75,4			1.5			0.03					0,0,0
+sp	1,0.75,5			1.5			82,255,255			std_plstc
+# sp		1,0.75,4			1.5			0,0,165			op_glss
 
-# Plane			Point		Normal		Light Absortion		Texture Color
+sp	-0.8,0.75,4			1.5			0,0,0				std_mtl
 
-pl				0,0,0		0,1,0		0.9					255,255,65
+# Plane			Point		Normal		Texture Color	Material Reference
 
-pl				0,0,6		0,0,-1		0.9					210,210,210
+pl				0,0,0		0,1,0		255,255,65		pl_plstc
 
-pl				0,4,0		0,-1,0		0.9					0,0,0
+pl				0,0,6		0,0,-1		210,210,210		pl_plstc
 
-pl				-2.5,0,0	1,0,0		0.9					208,56,56
+pl				0,4,0		0,-1,0		0,0,0			pl_plstc
 
-pl				2.5,0,0		-1,0,0		0.9					27,89,195
+pl				-2.5,0,0	1,0,0		208,56,56		pl_plstc
 
-pl				0,0,0		0,0,1		0.9					0,150,150
+pl				2.5,0,0		-1,0,0		27,89,195		pl_plstc
 
-# Cylinder	Point			Axis		Radius		Height		Light Absortion			Texture Color
+pl				0,0,0		0,0,1		0,150,150		pl_plstc
 
-cy			0,4,4.5			0,-1,0		0.6			0.101		0.9						255,255,255
+# Cylinder	Point			Axis		Radius		Height		Texture Color		Material Reference
+
+cy			0,4,4.5			0,-1,0		0.6			0.101		55,255,255			op_plstc

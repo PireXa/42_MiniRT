@@ -33,6 +33,18 @@ t_ray	get_ray(t_data *data, int x, int y)
 	return (ray);
 }
 
+int	get_normal_color(t_hit_obj hit)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = (int)(((hit.normal.x + 1) / 2)* 255);
+	g = (int)(((hit.normal.y + 1) / 2)* 255);
+	b = (int)(((hit.normal.z + 1) / 2)* 255);
+	return ((r << 16) | (g << 8) | b);
+}
+
 void	ray_tracer(t_data *data)
 {
 	t_ray ray;
@@ -52,9 +64,11 @@ void	ray_tracer(t_data *data)
 			hit = get_closest_intersection(data, ray);
 			if (hit.t_min < 4535320)
 			{
-				hit.color = reflection_refraction(data, ray, hit, REFLECTION_DEPTH, 1.0f);
+//				color = get_normal_color(hit);
+				hit.color = reflection_refraction(data, ray, hit, REFLECTION_DEPTH, 1.0f, 1.0f);
 				color = shading(hit, ray, data);
-				color = blend_colors(color, hit.color, hit.light_absorb_ratio);
+//				color = blend_colors(color, hit.color, hit.light_absorb_ratio);
+				color = blend_colors(color, hit.color, hit.light_absorb_distance);
 //				color = hit.color;
 			}
 			else

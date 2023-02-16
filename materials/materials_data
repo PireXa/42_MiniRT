@@ -1,0 +1,9 @@
+# Material Reference	Light Absorption	Light Refraction Index			Light Absortion by Distance
+op_plstc			0.95					1.5								10
+std_plstc			0.80					1.5								6
+ref_plstc			0.75					1.3								8
+op_glss				0.98					1.5								0.0
+ref_glss			0.68					1.5								0.68
+std_mtl				0.05					1.2								0.05
+pl_plstc 			0.90					1.5								1000.0
+pl_mirror			0.01					1.0								1000.0

@@ -84,6 +84,8 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 	hit.normal = (t_vector){0, 0, 0};
 	hit.hit_point = (t_vector){0, 0, 0};
 	hit.light_absorb_ratio = 1;
+	hit.refraction_index = 1;
+	hit.light_absorb_distance = 1;
 	//CHECK SPHERES
 	while(++i < data->nb_objs->nb_spheres)
 	{
@@ -128,8 +130,8 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 				hit.closest_sphere = -1;
 				hit.closest_plane = -1;
 			}
-			else
-			{
+			/*else
+			{*/
 				t = intersect_ray_cylinder_top(ray, data->scene->cylinders[i]);
 				if (t)
 				{
@@ -154,7 +156,7 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 						hit.closest_plane = -1;
 					}
 				}
-			}
+//			}
 		}
 	}
 	i = -1;
@@ -183,12 +185,16 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 			normalize_vector(&hit.normal);
 			hit.color = data->scene->spheres[hit.closest_sphere].color;
 			hit.light_absorb_ratio = data->scene->spheres[hit.closest_sphere].light_absorb_ratio;
+			hit.refraction_index = data->scene->spheres[hit.closest_sphere].refraction_index;
+			hit.light_absorb_distance = data->scene->spheres[hit.closest_sphere].light_absorb_distance;
 		}
 		else if (hit.closest_plane != -1)
 		{
 			hit.normal = data->scene->planes[hit.closest_plane].normal;
 			hit.color = data->scene->planes[hit.closest_plane].color;
 			hit.light_absorb_ratio = data->scene->planes[hit.closest_plane].light_absorb_ratio;
+			hit.refraction_index = data->scene->planes[hit.closest_plane].refraction_index;
+			hit.light_absorb_distance = data->scene->planes[hit.closest_plane].light_absorb_distance;
 		}
 		else if (hit.closest_cylinder != -1)
 		{
@@ -200,12 +206,16 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 				hit.normal = vector_scale(data->scene->cylinders[hit.closest_cylinder].normal, -1);
 			hit.color = data->scene->cylinders[hit.closest_cylinder].color;
 			hit.light_absorb_ratio = data->scene->cylinders[hit.closest_cylinder].light_absorb_ratio;
+			hit.refraction_index = data->scene->cylinders[hit.closest_cylinder].refraction_index;
+			hit.light_absorb_distance = data->scene->cylinders[hit.closest_cylinder].light_absorb_distance;
 		}
 		else if (hit.closest_triangle != -1)
 		{
 			hit.normal = normal_triangle(data->scene->triangles[hit.closest_triangle]);
 			hit.color = data->scene->triangles[hit.closest_triangle].color;
 			hit.light_absorb_ratio = data->scene->triangles[hit.closest_triangle].light_absorb_ratio;
+			hit.refraction_index = data->scene->triangles[hit.closest_triangle].refraction_index;
+			hit.light_absorb_distance = data->scene->triangles[hit.closest_triangle].light_absorb_distance;
 		}
 	}
 	return (hit);
