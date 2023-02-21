@@ -267,14 +267,14 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 		{
 			hit.normal = vector_from_points(data->scene->spheres[hit.closest_sphere].center, hit.hit_point);
 			normalize_vector(&hit.normal);
-			if (data->scene->spheres[hit.closest_sphere].texture == 1)
+			/*if (data->scene->spheres[hit.closest_sphere].texture == 1)
 			{
 				if (checkerboard_sphere(hit.hit_point, data->scene->spheres[hit.closest_sphere]) == 1)
 					hit.color = data->scene->spheres[hit.closest_sphere].color;
 				else
 					hit.color = 0x000000;
 			}
-			else
+			else*/
 				hit.color = data->scene->spheres[hit.closest_sphere].color;
 			hit.light_absorb_ratio = data->scene->spheres[hit.closest_sphere].light_absorb_ratio;
 			hit.refraction_index = data->scene->spheres[hit.closest_sphere].refraction_index;
