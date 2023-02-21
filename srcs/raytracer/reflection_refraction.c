@@ -17,8 +17,29 @@ t_vector	calc_refracted_ray(float n1, float n2, t_vector ray, t_vector normal)
 
 	n = n1 / n2;
 	c1 = dot_product(normal, ray);
-	c2 = sqrt(1 - n * n * (1 - c1 * c1));
+	c2 = (float)sqrt(1 - n * n * (1 - c1 * c1));
 	refracted_ray = vector_add(vector_scale(ray, n), vector_scale(normal, n * c1 - c2));
+	return (refracted_ray);
+}
+
+t_vector	calc_refracted_ray2(float n1, float n2, t_vector ray, t_vector normal)
+{
+	float	n;
+	float	c1;
+	float 	sqrt_term;
+	t_vector v1;
+	t_vector v2;
+	t_vector refracted_ray;
+
+	n = n1 / n2;
+	c1 = dot_product(normal, ray);
+	v1 = vector_scale(normal, c1);
+	v1 = vector_add(ray, v1);
+	v1 = vector_scale(v1, n); //finished v1
+
+	sqrt_term = 1 - n * n * (1 - c1 * c1);
+	v2 = vector_scale(normal, sqrtf(sqrt_term));
+	refracted_ray = vector_sub(v1, v2);
 	return (refracted_ray);
 }
 
@@ -52,7 +73,9 @@ t_hit_obj get_refracted_color(t_data *data, t_ray inc_ray, t_ray refract_ray, t_
 //	printf("beer_lambert = %f\n", *beer_lambert);
 	refract_ray.origin = vector_add(hit.hit_point, vector_scale(refract_ray.direction, refract_hit.t_min + 0.001f));
 	refract_ray.direction = calc_refracted_ray(hit.refraction_index, n1, refract_ray.direction, vector_scale(hit.normal, -1));
+//	refract_ray.direction = calc_refracted_ray(n1, hit.refraction_index, refract_ray.direction, vector_scale(hit.normal, -1));
 //	refract_ray.direction = inc_ray.direction;
+	normalize_vector(&refract_ray.direction);
 	refract_hit = get_closest_intersection(data, refract_ray);
 	if (refract_hit.t_min < 4535320)
 	{
@@ -62,21 +85,6 @@ t_hit_obj get_refracted_color(t_data *data, t_ray inc_ray, t_ray refract_ray, t_
 	else
 		refract_hit.color = hit.color;
 	return (refract_hit);
-}
-
-float get_random_number(float min, float max)
-{
-	float random = (float)rand() / (float)RAND_MAX;
-	float diff = max - min;
-	float r = random * diff;
-	return (min + r);
-}
-
-void	vector_rand(t_vector *reflect_dir, float randomness)
-{
-	reflect_dir->x += get_random_number(0, randomness);
-	reflect_dir->y += get_random_number(0, randomness);
-	reflect_dir->z += get_random_number(0, randomness);
 }
 
 int blend_colors(int color1, int color2, float ratio)
@@ -153,7 +161,6 @@ int reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, flo
 
 	reflected_hit = reflection(data, ray, hit, depth, light_intensity, fresnel_ratio, reflected_ray, &flag);
 	refracted_hit = refraction(data, ray, hit, depth, light_intensity, fresnel_ratio, ref_index);
-//	reflected_hit.color = refracted_hit.color;
 	reflected_hit.color = blend_colors(reflected_hit.color, refracted_hit.color, fresnel_ratio);
 	light_intensity = light_intensity - hit.light_absorb_ratio;
 	if (depth > 1 && light_intensity > 0.01f && flag)

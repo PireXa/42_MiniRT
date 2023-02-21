@@ -72,6 +72,10 @@ typedef struct s_sphere
 	float 		light_absorb_ratio;
 	float 		refraction_index;
 	float 		light_absorb_distance;
+	float 		ks;
+	float 		kd;
+	float 		roughness;
+	int 		texture;
 }				t_sphere;
 
 typedef struct s_plane
@@ -82,6 +86,10 @@ typedef struct s_plane
 	float 		light_absorb_ratio;
 	float 		refraction_index;
 	float 		light_absorb_distance;
+	float		ks;
+	float		kd;
+	float 		roughness;
+	int 		texture;
 }				t_plane;
 
 typedef struct s_square
@@ -103,6 +111,9 @@ typedef struct s_cylinder
 	float 		light_absorb_ratio;
 	float 		refraction_index;
 	float 		light_absorb_distance;
+	float 		ks;
+	float 		kd;
+	float 		roughness;
 }				t_cylinder;
 
 typedef struct s_triangle
@@ -114,6 +125,9 @@ typedef struct s_triangle
 	float 		light_absorb_ratio;
 	float 		refraction_index;
 	float 		light_absorb_distance;
+	float 		ks;
+	float 		kd;
+	float 		roughness;
 }				t_triangle;
 
 typedef struct s_light
@@ -169,6 +183,9 @@ typedef struct s_near_obj {
 	float 		light_absorb_ratio;
 	float 		refraction_index;
 	float 		light_absorb_distance;
+	float 		ks;
+	float 		kd;
+	float 		roughness;
 }				t_hit_obj;
 
 typedef struct s_data
@@ -224,7 +241,7 @@ int			sphere_counter(char *file);
 int			triangle_counter(char *file);
 
 //VECTOR UTILS
-void		vector_rand(t_vector *reflect_dir, float randomness);
+void		vector_rand(t_vector *vector, float randomness);
 float		dot_product(t_vector vector1, t_vector vector2);
 t_vector	cross_product(t_vector vector1, t_vector vector2);
 void		normalize_vector(t_vector *vector);

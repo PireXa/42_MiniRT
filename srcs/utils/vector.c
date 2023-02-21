@@ -84,3 +84,22 @@ t_vector	cross_product(t_vector vector1, t_vector vector2)
 	vector.z = vector1.x * vector2.y - vector1.y * vector2.x;
 	return (vector);
 }
+
+float get_random_number(float min, float max)
+{
+	float random = (float)rand() / (float)RAND_MAX;
+	float diff = max - min;
+	float r = random * diff;
+	float	signed_random = (float)rand() / (float)RAND_MAX;
+	if (signed_random < 0.5)
+		return (min - r);
+	else
+		return (min + r);
+}
+
+void	vector_rand(t_vector *vector, float randomness)
+{
+	vector->x += get_random_number(0, randomness);
+	vector->y += get_random_number(0, randomness);
+	vector->z += get_random_number(0, randomness);
+}

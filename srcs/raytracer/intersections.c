@@ -1,5 +1,87 @@
 
 #include "../../inc/minirt.h"
+
+int	checkerboard_sphere(t_vector hit_point, t_sphere sphere)
+{
+	t_vector	hit_point_local;
+	float 		u;
+	float 		v;
+	float 		r;
+	float		period;
+
+	hit_point_local = vector_from_points(sphere.center, hit_point);
+	period = 10.0f;
+	r = sphere.diameter / 2;
+	u = atan2(hit_point_local.z, hit_point_local.x) / (2 * M_PI) + 0.5;
+	v = acos(hit_point_local.y / r) / M_PI;
+	if ((int)(u * period) % 2 == (int)(v * period) % 2)
+		return (1);
+	return (0);
+}
+
+int	checkerboard_plane(t_vector hit_point, t_plane plane)
+{
+	int		x;
+	int		y;
+	float	period;
+	float	s;
+	float	t;
+	int 	flag;
+	t_vector u;
+	t_vector v;
+
+	flag = 0;
+	period = 3.0f;
+	if (plane.normal.y == 1 || plane.normal.y == -1)
+	{
+		u = cross_product(plane.normal, (t_vector){1, 0, 0});
+		flag = 1;
+	}
+	else
+		u = cross_product(plane.normal, (t_vector){0, 1, 0});
+	normalize_vector(&u);
+	v = cross_product(plane.normal, u);
+	normalize_vector(&v);
+	s = dot_product(u, hit_point);
+	t = dot_product(v, hit_point);
+	x = (int)(s / period);
+	y = (int)(t / period);
+	if (hit_point.x < 0)
+	{
+		if (hit_point.z < 0)
+		{
+			if ((x + y) % 2 == 0)
+				return (flag - 1);
+			else
+				return (flag);
+		}
+		else
+		{
+			if ((x + y) % 2 == 0)
+				return (flag);
+			else
+				return (flag - 1);
+		}
+	}
+	else
+	{
+		if (hit_point.z < 0)
+		{
+			if ((x + y) % 2 == 0)
+				return (flag);
+			else
+				return (flag - 1);
+		}
+		else
+		{
+			if ((x + y) % 2 == 0)
+				return (flag - 1);
+			else
+				return (flag);
+		}
+	}
+}
+
 float	intersect_ray_sphere(t_ray ray, t_sphere sphere)
 {
 	t_vector oc;
@@ -86,6 +168,8 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 	hit.light_absorb_ratio = 1;
 	hit.refraction_index = 1;
 	hit.light_absorb_distance = 1;
+	hit.ks = 0.4f;
+	hit.kd = 0.3f;
 	//CHECK SPHERES
 	while(++i < data->nb_objs->nb_spheres)
 	{
@@ -183,18 +267,42 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 		{
 			hit.normal = vector_from_points(data->scene->spheres[hit.closest_sphere].center, hit.hit_point);
 			normalize_vector(&hit.normal);
-			hit.color = data->scene->spheres[hit.closest_sphere].color;
+			if (data->scene->spheres[hit.closest_sphere].texture == 1)
+			{
+				if (checkerboard_sphere(hit.hit_point, data->scene->spheres[hit.closest_sphere]) == 1)
+					hit.color = data->scene->spheres[hit.closest_sphere].color;
+				else
+					hit.color = 0x000000;
+			}
+			else
+				hit.color = data->scene->spheres[hit.closest_sphere].color;
 			hit.light_absorb_ratio = data->scene->spheres[hit.closest_sphere].light_absorb_ratio;
 			hit.refraction_index = data->scene->spheres[hit.closest_sphere].refraction_index;
 			hit.light_absorb_distance = data->scene->spheres[hit.closest_sphere].light_absorb_distance;
+			hit.ks = data->scene->spheres[hit.closest_sphere].ks;
+			hit.kd = data->scene->spheres[hit.closest_sphere].kd;
+			hit.roughness = data->scene->spheres[hit.closest_sphere].roughness;
+			vector_rand(&hit.normal, hit.roughness);
 		}
 		else if (hit.closest_plane != -1)
 		{
 			hit.normal = data->scene->planes[hit.closest_plane].normal;
-			hit.color = data->scene->planes[hit.closest_plane].color;
+			if (data->scene->planes[hit.closest_plane].texture == 1)
+			{
+				if (checkerboard_plane(hit.hit_point, data->scene->planes[hit.closest_plane]))
+					hit.color = data->scene->planes[hit.closest_plane].color;
+				else
+					hit.color = 0x000000;
+			}
+			else
+				hit.color = data->scene->planes[hit.closest_plane].color;
 			hit.light_absorb_ratio = data->scene->planes[hit.closest_plane].light_absorb_ratio;
 			hit.refraction_index = data->scene->planes[hit.closest_plane].refraction_index;
 			hit.light_absorb_distance = data->scene->planes[hit.closest_plane].light_absorb_distance;
+			hit.ks = data->scene->planes[hit.closest_plane].ks;
+			hit.kd = data->scene->planes[hit.closest_plane].kd;
+			hit.roughness = data->scene->planes[hit.closest_plane].roughness;
+			vector_rand(&hit.normal, hit.roughness);
 		}
 		else if (hit.closest_cylinder != -1)
 		{
@@ -208,6 +316,10 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 			hit.light_absorb_ratio = data->scene->cylinders[hit.closest_cylinder].light_absorb_ratio;
 			hit.refraction_index = data->scene->cylinders[hit.closest_cylinder].refraction_index;
 			hit.light_absorb_distance = data->scene->cylinders[hit.closest_cylinder].light_absorb_distance;
+			hit.ks = data->scene->cylinders[hit.closest_cylinder].ks;
+			hit.kd = data->scene->cylinders[hit.closest_cylinder].kd;
+			hit.roughness = data->scene->cylinders[hit.closest_cylinder].roughness;
+			vector_rand(&hit.normal, hit.roughness);
 		}
 		else if (hit.closest_triangle != -1)
 		{
@@ -216,6 +328,10 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 			hit.light_absorb_ratio = data->scene->triangles[hit.closest_triangle].light_absorb_ratio;
 			hit.refraction_index = data->scene->triangles[hit.closest_triangle].refraction_index;
 			hit.light_absorb_distance = data->scene->triangles[hit.closest_triangle].light_absorb_distance;
+			hit.ks = data->scene->triangles[hit.closest_triangle].ks;
+			hit.kd = data->scene->triangles[hit.closest_triangle].kd;
+			hit.roughness = data->scene->triangles[hit.closest_triangle].roughness;
+			vector_rand(&hit.normal, hit.roughness);
 		}
 	}
 	return (hit);

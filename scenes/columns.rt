@@ -28,9 +28,9 @@ sp	-5,10,-2			4.2				140,140,140			std_plstc
 
 sp	5,10,-2				4.2				140,140,140			std_plstc
 
-# Plane			Point		Normal		Texture Color
+# Plane			Point		Normal		Texture Color		Material Reference	Texture
 
-pl				0,0,0		0,1,0		104,104,104			pl_plstc
+pl				0,0,0		0,1,0		104,104,104			pl_plstc				1
 
 pl				0,0,16		0,0,-1		25,25,178			pl_plstc
 

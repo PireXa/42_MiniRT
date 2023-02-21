@@ -17,26 +17,27 @@ l	0,1.5,1				0.101				255,255,255
 
 # l	1,1,5.5				0.101				255,255,255
 
-#  Sphere Center       Diameter		Texture Color		Material Reference
+#  Sphere Center       Diameter		Texture Color		Material Reference		Texture
 
-sp	1,0.75,5			1.5			82,255,255			std_plstc
+sp	1,0.75,5			1.5			82,255,255			std_plstc				1
 # sp		1,0.75,4			1.5			0,0,165			op_glss
+# sp	1,0.75,5			1.5			82,255,255			rog_plstc
 
-sp	-0.8,0.75,4			1.5			0,0,0				std_mtl
+sp	-0.8,0.75,4			1.5			0,0,0				std_mtl					0
 
-# Plane			Point		Normal		Texture Color	Material Reference
+# Plane			Point		Normal		Texture Color	Material Reference		Texture
 
-pl				0,0,0		0,1,0		255,255,65		pl_plstc
+pl				0,0,0		0,1,0		255,255,65		pl_plstc				0
 
-pl				0,0,6		0,0,-1		210,210,210		pl_plstc
+pl				0,0,6		0,0,-1		210,210,210		pl_plstc				0
 
-pl				0,4,0		0,-1,0		0,0,0			pl_plstc
+pl				0,4,0		0,-1,0		0,0,0			pl_plstc				0
 
-pl				-2.5,0,0	1,0,0		208,56,56		pl_plstc
+pl				-2.5,0,0	1,0,0		208,56,56		pl_plstc				0
 
-pl				2.5,0,0		-1,0,0		27,89,195		pl_plstc
+pl				2.5,0,0		-1,0,0		27,89,195		pl_plstc				0
 
-pl				0,0,0		0,0,1		0,150,150		pl_plstc
+pl				0,0,0.000001		0,0,1		0,150,150		pl_plstc				1
 
 # Cylinder	Point			Axis		Radius		Height		Texture Color		Material Reference
 

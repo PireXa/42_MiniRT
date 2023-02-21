@@ -247,13 +247,23 @@ void   parser(char *file, t_scene *scene)
 				scene->spheres[i].light_absorb_ratio = get_material_data(params[4], 1);
 				scene->spheres[i].refraction_index = get_material_data(params[4], 2);
 				scene->spheres[i].light_absorb_distance = get_material_data(params[4], 3);
+				scene->spheres[i].ks = get_material_data(params[4], 4);
+				scene->spheres[i].kd = get_material_data(params[4], 5);
+				scene->spheres[i].roughness = get_material_data(params[4], 6);
 			}
 			else
 			{
 				scene->spheres[i].light_absorb_ratio = 1;
 				scene->spheres[i].refraction_index = 1.2f;
 				scene->spheres[i].light_absorb_distance = 1.0f;
+				scene->spheres[i].ks = 0.4f;
+				scene->spheres[i].kd = 0.3f;
+				scene->spheres[i].roughness = 0.0f;
 			}
+			if (params[5])
+				scene->spheres[i].texture = ft_atoi(params[5]);
+			else
+				scene->planes[i].texture = 0;
 //			printf("sphere[%d] = {center = (%f, %f, %f)\ndiameter = %f\ncolor = %d\nlight_absorb_ratio = %f\nrefraction_index = %f\nlight_absorb_distance = %f}\n", i, scene->spheres[i].center.x, scene->spheres[i].center.y, scene->spheres[i].center.z, scene->spheres[i].diameter, scene->spheres[i].color, scene->spheres[i].light_absorb_ratio, scene->spheres[i].refraction_index, scene->spheres[i].light_absorb_distance);
 			i++;
 		}
@@ -268,6 +278,7 @@ void   parser(char *file, t_scene *scene)
 			scene->planes[j].normal.x = ft_atof(sub_params[0]);
 			scene->planes[j].normal.y = ft_atof(sub_params[1]);
 			scene->planes[j].normal.z = ft_atof(sub_params[2]);
+			normalize_vector(&scene->planes[j].normal);
 			free_double_array(sub_params);
 			/*if (params[4])
 			{
@@ -287,13 +298,23 @@ void   parser(char *file, t_scene *scene)
 				scene->planes[j].light_absorb_ratio = get_material_data(params[4], 1);
 				scene->planes[j].refraction_index = get_material_data(params[4], 2);
 				scene->planes[j].light_absorb_distance = get_material_data(params[4], 3);
+				scene->planes[j].ks = get_material_data(params[4], 4);
+				scene->planes[j].kd = get_material_data(params[4], 5);
+				scene->planes[j].roughness = get_material_data(params[4], 6);
 			}
 			else
 			{
 				scene->planes[j].light_absorb_ratio = 0.3f;
 				scene->planes[j].refraction_index = 1.2f;
 				scene->planes[j].light_absorb_distance = 50.0f;
+				scene->planes[j].ks = 0.4f;
+				scene->planes[j].kd = 0.3f;
+				scene->planes[j].roughness = 0.0f;
 			}
+			if (params[5])
+				scene->planes[j].texture = ft_atoi(params[5]);
+			else
+				scene->planes[j].texture = 0;
 //			printf("plane[%d] = {point = (%f, %f, %f)\nnormal = (%f, %f, %f)\ncolor = %d\nlight_absorb_ratio = %f\nrefraction_index = %f\nlight_absorb_distance = %f}\n", j, scene->planes[j].point.x, scene->planes[j].point.y, scene->planes[j].point.z, scene->planes[j].normal.x, scene->planes[j].normal.y, scene->planes[j].normal.z, scene->planes[j].color, scene->planes[j].light_absorb_ratio, scene->planes[j].refraction_index, scene->planes[j].light_absorb_distance);
 			j++;
 		}
@@ -333,12 +354,18 @@ void   parser(char *file, t_scene *scene)
 				scene->cylinders[k].light_absorb_ratio = get_material_data(params[6], 1);
 				scene->cylinders[k].refraction_index = get_material_data(params[6], 2);
 				scene->cylinders[k].light_absorb_distance = get_material_data(params[6], 3);
+				scene->cylinders[k].ks = get_material_data(params[6], 4);
+				scene->cylinders[k].kd = get_material_data(params[6], 5);
+				scene->cylinders[k].roughness = get_material_data(params[6], 6);
 			}
 			else
 			{
 				scene->cylinders[k].light_absorb_ratio = 1;
 				scene->cylinders[k].refraction_index = 1.2f;
 				scene->cylinders[k].light_absorb_distance = 1.0f;
+				scene->cylinders[k].ks = 0.4f;
+				scene->cylinders[k].kd = 0.3f;
+				scene->cylinders[k].roughness = 0.0f;
 			}
 			k++;
 		}
@@ -370,20 +397,26 @@ void   parser(char *file, t_scene *scene)
 				sub_params = ft_split(params[3], ',');
 			}*/
 			sub_params = ft_split(params[4], ',');
-			scene->triangles[l].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
-//			scene->triangles[l].color = 0x920092;
+//			scene->triangles[l].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
+			scene->triangles[l].color = 0x920092;
 			free_double_array(sub_params);
 			if (params[5])
 			{
 				scene->triangles[l].light_absorb_ratio = get_material_data(params[5], 1);
 				scene->triangles[l].refraction_index = get_material_data(params[5], 2);
 				scene->triangles[l].light_absorb_distance = get_material_data(params[5], 3);
+				scene->triangles[l].ks = get_material_data(params[5], 4);
+				scene->triangles[l].kd = get_material_data(params[5], 5);
+				scene->triangles[l].roughness = get_material_data(params[5], 6);
 			}
 			else
 			{
-				scene->triangles[l].light_absorb_ratio = 0.3f;
+				scene->triangles[l].light_absorb_ratio = 0.9f;
 				scene->triangles[l].refraction_index = 1.2f;
-				scene->triangles[l].light_absorb_distance = 1.0f;
+				scene->triangles[l].light_absorb_distance = 1000.0f;
+				scene->triangles[l].ks = 0.4f;
+				scene->triangles[l].kd = 0.3f;
+				scene->triangles[l].roughness = 0.0f;
 			}
 			l++;
 		}
