@@ -260,10 +260,10 @@ void   parser(char *file, t_scene *scene)
 				scene->spheres[i].kd = 0.3f;
 				scene->spheres[i].roughness = 0.0f;
 			}
-			if (params[5])
+			if (params[4] && params[5])
 				scene->spheres[i].texture = ft_atoi(params[5]);
 			else
-				scene->planes[i].texture = 0;
+				scene->spheres[i].texture = 0;
 //			printf("sphere[%d] = {center = (%f, %f, %f)\ndiameter = %f\ncolor = %d\nlight_absorb_ratio = %f\nrefraction_index = %f\nlight_absorb_distance = %f}\n", i, scene->spheres[i].center.x, scene->spheres[i].center.y, scene->spheres[i].center.z, scene->spheres[i].diameter, scene->spheres[i].color, scene->spheres[i].light_absorb_ratio, scene->spheres[i].refraction_index, scene->spheres[i].light_absorb_distance);
 			i++;
 		}
@@ -311,7 +311,7 @@ void   parser(char *file, t_scene *scene)
 				scene->planes[j].kd = 0.3f;
 				scene->planes[j].roughness = 0.0f;
 			}
-			if (params[5])
+			if (params[4] && params[5])
 				scene->planes[j].texture = ft_atoi(params[5]);
 			else
 				scene->planes[j].texture = 0;
