@@ -52,14 +52,36 @@ int main(int argc, char **argv)
 {
 	t_data		*data;
 	t_ray		ray;
+	int 		fd;
 
 	if (argc != 2)
 	{
 		printf("Correct usage: ./minirt scenes/(scene.rt)\n");
 		return (0);
 	}
+	if (open(argv[1], O_RDONLY) == -1)
+	{
+		printf("File not found\n");
+		return (0);
+	}
+	if (open(argv[1], __O_DIRECTORY) != -1)
+	{
+		printf("Incorrect file type\n");
+		return (0);
+	}
+	if (ft_strncmp(".rt", argv[1] + ft_strlen(argv[1]) - 3, 3))
+	{
+		printf("Incorrect file extension. Must be .rt\n");
+		return (0);
+	}
 	data = (t_data *)malloc(sizeof(t_data));
 	init_data(data, argv[1]);
+	if (data->nb_objs->nb_cameras == 0)
+	{
+		printf("No cameras found in scene\n");
+		return (0);
+	}
+
 	printf("Parsing scene...\n");
 	parser(argv[1], data->scene);
 	printf("Rendering...\n");

@@ -197,6 +197,16 @@ float	get_material_data(char *mat_ref, int data)
 	return (ret);
 }
 
+int double_array_len(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
+}
+
 void   parser(char *file, t_scene *scene)
 {
 	int       fd;
@@ -206,6 +216,7 @@ void   parser(char *file, t_scene *scene)
 	int    l;
 	int    m;
 	int    n;
+	int		line_count;
 	char   *line;
 	char   **params;
 	char   **sub_params;
@@ -216,7 +227,13 @@ void   parser(char *file, t_scene *scene)
 	l = 0;
 	m = 0;
 	n = 0;
+	line_count = 1;
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+	{
+		printf("Error: file not found\n");
+		exit(0);
+	}
 	while ((line = get_next_line(fd)))
 	{
 //    params = ft_split(line, ' ');
@@ -224,6 +241,11 @@ void   parser(char *file, t_scene *scene)
 		if (params[0][0] == 's' && params[0][1] == 'p')
 		{
 			sub_params = ft_split(params[1], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : sphere center coordinates not valid\n", line_count);
+				exit(0);
+			}
 			scene->spheres[i].center.x = ft_atof(sub_params[0]);
 			scene->spheres[i].center.y = ft_atof(sub_params[1]);
 			scene->spheres[i].center.z = ft_atof(sub_params[2]);
@@ -240,6 +262,11 @@ void   parser(char *file, t_scene *scene)
 				sub_params = ft_split(params[3], ',');
 			}*/
 			sub_params = ft_split(params[3], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : sphere color not valid\n", line_count);
+				exit(0);
+			}
 			scene->spheres[i].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			if (params[4])
@@ -270,11 +297,21 @@ void   parser(char *file, t_scene *scene)
 		else if (params[0][0] == 'p' && params[0][1] == 'l')
 		{
 			sub_params = ft_split(params[1], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : plane point coordinates not valid\n", line_count);
+				exit(0);
+			}
 			scene->planes[j].point.x = ft_atof(sub_params[0]);
 			scene->planes[j].point.y = ft_atof(sub_params[1]);
 			scene->planes[j].point.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			sub_params = ft_split(params[2], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : plane normal not valid\n", line_count);
+				exit(0);
+			}
 			scene->planes[j].normal.x = ft_atof(sub_params[0]);
 			scene->planes[j].normal.y = ft_atof(sub_params[1]);
 			scene->planes[j].normal.z = ft_atof(sub_params[2]);
@@ -291,6 +328,11 @@ void   parser(char *file, t_scene *scene)
 				sub_params = ft_split(params[3], ',');
 			}*/
 			sub_params = ft_split(params[3], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : plane color not valid\n", line_count);
+				exit(0);
+			}
 			scene->planes[j].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			if (params[4])
@@ -323,11 +365,21 @@ void   parser(char *file, t_scene *scene)
 			t_vector v1;
 
 			sub_params = ft_split(params[1], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : cylinder base center not valid\n", line_count);
+				exit(0);
+			}
 			scene->cylinders[k].base_center.x = ft_atof(sub_params[0]);
 			scene->cylinders[k].base_center.y = ft_atof(sub_params[1]);
 			scene->cylinders[k].base_center.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			sub_params = ft_split(params[2], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : cylinder normal not valid\n", line_count);
+				exit(0);
+			}
 			v1.x = ft_atof(sub_params[0]);
 			v1.y = ft_atof(sub_params[1]);
 			v1.z = ft_atof(sub_params[2]);
@@ -347,6 +399,11 @@ void   parser(char *file, t_scene *scene)
 				sub_params = ft_split(params[5], ',');
 			}*/
 			sub_params = ft_split(params[5], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : cylinder color not valid\n", line_count);
+				exit(0);
+			}
 			scene->cylinders[k].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			if (params[6])
@@ -372,16 +429,31 @@ void   parser(char *file, t_scene *scene)
 		else if (params[0][0] == 't' && params[0][1] == 'r')
 		{
 			sub_params = ft_split(params[1], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : triangle point 1 not valid\n", line_count);
+				exit(0);
+			}
 			scene->triangles[l].p1.x = ft_atof(sub_params[0]);
 			scene->triangles[l].p1.y = ft_atof(sub_params[1]);
 			scene->triangles[l].p1.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			sub_params = ft_split(params[2], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : triangle point 2 not valid\n", line_count);
+				exit(0);
+			}
 			scene->triangles[l].p2.x = ft_atof(sub_params[0]);
 			scene->triangles[l].p2.y = ft_atof(sub_params[1]);
 			scene->triangles[l].p2.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			sub_params = ft_split(params[3], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : triangle point 3 not valid\n", line_count);
+				exit(0);
+			}
 			scene->triangles[l].p3.x = ft_atof(sub_params[0]);
 			scene->triangles[l].p3.y = ft_atof(sub_params[1]);
 			scene->triangles[l].p3.z = ft_atof(sub_params[2]);
@@ -397,8 +469,13 @@ void   parser(char *file, t_scene *scene)
 				sub_params = ft_split(params[3], ',');
 			}*/
 			sub_params = ft_split(params[4], ',');
-//			scene->triangles[l].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
-			scene->triangles[l].color = 0x920092;
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : triangle color not valid\n", line_count);
+				exit(0);
+			}
+			scene->triangles[l].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
+//			scene->triangles[l].color = 0x920092;
 			free_double_array(sub_params);
 			if (params[5])
 			{
@@ -423,11 +500,21 @@ void   parser(char *file, t_scene *scene)
 		else if (params[0][0] == 'c')
 		{
 			sub_params = ft_split(params[1], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : camera origin not valid\n", line_count);
+				exit(0);
+			}
 			scene->cameras[m].origin.x = ft_atof(sub_params[0]);
 			scene->cameras[m].origin.y = ft_atof(sub_params[1]);
 			scene->cameras[m].origin.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			sub_params = ft_split(params[2], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : camera normal not valid\n", line_count);
+				exit(0);
+			}
 			scene->cameras[m].normal.x = ft_atof(sub_params[0]);
 			scene->cameras[m].normal.y = ft_atof(sub_params[1]);
 			scene->cameras[m].normal.z = ft_atof(sub_params[2]);
@@ -439,18 +526,29 @@ void   parser(char *file, t_scene *scene)
 		else if (params[0][0] == 'l')
 		{
 			sub_params = ft_split(params[1], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : light origin not valid\n", line_count);
+				exit(0);
+			}
 			scene->lights[n].origin.x = ft_atof(sub_params[0]);
 			scene->lights[n].origin.y = ft_atof(sub_params[1]);
 			scene->lights[n].origin.z = ft_atof(sub_params[2]);
 			free_double_array(sub_params);
 			scene->lights[n].intensity = ft_atof(params[2]);
 			sub_params = ft_split(params[3], ',');
+			if (double_array_len(sub_params) != 3)
+			{
+				printf("Error on line %d : light color not valid\n", line_count);
+				exit(0);
+			}
 			scene->lights[n].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			n++;
 		}
 		free_double_array(params);
 		free(line);
+		line_count++;
 	}
 	free(line);
 	close(fd);
