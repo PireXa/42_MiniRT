@@ -68,6 +68,11 @@ t_hit_obj get_refracted_color(t_data *data, t_ray inc_ray, t_ray refract_ray, t_
 		refract_hit.color = hit.color;
 		return (refract_hit);
 	}
+	if (refract_hit.t_min < 0.001f)
+	{
+		refract_ray.origin = vector_add(hit.hit_point, vector_scale(refract_ray.direction, refract_hit.t_min + 0.01f));
+		refract_hit = get_closest_intersection(data, refract_ray);
+	}
 //	*beer_lambert = 1.0f - exp(-MATERIAL_TRANSPARENCY * refract_hit.t_min);
 	*beer_lambert = 1.0f - exp(-hit.light_absorb_distance * refract_hit.t_min);
 //	printf("beer_lambert = %f\n", *beer_lambert);
@@ -77,7 +82,7 @@ t_hit_obj get_refracted_color(t_data *data, t_ray inc_ray, t_ray refract_ray, t_
 //	refract_ray.direction = inc_ray.direction;
 	normalize_vector(&refract_ray.direction);
 	refract_hit = get_closest_intersection(data, refract_ray);
-	if (refract_hit.t_min < 4535320)
+	if (refract_hit.t_min < 4535321)
 	{
 //		refract_hit.color = refract_hit.color;
 		refract_hit.color = shading(refract_hit, refract_ray, data);
@@ -157,11 +162,12 @@ int reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, flo
 	reflected_ray.direction = calc_reflected_ray(ray.direction, hit.normal);
 //	vector_rand(&reflected_ray, 0.1f);
 	normalize_vector(&reflected_ray.direction);
-	reflected_ray.origin = vector_add(hit.hit_point, vector_scale(reflected_ray.direction, 0.001f));
+	reflected_ray.origin = vector_add(hit.hit_point, vector_scale(reflected_ray.direction, 0.01f));
 
 	reflected_hit = reflection(data, ray, hit, depth, light_intensity, fresnel_ratio, reflected_ray, &flag);
 	refracted_hit = refraction(data, ray, hit, depth, light_intensity, fresnel_ratio, ref_index);
 	reflected_hit.color = blend_colors(reflected_hit.color, refracted_hit.color, fresnel_ratio);
+//	reflected_hit.color = refracted_hit.color;
 	light_intensity = light_intensity - hit.light_absorb_ratio;
 	if (depth > 1 && light_intensity > 0.01f && flag)
 		return (reflection_refraction(data, reflected_ray, reflected_hit, depth - 1, light_intensity, 1.0f));

@@ -69,6 +69,7 @@ void	ray_tracer(t_data *data)
 				color = shading(hit, ray, data);
 //				color = blend_colors(color, hit.color, hit.light_absorb_ratio);
 				color = blend_colors(color, hit.color, hit.light_absorb_distance);
+//				color = blend_colors(color, hit.color, 0.5f);
 //				color = hit.color;
 			}
 			else

@@ -282,7 +282,7 @@ void   parser(char *file, t_scene *scene)
 			{
 				scene->spheres[i].light_absorb_ratio = 1;
 				scene->spheres[i].refraction_index = 1.2f;
-				scene->spheres[i].light_absorb_distance = 1.0f;
+				scene->spheres[i].light_absorb_distance = 100.0f;
 				scene->spheres[i].ks = 0.4f;
 				scene->spheres[i].kd = 0.3f;
 				scene->spheres[i].roughness = 0.0f;
@@ -348,7 +348,7 @@ void   parser(char *file, t_scene *scene)
 			{
 				scene->planes[j].light_absorb_ratio = 0.3f;
 				scene->planes[j].refraction_index = 1.2f;
-				scene->planes[j].light_absorb_distance = 50.0f;
+				scene->planes[j].light_absorb_distance = 200.0f;
 				scene->planes[j].ks = 0.4f;
 				scene->planes[j].kd = 0.3f;
 				scene->planes[j].roughness = 0.0f;
@@ -419,7 +419,7 @@ void   parser(char *file, t_scene *scene)
 			{
 				scene->cylinders[k].light_absorb_ratio = 1;
 				scene->cylinders[k].refraction_index = 1.2f;
-				scene->cylinders[k].light_absorb_distance = 1.0f;
+				scene->cylinders[k].light_absorb_distance = 100.0f;
 				scene->cylinders[k].ks = 0.4f;
 				scene->cylinders[k].kd = 0.3f;
 				scene->cylinders[k].roughness = 0.0f;

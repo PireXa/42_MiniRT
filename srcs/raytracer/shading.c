@@ -56,7 +56,7 @@ float phong_shading(t_hit_obj hit, t_vector light_dir, t_vector view_dir)
 	diffuse = hit.kd * fmax(0, dot_product(hit.normal, light_dir));
 	half_vector = vector_add(light_dir, view_dir);
 	normalize_vector(&half_vector);
-	specular = hit.ks * pow(fmax(0, dot_product(hit.normal, half_vector)), 80);
+	specular = hit.ks * pow(fmax(0, dot_product(hit.normal, half_vector)), 200);
 	phong = diffuse + specular;
 	return (phong);
 }

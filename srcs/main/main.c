@@ -34,7 +34,7 @@ int render(t_data *data)
 
 void	init_graphics(t_data *data)
 {
-	data->mlx_win = mlx_new_window(data->mlx, WIND_W, WIND_H, "MiniRT");
+	data->mlx_win = mlx_new_window(data->mlx, WIND_W, WIND_H, "MiniRTX");
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
 }
 
@@ -81,7 +81,6 @@ int main(int argc, char **argv)
 		printf("No cameras found in scene\n");
 		return (0);
 	}
-
 	printf("Parsing scene...\n");
 	parser(argv[1], data->scene);
 	printf("Rendering...\n");

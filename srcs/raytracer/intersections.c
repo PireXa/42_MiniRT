@@ -46,9 +46,9 @@ int	checkerboard_plane(t_vector hit_point, t_plane plane)
 	t = dot_product(v, hit_point);
 	x = (int)(s / period);
 	y = (int)(t / period);
-	if (hit_point.x < 0)
+	if (s < 0)
 	{
-		if (hit_point.z < 0)
+		if (t < 0)
 		{
 			if ((x + y) % 2 == 0)
 				return (flag - 1);
@@ -65,7 +65,7 @@ int	checkerboard_plane(t_vector hit_point, t_plane plane)
 	}
 	else
 	{
-		if (hit_point.z < 0)
+		if (t < 0)
 		{
 			if ((x + y) % 2 == 0)
 				return (flag);
