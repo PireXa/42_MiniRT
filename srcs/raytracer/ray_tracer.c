@@ -65,12 +65,9 @@ void	ray_tracer(t_data *data)
 			if (hit.t_min < 4535320)
 			{
 //				color = get_normal_color(hit);
-				hit.color = reflection_refraction(data, ray, hit, REFLECTION_DEPTH, 1.0f, 1.0f);
+//				hit.color = reflection_refraction(data, ray, hit, REFLECTION_DEPTH, 1.0f, 1.0f);
 				color = shading(hit, ray, data);
-//				color = blend_colors(color, hit.color, hit.light_absorb_ratio);
-				color = blend_colors(color, hit.color, hit.light_absorb_distance);
-//				color = blend_colors(color, hit.color, 0.5f);
-//				color = hit.color;
+//				color = blend_colors(color, hit.color, hit.light_absorb_distance);
 			}
 			else
 			{

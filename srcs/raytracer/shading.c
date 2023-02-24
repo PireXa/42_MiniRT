@@ -41,7 +41,7 @@ int check_shadow(t_data *data, t_ray ray, t_vector hit_point, t_light light)
 	normalize_vector(&shadow_ray.direction);
 	light_dist = get_light_dist(light, shadow_ray.origin);
 	hit = get_closest_intersection(data, shadow_ray);
-	if (hit.t_min > 0.0001f && hit.t_min < light_dist /*&& hit.light_absorb_distance > 0.8f*/)
+	if (hit.t_min > 0.0001f && hit.t_min < light_dist)
 		return (1);
 	return (0);
 }
@@ -53,10 +53,10 @@ float phong_shading(t_hit_obj hit, t_vector light_dir, t_vector view_dir)
 	float	phong;
 	t_vector	half_vector;
 
-	diffuse = hit.kd * fmax(0, dot_product(hit.normal, light_dir));
+	diffuse = hit.kd * (float)fmax(0, dot_product(hit.normal, light_dir));
 	half_vector = vector_add(light_dir, view_dir);
 	normalize_vector(&half_vector);
-	specular = hit.ks * pow(fmax(0, dot_product(hit.normal, half_vector)), 200);
+	specular = hit.ks * (float)pow(fmax(0, dot_product(hit.normal, half_vector)), 200);
 	phong = diffuse + specular;
 	return (phong);
 }
