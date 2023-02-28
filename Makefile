@@ -10,7 +10,9 @@ SRCS		=	main/main.c main/initializers.c \
 
 OBJS		=	$(addprefix objs/,$(SRCS:.c=.o))
 
-CFLAGS		= 	-g #-ffast-math
+THREADS = $(shell nproc --all)
+
+CFLAGS		= 	-g -D THREADS=$(THREADS)#-ffast-math
 
 RM		=	rm -f
 
@@ -29,7 +31,7 @@ objs/%.o: srcs/%.c
 			$(CC) $(CFLAGS) -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
 $(NAME): 	$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
+			$(CC) $(CFLAGS) $(OBJS) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -lpthread -o $(NAME)
 
 clean:
 			@$(RM) $(OBJS)

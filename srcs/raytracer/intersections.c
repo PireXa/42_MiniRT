@@ -302,7 +302,7 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 			hit.ks = data->scene->planes[hit.closest_plane].ks;
 			hit.kd = data->scene->planes[hit.closest_plane].kd;
 			hit.roughness = data->scene->planes[hit.closest_plane].roughness;
-			vector_rand(&hit.normal, hit.roughness);
+//			vector_rand(&hit.normal, hit.roughness);
 		}
 		else if (hit.closest_cylinder != -1)
 		{
@@ -319,7 +319,7 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 			hit.ks = data->scene->cylinders[hit.closest_cylinder].ks;
 			hit.kd = data->scene->cylinders[hit.closest_cylinder].kd;
 			hit.roughness = data->scene->cylinders[hit.closest_cylinder].roughness;
-			vector_rand(&hit.normal, hit.roughness);
+//			vector_rand(&hit.normal, hit.roughness);
 		}
 		else if (hit.closest_triangle != -1)
 		{
@@ -331,7 +331,7 @@ t_hit_obj 	 get_closest_intersection(t_data *data, t_ray ray)
 			hit.ks = data->scene->triangles[hit.closest_triangle].ks;
 			hit.kd = data->scene->triangles[hit.closest_triangle].kd;
 			hit.roughness = data->scene->triangles[hit.closest_triangle].roughness;
-			vector_rand(&hit.normal, hit.roughness);
+//			vector_rand(&hit.normal, hit.roughness);
 		}
 	}
 	return (hit);

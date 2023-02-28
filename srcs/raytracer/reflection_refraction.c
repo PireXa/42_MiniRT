@@ -66,20 +66,19 @@ t_hit_obj get_refracted_color(t_data *data, t_ray inc_ray, t_ray refract_ray, t_
 	t_hit_obj	refract_hit;
 
 	refract_hit = get_closest_intersection(data, refract_ray);
-	if (refract_hit.t_min == 4535320)
+	/*if (refract_hit.t_min == 4535320)
 	{
 		refract_hit.color = hit.color;
 		return (refract_hit);
-	}
+	}*/
 	if (refract_hit.t_min < 0.001f)
 	{
 		refract_ray.origin = vector_add(hit.hit_point, vector_scale(refract_ray.direction, refract_hit.t_min + 0.01f));
 		refract_hit = get_closest_intersection(data, refract_ray);
 	}
-//	*beer_lambert = 1.0f - exp(-MATERIAL_TRANSPARENCY * refract_hit.t_min);
-	*beer_lambert = 1.0f - exp(-hit.light_absorb_distance * refract_hit.t_min);
-//	printf("beer_lambert = %f\n", *beer_lambert);
-	refract_ray.origin = vector_add(hit.hit_point, vector_scale(refract_ray.direction, refract_hit.t_min + 0.001f));
+	*beer_lambert = 1.0f - (float)exp((double)-hit.light_absorb_distance * refract_hit.t_min);
+	refract_ray.origin = vector_add(hit.hit_point, vector_scale(refract_ray.direction, refract_hit.t_min));
+	refract_ray.origin = vector_add(refract_ray.origin, vector_scale(refract_hit.normal, 0.001f));
 	refract_ray.direction = calc_refracted_ray(hit.refraction_index, n1, refract_ray.direction, vector_scale(hit.normal, -1));
 	normalize_vector(&refract_ray.direction);
 	refract_hit = get_closest_intersection(data, refract_ray);

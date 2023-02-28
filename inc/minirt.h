@@ -11,6 +11,7 @@
 # include <time.h>
 # include <sys/time.h>
 # include <stdint.h>
+# include <pthread.h>
 # include "mlx.h"
 # include "get_next_line.h"
 
@@ -29,6 +30,15 @@
 # define	LUMENS		10000
 # define	AMBIENT_LIGHT	0.15f
 # define	REFLECTION_DEPTH	25
+
+# define 	ESC			"\033"
+# define 	CSI			"["
+# define 	PREV		"F"
+# define 	BAKCSPACE	"D"
+
+# ifndef THREADS
+#	define	THREADS		16
+# endif
 # define	MATERIAL_REFRACTION	1.1f
 # define	MATERIAL_TRANSPARENCY	0.0f
 /*# define 	WORLD_SIZE	2000
@@ -202,6 +212,15 @@ typedef struct s_data
 	long int	start_render_time;
 }				t_data;
 
+typedef struct s_threads
+{
+	t_data		*data;
+	int			x_min;
+	int 		x;
+	int			x_max;
+	int			thread_id;
+}				t_threads;
+
 //GRAPHICS
 int			background_color(int y, int color1, int color2);
 int			calc_color_intensity(int color, float intensity);
@@ -215,10 +234,11 @@ float		intersect_ray_cylinder_top(t_ray ray, t_cylinder cylinder);
 float		intersect_ray_plane(t_ray ray, t_plane plane);
 float		intersect_ray_sphere(t_ray ray, t_sphere sphere);
 float		light_intens_by_dist(t_light light, t_vector hit_point);
+void		multi_threading(t_data *data);
 t_vector 	normal_cylinder(t_cylinder cylinder, t_vector hit_point);
 t_vector	normal_triangle(t_triangle triangle);
 void		put_pxl(t_img *img, int x, int y, int color);
-void		ray_tracer(t_data *data);
+void		ray_tracer(t_threads *tdata);
 int 		reflection_refraction(t_data *data, t_ray ray, t_hit_obj hit, int depth, float intensity, float ref_index);
 int			shading(t_hit_obj hit, t_ray ray, t_data *data);
 int 		shading_plane(t_plane plane, t_ray ray, t_vector hit_point, t_data *data);
@@ -260,7 +280,10 @@ void		init_data(t_data *data, char *scene_file);
 float		**set_camera_to_world_transformation_matrix(t_camera camera, t_vector up);
 
 //RENDER INFORMATION
-void		render_progress_bar(int x);
+int			check_progress(t_threads *threads_data);
+void		render_progress_bar(int x, int x_max);
+void		render_progress_bar2(int x, int x_max);
+void		multi_threaded_progress_bar(t_threads *tdata);
 
 //UTILS
 int			blend_colors(int color1, int color2, float ratio);

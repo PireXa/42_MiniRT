@@ -99,7 +99,10 @@ float get_random_number(float min, float max)
 
 void	vector_rand(t_vector *vector, float randomness)
 {
-	vector->x += get_random_number(0, randomness);
-	vector->y += get_random_number(0, randomness);
-	vector->z += get_random_number(0, randomness);
+	if (randomness > 0)
+	{
+		vector->x += get_random_number(0, randomness);
+		vector->y += get_random_number(0, randomness);
+		vector->z += get_random_number(0, randomness);
+	}
 }

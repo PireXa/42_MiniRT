@@ -40,7 +40,8 @@ void	init_graphics(t_data *data)
 
 void	loop(t_data *data)
 {
-	ray_tracer(data);
+//	ray_tracer(data);
+	multi_threading(data);
 	init_graphics(data);
 	controls(data);
 	printf("Render time: %ld ms\n", current_time_millis() - data->start_render_time);

@@ -45,7 +45,19 @@ int	get_normal_color(t_hit_obj hit)
 	return ((r << 16) | (g << 8) | b);
 }
 
-void	ray_tracer(t_data *data)
+void	render_estimated_time(long int start_time, int x, int x_max)
+{
+	long int	elapsed_time;
+	long int	estimated_time_minutes;
+	int			percent;
+
+	elapsed_time = current_time_millis() - start_time;
+	percent = (int)((float)x / (float)x_max * 100);
+	estimated_time_minutes = (long int)((float)elapsed_time / (float)percent * (100 - percent) / 1000 / 60);
+	printf("\rEstimated time: %ld minutes", estimated_time_minutes);
+}
+
+void	ray_tracer(t_threads *tdata)
 {
 	t_ray ray;
 	int x;
@@ -53,32 +65,65 @@ void	ray_tracer(t_data *data)
 	int color;
 	t_hit_obj	hit;
 
-	x = 0;
+	x = tdata->x_min;
 	y = 0;
-	while (x < (int)WIND_W)
+	while (x < tdata->x_max)
 	{
-		render_progress_bar(x);
+//		render_progress_bar(x, tdata->x_max);
 		while (y < (int)WIND_H)
 		{
-			ray = get_ray(data, x, y);
-			hit = get_closest_intersection(data, ray);
+			ray = get_ray(tdata->data, x, y);
+			hit = get_closest_intersection(tdata->data, ray);
 			if (hit.t_min < 4535320)
 			{
 //				color = get_normal_color(hit);
-//				hit.color = reflection_refraction(data, ray, hit, REFLECTION_DEPTH, 1.0f, 1.0f);
-				color = shading(hit, ray, data);
-//				color = blend_colors(color, hit.color, hit.light_absorb_distance);
+				hit.color = reflection_refraction(tdata->data, ray, hit, REFLECTION_DEPTH, 1.0f, 1.0f);
+				color = shading(hit, ray, tdata->data);
+				color = blend_colors(color, hit.color, hit.light_absorb_distance);
 			}
 			else
 			{
 //				color = background_color(y, 0x282828, 0xc13800);
 				color = background_color(y, BACKGROUND1, BACKGROUND2);
 			}
-			put_pxl(&data->img, x, y, color);
+			put_pxl(&tdata->data->img, x, y, color);
 			y++;
 		}
 		y = 0;
+		tdata->x++;
 		x++;
 	}
-	printf("\rProgress: 100%% | \n");
+//	printf("\rProgress: 100%% | \n");
+}
+
+void	multi_threading(t_data *data)
+{
+	pthread_t	threads[THREADS];
+	t_threads 	threads_data[THREADS];
+	int			i;
+	int 		step;
+
+	i = 0;
+	step = (int)ceil((double)(WIND_W / THREADS));
+	printf("Rendering on %d threads\n", THREADS);
+	while (i < THREADS)
+	{
+		threads_data[i].data = data;
+		threads_data[i].thread_id = i;
+		if (i == 0)
+			threads_data[i].x_min = 0;
+		else
+			threads_data[i].x_min = threads_data[i - 1].x_max;
+		threads_data[i].x = threads_data[i].x_min;
+		threads_data[i].x_max = threads_data[i].x_min + step;
+		pthread_create(&threads[i], NULL, (void *)ray_tracer, &threads_data[i]);
+		i++;
+	}
+	multi_threaded_progress_bar(threads_data);
+	i = 0;
+	while (i < THREADS)
+	{
+		pthread_join(threads[i], NULL);
+		i++;
+	}
 }
