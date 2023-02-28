@@ -1,8 +1,10 @@
-SRCS		=	main/main.c main/initializers.c \
+SRCS		=	main/main.c main/initializers.c main/free.c \
 				utils/put_pxl.c utils/vector.c utils/ft_split.c utils/ft_atoi.c utils/ft_itoa.c\
 				utils/fps.c utils/ft_atof.c utils/render_progress_bar.c utils/tab_space_split.c \
-				utils/ft_strncmp.c \
-				controls/controls.c \
+				utils/ft_strncmp.c utils/vector2.c \
+				controls/controls.c controls/controls_utils.c controls/editor_mode_utils.c \
+                controls/transform_utils1.c controls/transform_utils2.c \
+                controls/key_utils1.c controls/key_utils2.c \
 				parsing/parsing.c \
 				gnl/get_next_line.c gnl/get_next_line_utils.c \
 				raytracer/ray_tracer.c raytracer/shading.c raytracer/background.c \

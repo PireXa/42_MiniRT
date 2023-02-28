@@ -27,6 +27,7 @@ int check_progress(t_threads *threads_data)
 	i = 0;
 	x = 0;
 	done = 0;
+	x_max = 0;
 	while (i < THREADS)
 	{
 		x_max += threads_data[i].x_max - threads_data[i].x_min;
@@ -96,6 +97,7 @@ void	multi_threaded_progress_bar(t_threads *threads_data)
 	int progress;
 
 	done = 0;
+	e = 0;
 	while (!done)
 	{
 		while (e < THREADS)
@@ -109,7 +111,7 @@ void	multi_threaded_progress_bar(t_threads *threads_data)
 		estimated_time(threads_data, progress);
 		if (!done)
 			printf("\033[%dF", THREADS + 2);
-		usleep(10000);
+		usleep(1000);
 		e = 0;
 	}
 	printf("Finished Rendering\n");

@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   MINIRT                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rdas-nev <rdas-nev@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 4242/42/42 42:42:42 by rdas-nev          #+#    #+#             */
+/*   Updated: 4242/42/42 42:42:42 by rdas-nev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../inc/minirt.h"
 
-int    nb_words(char const *s)
+int	nb_words(char const *s)
 {
-	int    i;
-	int    count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -22,9 +33,9 @@ int    nb_words(char const *s)
 	return (count);
 }
 
-int    word_len(char const *s, int i)
+int	wrdl(char const *s, int i)
 {
-	int    len;
+	int	len;
 
 	len = 0;
 	while (s[i] && s[i] != ' ' && s[i] != '\t')
@@ -35,31 +46,31 @@ int    word_len(char const *s, int i)
 	return (len);
 }
 
-char   **tab_space_split(char const *s)
+char	**tab_space_split(char const *s)
 {
-	char   **arr;
-	int       i;
-	int       j;
-	int       k;
+	char	**arr;
+	int		*ijk;
+	int		k;
 
-	i = 0;
-	j = 0;
-	if (!s || !(arr = (char **)malloc(sizeof(char *) * (nb_words(s) + 1))))
+	ijk = (int [2]){0, 0};
+	arr = (char **)malloc(sizeof(char *) * (nb_words(s) + 1));
+	if (!s || !(arr))
 		return (NULL);
-	while (s[i])
+	while (s[ijk[0]])
 	{
 		k = 0;
-		if (s[i] != ' ' && s[i] != '\t')
+		if (s[ijk[0]] != ' ' && s[ijk[0]] != '\t')
 		{
-			if (!(arr[j] = (char *)malloc(sizeof(char) * (word_len(s, i) + 1))))
+			arr[ijk[1]] = (char *)malloc(sizeof(char) * (wrdl(s, ijk[0]) + 1));
+			if (!(arr[ijk[1]]))
 				return (NULL);
-			while (s[i] && s[i] != ' ' && s[i] != '\t')
-				arr[j][k++] = s[i++];
-			arr[j++][k] = '\0';
+			while (s[ijk[0]] && s[ijk[0]] != ' ' && s[ijk[0]] != '\t')
+				arr[ijk[1]][k++] = s[ijk[0]++];
+			arr[ijk[1]++][k] = '\0';
 		}
 		else
-			i++;
+			ijk[0]++;
 	}
-	arr[j] = NULL;
+	arr[ijk[1]] = NULL;
 	return (arr);
 }

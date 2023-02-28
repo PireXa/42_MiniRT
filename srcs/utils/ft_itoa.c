@@ -1,49 +1,61 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   MINIRT                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rdas-nev <rdas-nev@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 4242/42/42 42:42:42 by rdas-nev          #+#    #+#             */
+/*   Updated: 4242/42/42 42:42:42 by rdas-nev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minirt.h"
 
-void	ft_strrev(char *str)
+static int	newstrlen(long c)
 {
-	int		i;
-	int		j;
-	char	temp;
+	int	i;
 
 	i = 0;
-	j = ft_strlen(str) - 1;
-	while (i < j)
+	if (c == 0)
+		return (1);
+	else if (c < 0)
 	{
-		temp = str[i];
-		str[i] = str[j];
-		str[j] = temp;
+		c *= -1;
 		i++;
-		j--;
 	}
+	while (c > 0)
+	{
+		c /= 10;
+		i++;
+	}
+	return (i);
 }
 
-char *ft_itoa(int n)
+char	*ft_itoa(int c)
 {
-	char	*str;
-	int		i;
-	int		neg;
+	char	*res;
+	int		n;
+	long	new_c;
 
-	i = 0;
-	neg = 0;
-	if (n < 0)
-	{
-		neg = 1;
-		n *= -1;
-	}
-	str = malloc(sizeof(char) * 12);
-	if (!str)
+	new_c = c;
+	n = newstrlen(new_c);
+	res = malloc(sizeof(char) * n + 1);
+	if (!res)
 		return (NULL);
-	if (n == 0)
-		str[i++] = '0';
-	while (n > 0)
+	if (new_c < 0)
 	{
-		str[i++] = (n % 10) + '0';
-		n /= 10;
+		res[0] = '-';
+		new_c *= -1;
 	}
-	if (neg)
-		str[i++] = '-';
-	str[i] = '\0';
-	ft_strrev(str);
-	return (str);
+	else if (new_c == 0)
+		res[0] = '0';
+	res[n] = '\0';
+	while (new_c > 0)
+	{
+		res[n - 1] = new_c % 10 + '0';
+		new_c /= 10;
+		n--;
+	}
+	return (res);
 }

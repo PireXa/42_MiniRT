@@ -27,7 +27,7 @@ float light_intens_by_dist(t_light light, t_vector hit_point)
 	intensity = LUMENS / (get_light_dist(light, hit_point) * get_light_dist(light, hit_point));
 	if (intensity > 1)
 		intensity = 1;
-	return (intensity + AMBIENT_LIGHT);
+	return (intensity);
 }
 
 int check_shadow(t_data *data, t_ray ray, t_vector hit_point, t_light light)
@@ -100,9 +100,9 @@ int shading(t_hit_obj hit, t_ray ray, t_data *data)
 		light_dir = vector_from_points(hit.hit_point, data->scene->lights[i].origin);
 		normalize_vector(&light_dir);
 		if (check_shadow(data, ray, hit.hit_point, data->scene->lights[i]) == 0)
-			intensity += light_intens_by_dist(data->scene->lights[i], hit.hit_point) * phong_shading(hit, light_dir, view_dir);
+			intensity += light_intens_by_dist(data->scene->lights[i], hit.hit_point) * phong_shading(hit, light_dir, view_dir) * data->scene->lights[i].intensity;
 	}
-	intensity += AMBIENT_LIGHT;
+	intensity += data->scene->amb_light->intensity;
 	if (intensity >= 1)
 		intensity = 1;
 	return (calc_color_intensity(hit.color, intensity));

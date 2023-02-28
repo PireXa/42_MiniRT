@@ -105,7 +105,7 @@ int    camera_counter(char *file)
 	fd = open(file, O_RDONLY);
 	while ((line = get_next_line(fd)))
 	{
-		if (line[0] == 'c')
+		if (line[0] == 'c' && (line[1] == ' ' || line[1] == '\t'))
 			count++;
 		free(line);
 	}
@@ -520,6 +520,7 @@ void   parser(char *file, t_scene *scene)
 			scene->cameras[m].normal.z = ft_atof(sub_params[2]);
 			normalize_vector(&scene->cameras[m].normal);
 			free_double_array(sub_params);
+			scene->cameras[m].fov = ft_atof(params[3]);
 			scene->cameras[m].view_matrix = set_camera_to_world_transformation_matrix(scene->cameras[m], (t_vector){0, 1, 0});
 			m++;
 		}
@@ -545,6 +546,13 @@ void   parser(char *file, t_scene *scene)
 			scene->lights[n].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
 			free_double_array(sub_params);
 			n++;
+		}
+		else if (params[0][0] == 'A' && !params[0][1])
+		{
+			scene->amb_light[0].intensity = ft_atof(params[1]);
+			sub_params = ft_split(params[2], ',');
+			scene->amb_light[0].color = rgb_to_int(ft_atoi(sub_params[0]), ft_atoi(sub_params[1]), ft_atoi(sub_params[2]));
+			free_double_array(sub_params);
 		}
 		free_double_array(params);
 		free(line);

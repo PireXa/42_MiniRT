@@ -58,6 +58,7 @@ void	init_data(t_data *data, char *scene_file)
 	data->scene->triangles = (t_triangle *)malloc(sizeof(t_triangle) * data->nb_objs->nb_triangles);
 	data->scene->cameras = (t_camera *)malloc(sizeof(t_camera) * data->nb_objs->nb_cameras);
 	data->scene->lights = (t_light *)malloc(sizeof(t_light) * data->nb_objs->nb_lights);
+	data->scene->amb_light = (t_ambience *)malloc(sizeof(t_ambience));
 	/*data->light = malloc(sizeof(t_light));
 	data->light->origin.x = 0;
 	data->light->origin.y = 30;
@@ -68,4 +69,6 @@ void	init_data(t_data *data, char *scene_file)
 	data->fps.frame_ctr = 0;
 	data->fps.fps = 0;
 	data->start_render_time = current_time_millis();
+	data->edit_mode = 0;
+	data->camera_index = 0;
 }
