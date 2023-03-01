@@ -10,49 +10,65 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"../../inc/minirt.h"
+#include "../../inc/minirt.h"
 
-void	free_matrix(float **array, int size)
+int	rgb_to_int(int r, int g, int b)
+{
+	return (r << 16 | g << 8 | b);
+}
+
+void	free_double_array(char **array)
 {
 	int	i;
 
-	i = 0;
-	while (i < size)
-	{
+	i = -1;
+	while (array[++i])
 		free(array[i]);
-		i++;
-	}
 	free(array);
 }
 
-void	free_view_matrix(t_camera *cameras, int nb_cameras)
+void	get_to_eof(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
+	free(line);
+}
+
+float	get_material_data(char *mat_ref, int data)
+{
+	int		fd;
+	char	*fds;
+	char	**split;
+	float	ret;
+
+	fd = open("./materials/materials_data", O_RDONLY);
+	fds = get_next_line(fd);
+	while (ft_strncmp(fds, mat_ref, ft_strlen(mat_ref) - 1))
+	{
+		free(fds);
+		fds = get_next_line(fd);
+	}
+	split = tab_space_split(fds);
+	ret = ft_atof(split[data]);
+	free_double_array(split);
+	free(fds);
+	get_to_eof(fd);
+	close(fd);
+	return (ret);
+}
+
+int	double_array_len(char **array)
 {
 	int	i;
 
 	i = 0;
-	while (i < nb_cameras)
-	{
-		free_matrix(cameras[i].view_matrix, 4);
+	while (array[i])
 		i++;
-	}
-}
-
-int	free_all(t_data *data)
-{
-	mlx_destroy_image(data->mlx, data->img.img);
-	mlx_destroy_window(data->mlx, data->mlx_win);
-	mlx_destroy_display(data->mlx);
-	free(data->mlx);
-	free_view_matrix(data->scene->cameras, data->nb_objs->nb_cameras);
-	free(data->scene->spheres);
-	free(data->scene->planes);
-	free(data->scene->cylinders);
-	free(data->scene->cameras);
-	free(data->scene->amb_light);
-	free(data->scene->lights);
-	free(data->scene->triangles);
-	free(data->scene);
-	free(data->nb_objs);
-	free(data);
-	exit(0);
+	return (i);
 }

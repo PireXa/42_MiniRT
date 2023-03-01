@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cylinder.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fde-albe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/01 10:05:30 by fde-albe          #+#    #+#             */
+/*   Updated: 2023/03/01 12:17:33 by fde-albe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minirt.h"
 
-float	define_cylinder_height(t_cylinder  cylinder, t_ray ray, float t)
+float	define_cylinder_height(t_cylinder cylinder, t_ray ray, float t)
 {
 	float		height;
 	t_vector	hit_axis_proj;
@@ -18,40 +30,41 @@ float	define_cylinder_height(t_cylinder  cylinder, t_ray ray, float t)
 	return (t);
 }
 
-float intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
+float	intersect_ray_cylinder(t_ray ray, t_cylinder cylinder)
 {
-	t_vector oc;
-	float a;
-	float b;
-	float c;
-	float discriminant;
-	float t;
+	t_2nd_equation	eq;
 
-	oc = vector_from_points(cylinder.base_center, ray.origin);
-	a = dot_product(ray.direction, ray.direction) - pow(dot_product(ray.direction, cylinder.normal), 2);
-	b = 2 * (dot_product(ray.direction, oc) - dot_product(ray.direction, cylinder.normal) * dot_product(oc, cylinder.normal));
-	c = dot_product(oc, oc) - pow(dot_product(oc, cylinder.normal), 2) - pow(cylinder.diameter / 2, 2);
-	discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
+	eq.oc = vector_from_points(cylinder.base_center, ray.origin);
+	eq.a = dot_product(ray.direction, ray.direction)
+		- pow(dot_product(ray.direction, cylinder.normal), 2);
+	eq.b = 2 * (dot_product(ray.direction, eq.oc)
+			- dot_product(ray.direction, cylinder.normal)
+			* dot_product(eq.oc, cylinder.normal));
+	eq.c = dot_product(eq.oc, eq.oc)
+		- pow(dot_product(eq.oc, cylinder.normal), 2)
+		- pow(cylinder.diameter / 2, 2);
+	eq.discriminant = eq.b * eq.b - 4 * eq.a * eq.c;
+	if (eq.discriminant < 0)
 		return (0);
-	t = (-b - sqrt(discriminant)) / (2.0 * a);
-	if (t > 0.0001f)
-		return (t);
-	t = (-b + sqrt(discriminant)) / (2.0 * a);
-	if (t > 0.0001f)
-		return (t);
+	eq.t = (-eq.b - sqrt(eq.discriminant)) / (2.0 * eq.a);
+	if (eq.t > 0.0001f)
+		return (eq.t);
+	eq.t = (-eq.b + sqrt(eq.discriminant)) / (2.0 * eq.a);
+	if (eq.t > 0.0001f)
+		return (eq.t);
 	return (0);
 }
 
 float	intersect_ray_cylinder_top(t_ray ray, t_cylinder cylinder)
 {
-	float t;
-	float denom;
-	t_vector p0l0;
-	t_vector top;
-	t_vector hit_point;
+	float		t;
+	float		denom;
+	t_vector	p0l0;
+	t_vector	top;
+	t_vector	hit_point;
 
-	top = vector_add(cylinder.base_center, vector_scale(cylinder.normal, cylinder.height));
+	top = vector_add(cylinder.base_center,
+			vector_scale(cylinder.normal, cylinder.height));
 	denom = dot_product(cylinder.normal, ray.direction);
 	if (fabs(denom) > 0.0001f)
 	{
@@ -60,7 +73,8 @@ float	intersect_ray_cylinder_top(t_ray ray, t_cylinder cylinder)
 		if (t > 0.0001f)
 		{
 			hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
-			if (vector_length(vector_from_points(top, hit_point)) <= cylinder.diameter / 2)
+			if (vector_length(vector_from_points(top, hit_point))
+				<= cylinder.diameter / 2)
 				return (t);
 		}
 	}
@@ -69,11 +83,11 @@ float	intersect_ray_cylinder_top(t_ray ray, t_cylinder cylinder)
 
 float	intersect_ray_cylinder_bottom(t_ray ray, t_cylinder cylinder)
 {
-	float t;
-	float denom;
-	t_vector p0l0;
-	t_vector bottom;
-	t_vector hit_point;
+	float		t;
+	float		denom;
+	t_vector	p0l0;
+	t_vector	bottom;
+	t_vector	hit_point;
 
 	bottom = cylinder.base_center;
 	denom = dot_product(cylinder.normal, ray.direction);
@@ -84,7 +98,8 @@ float	intersect_ray_cylinder_bottom(t_ray ray, t_cylinder cylinder)
 		if (t > 0.0001f)
 		{
 			hit_point = vector_add(ray.origin, vector_scale(ray.direction, t));
-			if (vector_length(vector_from_points(bottom, hit_point)) <= cylinder.diameter / 2)
+			if (vector_length(vector_from_points(bottom, hit_point))
+				<= cylinder.diameter / 2)
 				return (t);
 		}
 	}

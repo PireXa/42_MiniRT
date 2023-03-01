@@ -17,20 +17,20 @@ void	clean_slate(t_data *g)
 	ft_bzero(g->img.addr, WIND_H * WIND_W * (g->img.bi_per_pxl / 8));
 }
 
-int	checkcode(char *line, t_data *data)
+char	checkcode(char *line)
 {
 	if (ft_strncmp(line, "sp", 3) == 0)
-		return (1);
+		return ('1');
 	else if (ft_strncmp(line, "pl", 3) == 0)
-		return (2);
+		return ('2');
 	else if (ft_strncmp(line, "cy", 3) == 0)
-		return (3);
+		return ('3');
 	else if (ft_strncmp(line, "l", 2) == 0)
-		return (4);
+		return ('4');
 	else if (ft_strncmp(line, "c", 2) == 0)
-		return (5);
+		return ('5');
 	else
-		return (-1);
+		return ('-');
 }
 
 void	transform_cameras2(t_data *data, char code[3], int n)
@@ -57,7 +57,7 @@ void	transform_cameras2(t_data *data, char code[3], int n)
 				= rotater(data->scene->cameras[n].normal, 'z', -1);
 		normalize_vector(&data->scene->cameras[n].normal);
 		data->scene->cameras[n].view_matrix
-			= set_camera_to_world_transformation_matrix(
+			= set_cam_wrld_mtrx(
 				data->scene->cameras[n], (t_vector){0, 1, 0});
 	}
 }

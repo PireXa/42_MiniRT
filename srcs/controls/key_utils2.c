@@ -30,7 +30,7 @@ void	key_rotation(t_data *data, int key, char *code, int n)
 			transform(data, (char [3]){code[0], '3', '6'}, n, 0.5f);
 		clean_slate(data);
 		multi_threading(data);
-		mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
+		put_new_img(data);
 	}
 }
 
@@ -44,6 +44,6 @@ void	key_height(t_data *data, int key, char *code, int n)
 			transform(data, (char [3]){code[0], '4', '2'}, n, 0.5f);
 		clean_slate(data);
 		multi_threading(data);
-		mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
+		put_new_img(data);
 	}
 }

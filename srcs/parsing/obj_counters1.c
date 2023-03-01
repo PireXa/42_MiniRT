@@ -10,49 +10,67 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"../../inc/minirt.h"
+#include "../../inc/minirt.h"
 
-void	free_matrix(float **array, int size)
+int	sphere_counter(char *file)
 {
-	int	i;
+	int		fd;
+	int		count;
+	char	*line;
 
-	i = 0;
-	while (i < size)
+	count = 0;
+	fd = open(file, O_RDONLY);
+	line = get_next_line(fd);
+	while (line)
 	{
-		free(array[i]);
-		i++;
+		if (line[0] == 's' && line[1] == 'p')
+			count++;
+		free(line);
+		line = get_next_line(fd);
 	}
-	free(array);
+	free(line);
+	close(fd);
+	return (count);
 }
 
-void	free_view_matrix(t_camera *cameras, int nb_cameras)
+int	plane_counter(char *file)
 {
-	int	i;
+	int		fd;
+	int		count;
+	char	*line;
 
-	i = 0;
-	while (i < nb_cameras)
+	count = 0;
+	fd = open(file, O_RDONLY);
+	line = get_next_line(fd);
+	while (line)
 	{
-		free_matrix(cameras[i].view_matrix, 4);
-		i++;
+		if (line[0] == 'p' && line[1] == 'l')
+			count++;
+		free(line);
+		line = get_next_line(fd);
 	}
+	free(line);
+	close(fd);
+	return (count);
 }
 
-int	free_all(t_data *data)
+int	cylinder_counter(char *file)
 {
-	mlx_destroy_image(data->mlx, data->img.img);
-	mlx_destroy_window(data->mlx, data->mlx_win);
-	mlx_destroy_display(data->mlx);
-	free(data->mlx);
-	free_view_matrix(data->scene->cameras, data->nb_objs->nb_cameras);
-	free(data->scene->spheres);
-	free(data->scene->planes);
-	free(data->scene->cylinders);
-	free(data->scene->cameras);
-	free(data->scene->amb_light);
-	free(data->scene->lights);
-	free(data->scene->triangles);
-	free(data->scene);
-	free(data->nb_objs);
-	free(data);
-	exit(0);
+	int		fd;
+	int		count;
+	char	*line;
+
+	count = 0;
+	fd = open(file, O_RDONLY);
+	line = get_next_line(fd);
+	while (line)
+	{
+		if (line[0] == 'c' && line[1] == 'y')
+			count++;
+		free(line);
+		line = get_next_line(fd);
+	}
+	free(line);
+	close(fd);
+	return (count);
 }

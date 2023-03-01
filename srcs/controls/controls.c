@@ -12,6 +12,12 @@
 
 #include "../../inc/minirt.h"
 
+void	put_new_img(t_data *data)
+{
+	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
+	data->start_render_time = current_time_millis();
+}
+
 int	key_press(int key, t_data *data)
 {
 	char		*cmd;
@@ -19,13 +25,11 @@ int	key_press(int key, t_data *data)
 	static char	code[3];
 	static int	n;
 
-	key = key_converter1(key);
-	key = key_converter2(key);
 	if (key == key_TAB)
 	{
 		cmd = print_message(cmd);
 		obj_code = ft_split(cmd, ' ');
-		code[0] = ft_itoa(checkcode(obj_code[0], data))[0];
+		code[0] = checkcode(obj_code[0]);
 		n = ft_atoi(obj_code[1]);
 		free_editor(obj_code, cmd, data);
 	}

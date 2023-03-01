@@ -1,49 +1,66 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   MINIRT                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rdas-nev <rdas-nev@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 4242/42/42 42:42:42 by rdas-nev          #+#    #+#             */
+/*   Updated: 4242/42/42 42:42:42 by rdas-nev         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minirt.h"
 
-float	**set_camera_to_world_transformation_matrix(t_camera camera, t_vector up)
+float	*init_mtrx(float *values, float *matrix)
 {
-	float	**matrix;
+	matrix[0] = values[0];
+	matrix[1] = values[1];
+	matrix[2] = values[2];
+	matrix[3] = values[3];
+	return (matrix);
+}
+
+float	**set_cam_wrld_mtrx(t_camera c, t_vector up)
+{
+	float		**m;
 	t_vector	z_axis;
 	t_vector	x_axis;
 	t_vector	y_axis;
 
-	matrix = malloc(sizeof(float *) * 4);
-	matrix[0] = malloc(sizeof(float) * 4);
-	matrix[1] = malloc(sizeof(float) * 4);
-	matrix[2] = malloc(sizeof(float) * 4);
-	matrix[3] = malloc(sizeof(float) * 4);
-	z_axis.x = camera.normal.x;
-	z_axis.y = camera.normal.y;
-	z_axis.z = camera.normal.z;
+	m = malloc(sizeof(float *) * 4);
+	m[0] = malloc(sizeof(float) * 4);
+	m[1] = malloc(sizeof(float) * 4);
+	m[2] = malloc(sizeof(float) * 4);
+	m[3] = malloc(sizeof(float) * 4);
+	z_axis.x = c.normal.x;
+	z_axis.y = c.normal.y;
+	z_axis.z = c.normal.z;
 	normalize_vector(&z_axis);
 	x_axis = cross_product(up, z_axis);
 	normalize_vector(&x_axis);
 	y_axis = cross_product(z_axis, x_axis);
 	normalize_vector(&y_axis);
-	matrix[0][0] = x_axis.x;
-	matrix[0][1] = x_axis.y;
-	matrix[0][2] = x_axis.z;
-	matrix[0][3] = 0;//-dot_product(x_axis, camera.origin);
-	matrix[1][0] = y_axis.x;
-	matrix[1][1] = y_axis.y;
-	matrix[1][2] = y_axis.z;
-	matrix[1][3] = 0;//-dot_product(y_axis, camera.origin);
-	matrix[2][0] = z_axis.x;
-	matrix[2][1] = z_axis.y;
-	matrix[2][2] = z_axis.z;
-	matrix[2][3] = 0;//-dot_product(z_axis, camera.origin);
-	matrix[3][0] = camera.origin.x;
-	matrix[3][1] = camera.origin.y;
-	matrix[3][2] = camera.origin.z;
-	matrix[3][3] = 1;
-	return (matrix);
+	m[0] = init_mtrx((float [4]){x_axis.x, x_axis.y, x_axis.z, 0}, m[0]);
+	m[1] = init_mtrx((float [4]){y_axis.x, y_axis.y, y_axis.z, 0}, m[1]);
+	m[2] = init_mtrx((float [4]){z_axis.x, z_axis.y, z_axis.z, 0}, m[2]);
+	m[3] = init_mtrx((float [4]){c.origin.x, c.origin.y, c.origin.z, 1}, m[3]);
+	return (m);
 }
 
-void	init_data(t_data *data, char *scene_file)
+void	mlx_data_init(t_data *d)
 {
-	data->mlx = mlx_init();
-	data->img.img = mlx_new_image(data->mlx, WIND_W, WIND_H);
-	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bi_per_pxl, &data->img.line_length, &data->img.endian);
+	d->mlx = mlx_init();
+//	d->mlx_win = mlx_new_window(d->mlx,
+//			WIND_W, WIND_H, "miniRT");
+	d->img.img = mlx_new_image(d->mlx, WIND_W, WIND_H);
+	d->img.addr = mlx_get_data_addr(d->img.img,
+			&d->img.bi_per_pxl,
+			&d->img.line_length, &d->img.endian);
+}
+
+void	nb_objs_init(t_data *data, char *scene_file)
+{
 	data->nb_objs = malloc(sizeof(t_nb_objs));
 	data->nb_objs->nb_spheres = sphere_counter(scene_file);
 	data->nb_objs->nb_planes = plane_counter(scene_file);
@@ -51,24 +68,31 @@ void	init_data(t_data *data, char *scene_file)
 	data->nb_objs->nb_triangles = triangle_counter(scene_file);
 	data->nb_objs->nb_cameras = camera_counter(scene_file);
 	data->nb_objs->nb_lights = light_counter(scene_file);
+}
+
+void	init_data(t_data *data, char *scene_file)
+{
+	mlx_data_init(data);
+	nb_objs_init(data, scene_file);
 	data->scene = (t_scene *)malloc(sizeof(t_scene));
-	data->scene->spheres = (t_sphere *)malloc(sizeof(t_sphere) * data->nb_objs->nb_spheres);
-	data->scene->planes = (t_plane *)malloc(sizeof(t_plane) * data->nb_objs->nb_planes);
-	data->scene->cylinders = (t_cylinder *)malloc(sizeof(t_cylinder) * data->nb_objs->nb_cylinders);
-	data->scene->triangles = (t_triangle *)malloc(sizeof(t_triangle) * data->nb_objs->nb_triangles);
-	data->scene->cameras = (t_camera *)malloc(sizeof(t_camera) * data->nb_objs->nb_cameras);
-	data->scene->lights = (t_light *)malloc(sizeof(t_light) * data->nb_objs->nb_lights);
+	data->scene->spheres = (t_sphere *)malloc(sizeof(t_sphere)
+			* data->nb_objs->nb_spheres);
+	data->scene->planes = (t_plane *)malloc(sizeof(t_plane)
+			* data->nb_objs->nb_planes);
+	data->scene->cylinders = (t_cylinder *)malloc(sizeof(t_cylinder)
+			* data->nb_objs->nb_cylinders);
+	data->scene->triangles = (t_triangle *)malloc(sizeof(t_triangle)
+			* data->nb_objs->nb_triangles);
+	data->scene->cameras = (t_camera *)malloc(sizeof(t_camera)
+			* data->nb_objs->nb_cameras);
+	data->scene->lights = (t_light *)malloc(sizeof(t_light)
+			* data->nb_objs->nb_lights);
 	data->scene->amb_light = (t_ambience *)malloc(sizeof(t_ambience));
-	/*data->light = malloc(sizeof(t_light));
-	data->light->origin.x = 0;
-	data->light->origin.y = 30;
-	data->light->origin.z = 20;
-	data->light->intensity = 1;
-	data->light->color = 0xFFFFFF;*/
 	data->fps.frame_time = time(NULL);
 	data->fps.frame_ctr = 0;
 	data->fps.fps = 0;
 	data->start_render_time = current_time_millis();
 	data->edit_mode = 0;
 	data->camera_index = 0;
+	data->normal_mode = 0;
 }

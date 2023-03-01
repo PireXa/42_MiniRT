@@ -27,8 +27,13 @@
 # include "mlx.h"
 # include "get_next_line.h"
 
+
+/*# define WIND_W 100.00f
+# define WIND_H 50.00f*/
 # define WIND_W 840.00f
 # define WIND_H 680.00f
+/*# define WIND_W 1920.00f
+# define WIND_H 1080.00f*/
 # define BACKGROUND1 0xF525E0
 # define BACKGROUND2 0x03CFFC
 # define LUMENS 10000
@@ -58,6 +63,16 @@ typedef struct s_vector
 	float	y;
 	float	z;
 }				t_vector;
+
+typedef struct	s_2nd_equation
+{
+	t_vector	oc;
+	float		a;
+	float		b;
+	float		c;
+	float		discriminant;
+	float		t;
+}				t_2nd_equation;
 
 typedef struct s_ray
 {
@@ -192,6 +207,7 @@ typedef struct s_data
 	long int	start_render_time;
 	int			camera_index;
 	int			edit_mode;
+	int 		normal_mode;
 }				t_data;
 
 typedef struct s_thread_data {
@@ -205,6 +221,8 @@ typedef struct s_thread_data {
 //GRAPHICS
 int			background_color(int y, int color1, int color2);
 int			calc_color_intensity(int color, float intensity);
+int			checkerboard_plane(t_vector hit_point, t_plane plane);
+int			checkerboard_sphere(t_vector hit_point, t_sphere sphere);
 int			check_shadow(t_data *data, t_ray ray, t_vector hit_pnt, t_light l);
 float		define_cylinder_height(t_cylinder cylinder, t_ray ray, float t);
 t_hit_obj	get_closest_intersection(t_data *data, t_ray ray);
@@ -213,6 +231,7 @@ float		intersect_ray_cylinder_bottom(t_ray ray, t_cylinder cylinder);
 float		intersect_ray_cylinder_top(t_ray ray, t_cylinder cylinder);
 float		intersect_ray_plane(t_ray ray, t_plane plane);
 float		intersect_ray_sphere(t_ray ray, t_sphere sphere);
+float		intersect_ray_triangle(t_ray ray, t_triangle triangle);
 float		light_intens_by_dist(t_light l, t_vector hit_pnt);
 t_vector	normal_cylinder(t_cylinder cylinder, t_vector hit_point);
 t_vector	normal_triangle(t_triangle triangle);
@@ -227,10 +246,14 @@ void		controls(t_data *data);
 //PARSING
 int			camera_counter(char *file);
 int			cylinder_counter(char *file);
+int			cylinder_parser(char **params, t_scene *scene, int i, int line_count);
+float		get_material_data(char *mat_ref, int data);
 int			light_counter(char *file);
 void		parser(char *file, t_scene *scene);
 int			plane_counter(char *file);
+int			plane_parser(char **params, t_scene *scene, int i, int line_count);
 int			sphere_counter(char *file);
+int			sphere_parser(char **params, t_scene *scene, int i, int line_count);
 int			triangle_counter(char *file);
 
 //VECTOR UTILS
@@ -250,13 +273,14 @@ long int	current_time_millis(void);
 
 //DATA INITIALIZATION
 void		init_data(t_data *data, char *scene_file);
-float		**set_camera_to_world_transformation_matrix(t_camera camera, t_vector up);
+float		**set_cam_wrld_mtrx(t_camera camera, t_vector up);
 
 //RENDER INFORMATION
 void		multi_threaded_progress_bar(t_threads *treads_data);
 
 //UTILS
 int			blend_colors(int color1, int color2, float ratio);
+int			double_array_len(char **array);
 int			ft_atoi(const char *str);
 float		ft_atof(char *str);
 char		*ft_itoa(int n);
@@ -264,7 +288,9 @@ char		**ft_split(char const *s, char c);
 int			ft_strncmp(char *s1, char *s2, int n);
 char		**tab_space_split(char const *s);
 int			free_all(t_data *data);
+void		free_double_array(char **array);
 void		ft_bzero(void *s, size_t n);
+int    		rgb_to_int(int r, int g, int b);
 
 // THREADS
 
@@ -272,8 +298,9 @@ void		multi_threading(t_data *data);
 
 // ANIMATION
 
-int			checkcode(char *line, t_data *data);
+char		checkcode(char *line);
 void		clean_slate(t_data *g);
+void		put_new_img(t_data *data);
 void		init_graphics(t_data *data);
 t_vector	rotater(t_vector v, char e, float sign);
 void		transform_sphere(t_data *data, char code[3], int n, float value);
@@ -294,28 +321,27 @@ void		key_height(t_data *data, int key, char *code, int n);
 
 // KEYS
 
-int			key_converter1(int key);
-int			key_converter2(int key);
 enum e_keys{
-	key_TAB = -1,
-	key_ESC = -2,
-	key_ENTER = -3,
-	key_D = -4,
-	key_F = -5,
-	key_LEFT = -6,
-	key_RIGHT = -7,
-	key_UP = -8,
-	key_DOWN = -9,
-	key_SPACE = -10,
-	key_C = -11,
-	key_X = -12,
-	key_Y = -13,
-	key_Z = -14,
-	key_H = -15,
-	key_J = -16,
-	key_K = -17,
-	key_E = -18,
-	key_R = -19,
-	key_V = -20,
+	key_ESC = 65307,
+	key_TAB = 65289,
+	key_ENTER = 65293,
+	key_D = 100,
+	key_F = 102,
+	key_LEFT = 65361,
+	key_RIGHT = 65363,
+	key_UP = 65362,
+	key_DOWN = 65364,
+	key_SPACE = 32,
+	key_C = 99,
+	key_X = 120,
+	key_Y = 121,
+	key_Z = 122,
+	key_H = 104,
+	key_J = 106,
+	key_K = 107,
+	key_E = 101,
+	key_R = 114,
+	key_V = 118,
+	key_N = 110,
 };
 #endif

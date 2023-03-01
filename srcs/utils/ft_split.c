@@ -96,7 +96,7 @@ char	**ft_split(const char *s, char c)
 	strarray = NULL;
 	if (!s)
 		return (NULL);
-	strarray = (char **)malloc(strcount((char *)s, c) * sizeof(char *) + 1);
+	strarray = (char **)malloc((strcount((char *)s, c) + 1) * sizeof(char *));
 	if (!strarray)
 		return (0);
 	strarray = make_arrays(strarray, (char *)s, c, i);

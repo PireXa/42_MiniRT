@@ -5,10 +5,14 @@ SRCS		=	main/main.c main/initializers.c main/free.c \
 				controls/controls.c controls/controls_utils.c controls/editor_mode_utils.c \
                 controls/transform_utils1.c controls/transform_utils2.c \
                 controls/key_utils1.c controls/key_utils2.c \
-				parsing/parsing.c \
+				parsing/parsing.c parsing/obj_counters1.c parsing/obj_counters2.c \
+                parsing/parser_utils1.c parsing/sphere_parser.c parsing/plane_parser.c \
+                parsing/cylinder_parser.c \
 				gnl/get_next_line.c gnl/get_next_line_utils.c \
 				raytracer/ray_tracer.c raytracer/shading.c raytracer/background.c \
 				raytracer/intersections.c raytracer/cylinder.c raytracer/reflection_refraction.c \
+				raytracer/sphere.c raytracer/plane.c raytracer/triangle.c \
+				textures/plane_checkerboard.c textures/sphere_checkerboard.c \
 
 OBJS		=	$(addprefix objs/,$(SRCS:.c=.o))
 
@@ -30,6 +34,7 @@ objs/%.o: srcs/%.c
 			@mkdir -p objs/parsing
 			@mkdir -p objs/gnl
 			@mkdir -p objs/raytracer
+			@mkdir -p objs/textures
 			$(CC) $(CFLAGS) -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
 $(NAME): 	$(OBJS)

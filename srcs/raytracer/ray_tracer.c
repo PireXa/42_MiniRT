@@ -27,7 +27,7 @@ t_ray	get_ray(t_data *data, int x, int y)
 	camera.y = (1 - 2 * (y + 0.5) / WIND_H) * tan(deg_to_rad(data->scene->cameras[data->camera_index].fov) / 2);
 	camera.z = 1;
 	normalize_vector(&camera);
-	ray.origin = data->scene->cameras[0].origin;
+	ray.origin = data->scene->cameras[data->camera_index].origin;
 	ray.direction = transform_vector(camera, data->scene->cameras[data->camera_index].view_matrix);
 	normalize_vector(&ray.direction);
 	return (ray);
@@ -76,10 +76,14 @@ void	ray_tracer(t_threads *tdata)
 			hit = get_closest_intersection(tdata->data, ray);
 			if (hit.t_min < 4535320)
 			{
-//				color = get_normal_color(hit);
-				hit.color = reflection_refraction(tdata->data, ray, hit, REFLECTION_DEPTH, 1.0f, 1.0f);
-				color = shading(hit, ray, tdata->data);
-				color = blend_colors(color, hit.color, hit.light_absorb_distance);
+				if (tdata->data->normal_mode)
+					color = get_normal_color(hit);
+				else
+				{
+					hit.color = reflection_refraction(tdata->data, ray, hit, REFLECTION_DEPTH, 1.0f, 1.0f);
+					color = shading(hit, ray, tdata->data);
+					color = blend_colors(color, hit.color, hit.light_absorb_distance);
+				}
 			}
 			else
 			{
