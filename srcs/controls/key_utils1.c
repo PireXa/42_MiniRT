@@ -15,7 +15,7 @@
 void	key_out(int key, t_data *data)
 {
 	if (key == key_ESC && data->edit_mode == 0)
-		free_all(data);
+		free_all(data, 0);
 	else if (key == key_ENTER && data->edit_mode == 1)
 		data->edit_mode = 0;
 	else if (key == key_V && data->edit_mode == 0)

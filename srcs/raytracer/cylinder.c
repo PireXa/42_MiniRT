@@ -12,6 +12,21 @@
 
 #include "../../inc/minirt.h"
 
+t_vector	normal_cylinder(t_cylinder cylinder, t_vector hit_point)
+{
+	float		m;
+	t_vector	normal;
+	t_vector	axis_point;
+
+	m = dot_product(vector_from_points(cylinder.base_center,
+				hit_point), cylinder.normal);
+	axis_point = vector_add(cylinder.base_center,
+			vector_scale(cylinder.normal, m));
+	normal = vector_from_points(axis_point, hit_point);
+	normalize_vector(&normal);
+	return (normal);
+}
+
 float	define_cylinder_height(t_cylinder cylinder, t_ray ray, float t)
 {
 	float		height;

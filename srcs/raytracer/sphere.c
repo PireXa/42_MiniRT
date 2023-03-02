@@ -12,10 +12,30 @@
 
 #include "../../inc/minirt.h"
 
+void	check_hit_spheres(t_data *data, t_ray ray, t_hit_obj *hit)
+{
+	int			i;
+	float		t;
+
+	i = -1;
+	while (++i < data->nb_objs->nb_spheres)
+	{
+		t = intersect_ray_sphere(ray, data->scene->spheres[i]);
+		if (t)
+		{
+			if (t < hit->t_min)
+			{
+				hit->t_min = t;
+				hit->closest_sphere = i;
+			}
+		}
+	}
+}
+
 float	intersect_ray_sphere(t_ray ray, t_sphere sphere)
 {
-	t_2nd_equation eq;
-	float		radius;
+	float			radius;
+	t_2nd_equation	eq;
 
 	radius = sphere.diameter / 2;
 	eq.oc = vector_from_points(sphere.center, ray.origin);

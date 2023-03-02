@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.c                                            :+:      :+:    :+:   */
+/*   vector3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fde-albe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,40 +12,12 @@
 
 #include "../../inc/minirt.h"
 
-void	check_hit_planes(t_data *data, t_ray ray, t_hit_obj *hit)
+t_vector	transform_vector(t_vector v, float **matrix)
 {
-	int			i;
-	float		t;
+	t_vector	result;
 
-	i = -1;
-	while (++i < data->nb_objs->nb_planes)
-	{
-		t = intersect_ray_plane(ray, data->scene->planes[i]);
-		if (t)
-		{
-			if (t < hit->t_min)
-			{
-				hit->t_min = t;
-				hit->closest_plane = i;
-				hit->closest_sphere = -1;
-			}
-		}
-	}
-}
-
-float	intersect_ray_plane(t_ray ray, t_plane plane)
-{
-	float		t;
-	float		denom;
-	t_vector	p0l0;
-
-	denom = dot_product(plane.normal, ray.direction);
-	if (fabsf(denom) > 0.0001f)
-	{
-		p0l0 = vector_from_points(ray.origin, plane.point);
-		t = dot_product(p0l0, plane.normal) / denom;
-		if (t > 0.0001f)
-			return (t);
-	}
-	return (0);
+	result.x = v.x * matrix[0][0] + v.y * matrix[1][0] + v.z * matrix[2][0];
+	result.y = v.x * matrix[0][1] + v.y * matrix[1][1] + v.z * matrix[2][1];
+	result.z = v.x * matrix[0][2] + v.y * matrix[1][2] + v.z * matrix[2][2];
+	return (result);
 }

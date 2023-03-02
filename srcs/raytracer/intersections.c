@@ -12,13 +12,7 @@
 
 #include "../../inc/minirt.h"
 
-typedef struct s_cyl_height
-{
-	int			i;
-	float		t;
-}				t_cy_h;
-
-t_hit_obj	no_hit_default_values(void)
+/*t_hit_obj	no_hit_default_values(void)
 {
 	t_hit_obj	hit;
 
@@ -36,9 +30,9 @@ t_hit_obj	no_hit_default_values(void)
 	hit.ks = 0.4f;
 	hit.kd = 0.3f;
 	return (hit);
-}
+}*/
 
-void	check_hit_spheres(t_data *data, t_ray ray, t_hit_obj *hit)
+/*void	check_hit_spheres(t_data *data, t_ray ray, t_hit_obj *hit)
 {
 	int			i;
 	float		t;
@@ -56,9 +50,9 @@ void	check_hit_spheres(t_data *data, t_ray ray, t_hit_obj *hit)
 			}
 		}
 	}
-}
+}*/
 
-void	check_hit_planes(t_data *data, t_ray ray, t_hit_obj *hit)
+/*void	check_hit_planes(t_data *data, t_ray ray, t_hit_obj *hit)
 {
 	int			i;
 	float		t;
@@ -77,9 +71,9 @@ void	check_hit_planes(t_data *data, t_ray ray, t_hit_obj *hit)
 			}
 		}
 	}
-}
+}*/
 
-void	check_cylinder_h(t_cylinder cyl, t_ray ray, t_hit_obj *hit, t_cy_h c_h)
+/*void	check_cylinder_h(t_cylinder cyl, t_ray ray, t_hit_obj *hit, t_cy_h c_h)
 {
 	c_h.t = define_cylinder_height(cyl, ray, c_h.t);
 	if (c_h.t && c_h.t < hit->t_min)
@@ -133,9 +127,9 @@ void	check_hit_cylinders(t_data *data, t_ray ray, t_hit_obj *hit)
 			check_cylinder_b(data->scene->cylinders[c_h.i], ray, hit, c_h);
 		}
 	}
-}
+}*/
 
-void	check_hit_triangles(t_data *data, t_ray ray, t_hit_obj *hit)
+/*void	check_hit_triangles(t_data *data, t_ray ray, t_hit_obj *hit)
 {
 	int			i;
 	float		t;
@@ -156,7 +150,7 @@ void	check_hit_triangles(t_data *data, t_ray ray, t_hit_obj *hit)
 			}
 		}
 	}
-}
+}*/
 
 void	hit_sphere(t_data *data, t_hit_obj *hit)
 {

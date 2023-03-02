@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane_checkerboard.c                                       :+:      :+:    :+:   */
+/*   plane_checkerboard.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fde-albe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -61,7 +61,7 @@ int	checkerboard_plane_1(t_chck_pl chck_pl, int x, int y)
 	}
 }
 
-int checkerboard_plane_2(t_chck_pl chck_pl, int x, int y)
+int	checkerboard_plane_2(t_chck_pl chck_pl, int x, int y)
 {
 	if (chck_pl.t < 0)
 	{

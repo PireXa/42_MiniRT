@@ -99,8 +99,10 @@ typedef struct s_progress_bar
 	int	progress;
 }		t_progress_bar;
 
-t_progress_bar	init_progress_bar(t_progress_bar pb)
+t_progress_bar	init_progress_bar(void)
 {
+	t_progress_bar	pb;
+
 	pb.e = 0;
 	pb.x = 0;
 	pb.done = 0;
@@ -112,7 +114,7 @@ void	multi_threaded_progress_bar(t_threads *tdata)
 {
 	t_progress_bar	pb;
 
-	pb = init_progress_bar(pb);
+	pb = init_progress_bar();
 	while (!pb.done)
 	{
 		while (pb.e < THREADS)

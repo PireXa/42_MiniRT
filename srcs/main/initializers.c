@@ -51,8 +51,6 @@ float	**set_cam_wrld_mtrx(t_camera c, t_vector up)
 void	mlx_data_init(t_data *d)
 {
 	d->mlx = mlx_init();
-//	d->mlx_win = mlx_new_window(d->mlx,
-//			WIND_W, WIND_H, "miniRT");
 	d->img.img = mlx_new_image(d->mlx, WIND_W, WIND_H);
 	d->img.addr = mlx_get_data_addr(d->img.img,
 			&d->img.bi_per_pxl,
@@ -85,6 +83,7 @@ void	init_data(t_data *data, char *scene_file)
 			* data->nb_objs->nb_triangles);
 	data->scene->cameras = (t_camera *)malloc(sizeof(t_camera)
 			* data->nb_objs->nb_cameras);
+	data->scene->cameras[0].fov = -1;
 	data->scene->lights = (t_light *)malloc(sizeof(t_light)
 			* data->nb_objs->nb_lights);
 	data->scene->amb_light = (t_ambience *)malloc(sizeof(t_ambience));

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.c                                            :+:      :+:    :+:   */
+/*   no_intersection.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fde-albe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,40 +12,22 @@
 
 #include "../../inc/minirt.h"
 
-void	check_hit_planes(t_data *data, t_ray ray, t_hit_obj *hit)
+t_hit_obj	no_hit_default_values(void)
 {
-	int			i;
-	float		t;
+	t_hit_obj	hit;
 
-	i = -1;
-	while (++i < data->nb_objs->nb_planes)
-	{
-		t = intersect_ray_plane(ray, data->scene->planes[i]);
-		if (t)
-		{
-			if (t < hit->t_min)
-			{
-				hit->t_min = t;
-				hit->closest_plane = i;
-				hit->closest_sphere = -1;
-			}
-		}
-	}
-}
-
-float	intersect_ray_plane(t_ray ray, t_plane plane)
-{
-	float		t;
-	float		denom;
-	t_vector	p0l0;
-
-	denom = dot_product(plane.normal, ray.direction);
-	if (fabsf(denom) > 0.0001f)
-	{
-		p0l0 = vector_from_points(ray.origin, plane.point);
-		t = dot_product(p0l0, plane.normal) / denom;
-		if (t > 0.0001f)
-			return (t);
-	}
-	return (0);
+	hit.t_min = 4535320;
+	hit.closest_sphere = -1;
+	hit.closest_plane = -1;
+	hit.closest_cylinder = -1;
+	hit.closest_triangle = -1;
+	hit.color = 0;
+	hit.normal = (t_vector){0, 0, 0};
+	hit.hit_point = (t_vector){0, 0, 0};
+	hit.light_absorb_ratio = 1;
+	hit.refraction_index = 1;
+	hit.light_absorb_distance = 1;
+	hit.ks = 0.4f;
+	hit.kd = 0.3f;
+	return (hit);
 }

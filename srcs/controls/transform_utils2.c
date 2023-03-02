@@ -18,6 +18,7 @@ t_vector	rotater(t_vector v, char e, float sign)
 	float		ang;
 
 	ang = 0.5f;
+	r = (t_vector){0, 0, 0};
 	if (e == 'x')
 	{
 		r.x = v.x;

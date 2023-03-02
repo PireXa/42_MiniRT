@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   plane.c                                            :+:      :+:    :+:   */
+/*   multi_threading.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fde-albe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,40 +12,30 @@
 
 #include "../../inc/minirt.h"
 
-void	check_hit_planes(t_data *data, t_ray ray, t_hit_obj *hit)
+void	multi_threading(t_data *data)
 {
 	int			i;
-	float		t;
+	int			step;
+	pthread_t	threads[THREADS];
+	t_threads	threads_data[THREADS];
 
+	i = 0;
+	step = (int)ceil((double)(WIND_W / THREADS));
+	while (i < THREADS)
+	{
+		threads_data[i].data = data;
+		threads_data[i].thread_id = i;
+		if (i == 0)
+			threads_data[i].x_min = 0;
+		else
+			threads_data[i].x_min = threads_data[i - 1].x_max;
+		threads_data[i].x = threads_data[i].x_min;
+		threads_data[i].x_max = threads_data[i].x_min + step;
+		pthread_create(&threads[i], NULL, (void *)ray_tracer, &threads_data[i]);
+		i++;
+	}
+	multi_threaded_progress_bar(threads_data);
 	i = -1;
-	while (++i < data->nb_objs->nb_planes)
-	{
-		t = intersect_ray_plane(ray, data->scene->planes[i]);
-		if (t)
-		{
-			if (t < hit->t_min)
-			{
-				hit->t_min = t;
-				hit->closest_plane = i;
-				hit->closest_sphere = -1;
-			}
-		}
-	}
-}
-
-float	intersect_ray_plane(t_ray ray, t_plane plane)
-{
-	float		t;
-	float		denom;
-	t_vector	p0l0;
-
-	denom = dot_product(plane.normal, ray.direction);
-	if (fabsf(denom) > 0.0001f)
-	{
-		p0l0 = vector_from_points(ray.origin, plane.point);
-		t = dot_product(p0l0, plane.normal) / denom;
-		if (t > 0.0001f)
-			return (t);
-	}
-	return (0);
+	while (++i < THREADS)
+		pthread_join(threads[i], NULL);
 }

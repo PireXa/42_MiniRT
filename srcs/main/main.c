@@ -23,7 +23,7 @@ long int	current_time_millis(void)
 void	loop(t_data *data)
 {
 	multi_threading(data);
-	data->mlx_win = mlx_new_window(data->mlx, WIND_W, WIND_H, "RTX");
+	data->mlx_win = mlx_new_window(data->mlx, WIND_W, WIND_H, "miniRT");
 	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
 	controls(data);
 	printf("Render time: %ld ms\n",
@@ -48,7 +48,7 @@ int	main(int argc, char **argv)
 	if (data->nb_objs->nb_cameras == 0)
 		return (printf("\033[31mError\nNo cameras found in scene\n"));
 	printf("Parsing scene...\n");
-	parser(argv[1], data->scene);
+	parser(argv[1], data);
 	printf("Rendering...\n");
 	loop(data);
 }

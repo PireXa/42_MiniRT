@@ -27,6 +27,7 @@ int	key_press(int key, t_data *data)
 
 	if (key == key_TAB)
 	{
+		cmd = 0;
 		cmd = print_message(cmd);
 		obj_code = ft_split(cmd, ' ');
 		code[0] = checkcode(obj_code[0]);
@@ -41,8 +42,14 @@ int	key_press(int key, t_data *data)
 	return (0);
 }
 
+int	exit_window(t_data *data)
+{
+	free_all(data, 0);
+	return (0);
+}
+
 void	controls(t_data *data)
 {
 	mlx_hook(data->mlx_win, 2, 1L << 0, key_press, data);
-	mlx_hook(data->mlx_win, 17, 1L << 17, free_all, data);
+	mlx_hook(data->mlx_win, 17, 1L << 17, exit_window, data);
 }
