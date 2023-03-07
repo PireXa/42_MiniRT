@@ -37,6 +37,15 @@ void	free_view_matrix(t_camera *cameras, int nb_cameras)
 	}
 }
 
+void	reach_eof(int fd, t_data *data)
+{
+	while (data->line)
+	{
+		free(data->line);
+		data->line = get_next_line(fd);
+	}
+}
+
 int	free_all(t_data *data, int exit_code)
 {
 	mlx_destroy_image(data->mlx, data->img.img);
@@ -55,6 +64,11 @@ int	free_all(t_data *data, int exit_code)
 	free(data->scene->triangles);
 	free(data->scene);
 	free(data->nb_objs);
+	if (data->params)
+		free_double_array(data->params);
+	if (data->line)
+		reach_eof(data->fd, data);
+	close(data->fd);
 	free(data);
 	exit(exit_code);
 }

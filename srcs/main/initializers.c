@@ -28,6 +28,8 @@ float	**set_cam_wrld_mtrx(t_camera c, t_vector up)
 	t_vector	x_axis;
 	t_vector	y_axis;
 
+	if (c.normal.x == 0 && c.normal.y == 1 && c.normal.z == 0)
+		up = (t_vector){0, 0, -1};
 	m = malloc(sizeof(float *) * 4);
 	m[0] = malloc(sizeof(float) * 4);
 	m[1] = malloc(sizeof(float) * 4);
@@ -51,6 +53,7 @@ float	**set_cam_wrld_mtrx(t_camera c, t_vector up)
 void	mlx_data_init(t_data *d)
 {
 	d->mlx = mlx_init();
+	d->mlx_win = NULL;
 	d->img.img = mlx_new_image(d->mlx, WIND_W, WIND_H);
 	d->img.addr = mlx_get_data_addr(d->img.img,
 			&d->img.bi_per_pxl,
@@ -66,12 +69,6 @@ void	nb_objs_init(t_data *data, char *scene_file)
 	data->nb_objs->nb_triangles = triangle_counter(scene_file);
 	data->nb_objs->nb_cameras = camera_counter(scene_file);
 	data->nb_objs->nb_lights = light_counter(scene_file);
-}
-
-void	init_data(t_data *data, char *scene_file)
-{
-	mlx_data_init(data);
-	nb_objs_init(data, scene_file);
 	data->scene = (t_scene *)malloc(sizeof(t_scene));
 	data->scene->spheres = (t_sphere *)malloc(sizeof(t_sphere)
 			* data->nb_objs->nb_spheres);
@@ -86,6 +83,12 @@ void	init_data(t_data *data, char *scene_file)
 	data->scene->cameras[0].fov = -1;
 	data->scene->lights = (t_light *)malloc(sizeof(t_light)
 			* data->nb_objs->nb_lights);
+}
+
+void	init_data(t_data *data, char *scene_file)
+{
+	mlx_data_init(data);
+	nb_objs_init(data, scene_file);
 	data->scene->amb_light = (t_ambience *)malloc(sizeof(t_ambience));
 	data->fps.frame_time = time(NULL);
 	data->fps.frame_ctr = 0;
@@ -94,4 +97,7 @@ void	init_data(t_data *data, char *scene_file)
 	data->edit_mode = 0;
 	data->camera_index = 0;
 	data->normal_mode = 0;
+	data->line = NULL;
+	data->params = NULL;
+	data->fd = 0;
 }

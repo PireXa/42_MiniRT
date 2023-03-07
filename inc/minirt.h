@@ -27,7 +27,6 @@
 # include "mlx.h"
 # include "get_next_line.h"
 
-
 /*# define WIND_W 100.00f
 # define WIND_H 50.00f*/
 # define WIND_W 840.00f
@@ -39,7 +38,7 @@
 # define LUMENS 10000
 # define REFLECTION_DEPTH 25
 # ifndef THREADS
-#	define	THREADS		4
+#  define THREADS 4
 # endif
 
 typedef struct s_img
@@ -64,7 +63,7 @@ typedef struct s_vector
 	float	z;
 }				t_vector;
 
-typedef struct	s_2nd_equation
+typedef struct s_2nd_equation
 {
 	t_vector	oc;
 	float		a;
@@ -76,9 +75,9 @@ typedef struct	s_2nd_equation
 
 typedef struct s_ref_cap
 {
-	int 		depth;
-	float		light_int;
-}				t_ref_cap;
+	int		depth;
+	float	light_int;
+}			t_ref_cap;
 
 typedef struct s_ray
 {
@@ -219,16 +218,19 @@ typedef struct s_data
 	long int	start_render_time;
 	int			camera_index;
 	int			edit_mode;
-	int 		normal_mode;
+	int			normal_mode;
+	char		*line;
+	char		**params;
+	int			fd;
 }				t_data;
 
 typedef struct s_thread_data {
-	t_data		*data;
-	int 		thread_id;
-	int 		x_min;
-	int			x;
-	int			x_max;
-}				t_threads;
+	t_data	*data;
+	int		thread_id;
+	int		x_min;
+	int		x;
+	int		x_max;
+}			t_threads;
 
 //GRAPHICS
 int			background_color(int y, int color1, int color2);
@@ -240,16 +242,21 @@ int			checkerboard_sphere(t_vector hit_point, t_sphere sphere);
 void		check_hit_spheres(t_data *data, t_ray ray, t_hit_obj *hit);
 void		check_hit_planes(t_data *data, t_ray ray, t_hit_obj *hit);
 void		check_hit_cylinders(t_data *data, t_ray ray, t_hit_obj *hit);
-void		check_cylinder_b(t_cylinder cyl, t_ray ray, t_hit_obj *hit, t_cy_h c_h);
-void		check_cylinder_t(t_cylinder cyl, t_ray ray, t_hit_obj *hit, t_cy_h c_h);
-void		check_cylinder_h(t_cylinder cyl, t_ray ray, t_hit_obj *hit, t_cy_h c_h);
+void		check_cylinder_b(t_cylinder cyl, t_ray ray,
+				t_hit_obj *hit, t_cy_h c_h);
+void		check_cylinder_t(t_cylinder cyl, t_ray ray,
+				t_hit_obj *hit, t_cy_h c_h);
+void		check_cylinder_h(t_cylinder cyl, t_ray ray,
+				t_hit_obj *hit, t_cy_h c_h);
 void		check_hit_triangles(t_data *data, t_ray ray, t_hit_obj *hit);
 int			check_shadow(t_data *data, t_ray ray, t_vector hit_pnt, t_light l);
 float		define_cylinder_height(t_cylinder cylinder, t_ray ray, float t);
 float		fresnel(float n2, t_vector i_dir, t_vector nor, float l_rflct);
 t_hit_obj	get_closest_intersection(t_data *data, t_ray ray);
-t_hit_obj	get_reflect_color(t_data *d, t_ray rflct_ray, t_hit_obj h, float *f);
-t_hit_obj	get_refract_color(t_data *d, t_ray rfrct_ray, t_hit_obj h, float *b);
+t_hit_obj	get_reflect_color(t_data *d, t_ray rflct_ray,
+				t_hit_obj h, float *f);
+t_hit_obj	get_refract_color(t_data *d, t_ray rfrct_ray,
+				t_hit_obj h, float *b);
 float		intersect_ray_cylinder(t_ray ray, t_cylinder cylinder);
 float		intersect_ray_cylinder_bottom(t_ray ray, t_cylinder cylinder);
 float		intersect_ray_cylinder_top(t_ray ray, t_cylinder cylinder);
@@ -262,24 +269,30 @@ t_vector	normal_triangle(t_triangle triangle);
 t_hit_obj	no_hit_default_values(void);
 void		put_pxl(t_img *img, int x, int y, int color);
 void		ray_tracer(t_threads *tdata);
-int			reflection_refraction(t_data *dt, t_ray r, t_hit_obj h, t_ref_cap cap);
+int			reflection_refraction(t_data *dt, t_ray r,
+				t_hit_obj h, t_ref_cap cap);
 int			shading(t_hit_obj hit, t_ray ray, t_data *data);
 
 //CONTROLS
 void		controls(t_data *data);
 
 //PARSING
+void		ambience_parser(char **p, t_data *data);
+int			ambience_counter(char *file);
 int			camera_counter(char *file);
+int			camera_parser(char **params, t_data *d, int m, int lcnt);
 int			cylinder_counter(char *file);
-int          cylinder_parser(char **params, t_data *data, int i, int line_count); // ALTEREI
+int			cylinder_parser(char **params, t_data *data, int i, int line_count);
 float		get_material_data(char *mat_ref, int data);
 int			light_counter(char *file);
-void      parser(char *file,  t_data *data); // ALTEREI
+int			light_parser(char **params, t_data *data, int n, int line_count);
+void		parser(char *file, t_data *data);
 int			plane_counter(char *file);
-int          plane_parser(char **params, t_data *data, int i, int lcnt);
+int			plane_parser(char **params, t_data *data, int i, int lcnt);
 int			sphere_counter(char *file);
-int          sphere_parser(char **params, t_data *data, int i, int line_count); // ALTEREI
+int			sphere_parser(char **params, t_data *data, int i, int line_count);
 int			triangle_counter(char *file);
+int			triangle_parser(char **params, t_data *d, int l, int line_count);
 
 //VECTOR UTILS
 t_vector	cross_product(t_vector vector1, t_vector vector2);
@@ -313,10 +326,11 @@ char		*ft_itoa(int n);
 char		**ft_split(char const *s, char c);
 int			ft_strncmp(char *s1, char *s2, int n);
 char		**tab_space_split(char const *s);
-int          free_all(t_data *data, int exit_code);
+int			free_all(t_data *data, int exit_code);
 void		free_double_array(char **array);
 void		ft_bzero(void *s, size_t n);
-int    		rgb_to_int(int r, int g, int b);
+int			rgb_to_int(int r, int g, int b);
+void		reach_eof(int fd, t_data *data);
 
 // THREADS
 
@@ -327,10 +341,9 @@ void		multi_threading(t_data *data);
 char		checkcode(char *line);
 void		clean_slate(t_data *g);
 void		put_new_img(t_data *data);
-void		init_graphics(t_data *data);
 t_vector	rotater(t_vector v, char e, float sign);
 void		transform_sphere(t_data *data, char code[3], int n, float value);
-void		transform_plane(t_data *data, char code[3], int n, float valute);
+void		transform_plane(t_data *data, char code[3], int n, float value);
 void		transform_lights(t_data *data, char code[3], int n, float value);
 void		transform_cylinders1(t_data *data, char code[3], int n, float val);
 void		transform_cylinders2(t_data *data, char code[3], int n);
@@ -344,6 +357,7 @@ void		key_translations(t_data *data, int key, char *code, int n);
 void		key_resize(t_data *data, int key, char *code, int n);
 void		key_rotation(t_data *data, int key, char *code, int n);
 void		key_height(t_data *data, int key, char *code, int n);
+void		re_render(t_data *data);
 
 // KEYS
 
@@ -370,15 +384,5 @@ enum e_keys{
 	key_V = 118,
 	key_N = 110,
 };
-
-
-
-int          triangle_parser(char **params, t_data *d, int l, int line_count); // ALTEREI
-int          camera_parser(char **params, t_data *data, int m, int lcnt); // ALTEREI
-int          light_parser(char **params, t_data *data, int n, int line_count); // ALTEREI
-void      ambience_parser(char **params, t_data *data); // ALTEREI
-
-
-
 
 #endif

@@ -33,7 +33,7 @@ void	loop(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	t_data		*data;
+	t_data	*data;
 
 	if (argc != 2)
 		return (printf("\033[31mError\nCorrect: ./miniRT scenes/(file.rt)\n"));
@@ -43,12 +43,18 @@ int	main(int argc, char **argv)
 		return (printf("\033[31mError\nIncorrect file type\n"));
 	if (ft_strncmp(".rt", argv[1] + ft_strlen(argv[1]) - 3, 3))
 		return (printf("\033[31mError\nFile extension must be .rt\n"));
+	if (camera_counter(argv[1]) == 0)
+		return (printf("\033[31mError\nNo cameras found in scene\n"));
 	data = (t_data *)malloc(sizeof(t_data));
 	init_data(data, argv[1]);
-	if (data->nb_objs->nb_cameras == 0)
-		return (printf("\033[31mError\nNo cameras found in scene\n"));
 	printf("Parsing scene...\n");
 	parser(argv[1], data);
+	if (ambience_counter(argv[1]) != 1)
+	{
+		reach_eof(data->fd, data);
+		free_all(data, printf("\033[31mError\n"
+				"Ambience must be defined once and only once.\033[0m\n"));
+	}
 	printf("Rendering...\n");
 	loop(data);
 }

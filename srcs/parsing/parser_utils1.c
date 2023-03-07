@@ -14,6 +14,12 @@
 
 int	rgb_to_int(int r, int g, int b)
 {
+	if (r > 255)
+		exit(printf("\033[31mError\nRed value too high\033[0m\n"));
+	if (g > 255)
+		exit(printf("\033[31mError\nGreen value too high\033[0m\n"));
+	if (b > 255)
+		exit(printf("\033[31mError\nBlue value too high\033[0m\n"));
 	return (r << 16 | g << 8 | b);
 }
 
@@ -22,6 +28,8 @@ void	free_double_array(char **array)
 	int	i;
 
 	i = -1;
+	if (!array)
+		return ;
 	while (array[++i])
 		free(array[i]);
 	free(array);
@@ -68,6 +76,8 @@ int	double_array_len(char **array)
 	int	i;
 
 	i = 0;
+	if (!array)
+		return (0);
 	while (array[i])
 		i++;
 	return (i);

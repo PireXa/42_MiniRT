@@ -42,7 +42,7 @@ void	key_out(int key, t_data *data)
 
 void	key_translations(t_data *data, int key, char *code, int n)
 {
-	if (data->edit_mode == 1)
+	if (data->edit_mode == 1 && code[0] != '0')
 	{
 		if (key == key_LEFT)
 			transform(data, (char [3]){code[0], '2', '1'}, n, 0.5f);
@@ -56,22 +56,16 @@ void	key_translations(t_data *data, int key, char *code, int n)
 			transform(data, (char [3]){code[0], '2', '5'}, n, 0.5f);
 		else if (key == key_C)
 			transform(data, (char [3]){code[0], '2', '6'}, n, 0.5f);
-		clean_slate(data);
-		multi_threading(data);
-		put_new_img(data);
 	}
 }
 
 void	key_resize(t_data *data, int key, char *code, int n)
 {
-	if (data->edit_mode == 1)
+	if (data->edit_mode == 1 && code[0] != '0')
 	{
 		if (key == key_D)
 			transform(data, (char [3]){code[0], '1', '1'}, n, 0.5f);
 		else if (key == key_F)
 			transform(data, (char [3]){code[0], '1', '2'}, n, 0.5f);
-		clean_slate(data);
-		multi_threading(data);
-		put_new_img(data);
 	}
 }

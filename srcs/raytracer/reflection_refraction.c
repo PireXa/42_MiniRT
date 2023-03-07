@@ -37,47 +37,6 @@ t_vector	calc_refracted_ray(float n1, float n2, t_vector ray, t_vector n)
 	return (refracted_ray);
 }
 
-/*t_hit_obj	get_reflect_color(t_data *d, t_ray rflct_ray, t_hit_obj h, float *f)
-{
-	t_hit_obj	reflect_hit;
-
-	reflect_hit = get_closest_intersection(d, rflct_ray);
-	if (reflect_hit.t_min < 4535320)
-		reflect_hit.color = shading(reflect_hit, rflct_ray, d);
-	else
-	{
-		*f = -5.0f;
-		reflect_hit.color = h.color;
-	}
-	return (reflect_hit);
-}
-
-t_hit_obj	get_refract_color(t_data *d, t_ray rfrct_ray, t_hit_obj h, float *b)
-{
-	t_hit_obj	refract_hit;
-
-	refract_hit = get_closest_intersection(d, rfrct_ray);
-	if (refract_hit.t_min < 0.001f)
-	{
-		rfrct_ray.origin = vector_add(h.hit_point,
-				vector_scale(rfrct_ray.direction, refract_hit.t_min + 0.01f));
-		refract_hit = get_closest_intersection(d, rfrct_ray);
-	}
-	*b = 1.0f - expf(-h.light_absorb_distance * refract_hit.t_min);
-	rfrct_ray.origin = vector_add(h.hit_point,
-			vector_scale(rfrct_ray.direction, refract_hit.t_min));
-	rfrct_ray.origin = vector_add(rfrct_ray.origin,
-			vector_scale(refract_hit.normal, 0.001f));
-	rfrct_ray.direction = calc_refracted_ray(h.refraction_index, 1.0f,
-			rfrct_ray.direction, vector_scale(h.normal, -1));
-	refract_hit = get_closest_intersection(d, rfrct_ray);
-	if (refract_hit.t_min < 4535320)
-		refract_hit.color = shading(refract_hit, rfrct_ray, d);
-	else
-		refract_hit.color = h.color;
-	return (refract_hit);
-}*/
-
 //fresnel = reflectance
 //1 - fresnel = transmittance
 

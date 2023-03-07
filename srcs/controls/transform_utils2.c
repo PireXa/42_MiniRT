@@ -17,7 +17,7 @@ t_vector	rotater(t_vector v, char e, float sign)
 	t_vector	r;
 	float		ang;
 
-	ang = 0.5f;
+	ang = 0.1f;
 	r = (t_vector){0, 0, 0};
 	if (e == 'x')
 	{
@@ -103,6 +103,7 @@ void	transform_cylinders(t_data *data, char code[3], int n, float value)
 		else if (code[2] == '2' && data->scene->cylinders[n].height > 0)
 			data->scene->cylinders[n].height -= value;
 	}
+	re_render(data);
 }
 
 void	transform_cameras1(t_data *data, char code[3], int n, float value)

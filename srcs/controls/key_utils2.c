@@ -14,7 +14,7 @@
 
 void	key_rotation(t_data *data, int key, char *code, int n)
 {
-	if (data->edit_mode == 1)
+	if (data->edit_mode == 1 && code[0] != '0')
 	{
 		if (key == key_X)
 			transform(data, (char [3]){code[0], '3', '1'}, n, 0.5f);
@@ -28,22 +28,16 @@ void	key_rotation(t_data *data, int key, char *code, int n)
 			transform(data, (char [3]){code[0], '3', '5'}, n, 0.5f);
 		else if (key == key_K)
 			transform(data, (char [3]){code[0], '3', '6'}, n, 0.5f);
-		clean_slate(data);
-		multi_threading(data);
-		put_new_img(data);
 	}
 }
 
 void	key_height(t_data *data, int key, char *code, int n)
 {
-	if (data->edit_mode == 1)
+	if (data->edit_mode == 1 && code[0] != '0')
 	{
 		if (key == key_E)
 			transform(data, (char [3]){code[0], '4', '1'}, n, 0.5f);
 		else if (key == key_R)
 			transform(data, (char [3]){code[0], '4', '2'}, n, 0.5f);
-		clean_slate(data);
-		multi_threading(data);
-		put_new_img(data);
 	}
 }

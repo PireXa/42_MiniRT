@@ -21,7 +21,7 @@ void	triangle_parser1(char **params, t_data *data, int l, int lcnt)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d :"
-				" triangle point 1 not valid\n", lcnt));
+				" triangle point 1 not valid\033[0m\n", lcnt));
 	}
 	data->scene->triangles[l].p1.x = ft_atof(sub_params[0]);
 	data->scene->triangles[l].p1.y = ft_atof(sub_params[1]);
@@ -32,7 +32,7 @@ void	triangle_parser1(char **params, t_data *data, int l, int lcnt)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d :"
-				" triangle point 2 not valid\n", lcnt));
+				" triangle point 2 not valid\033[0m\n", lcnt));
 	}
 	data->scene->triangles[l].p2.x = ft_atof(sub_params[0]);
 	data->scene->triangles[l].p2.y = ft_atof(sub_params[1]);
@@ -49,7 +49,7 @@ void	triangle_parser2(char **params, t_data *data, int l, int lcnt)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d :"
-				" triangle point 3 not valid\n", lcnt));
+				" triangle point 3 not valid\033[0m\n", lcnt));
 	}
 	data->scene->triangles[l].p3.x = ft_atof(sub_params[0]);
 	data->scene->triangles[l].p3.y = ft_atof(sub_params[1]);
@@ -60,7 +60,7 @@ void	triangle_parser2(char **params, t_data *data, int l, int lcnt)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d :"
-				" triangle color not valid\n", lcnt));
+				" triangle color not valid\033[0m\n", lcnt));
 	}
 	data->scene->triangles[l].color = rgb_to_int(ft_atoi(sub_params[0]),
 			ft_atoi(sub_params[1]),

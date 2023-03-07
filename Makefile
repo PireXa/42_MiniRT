@@ -18,13 +18,15 @@ SRCS		=	main/main.c main/initializers.c main/free.c \
 
 OBJS		=	$(addprefix objs/,$(SRCS:.c=.o))
 
+MLX			=	mlx_linux/libmlx_Linux.a
+
 THREADS = $(shell nproc --all)
 
-CFLAGS		= 	-g -Wall -Wextra -Werror -D THREADS=$(THREADS)#-ffast-math
+CFLAGS		= 	-g -Wall -Wextra -Werror -D THREADS=$(THREADS)
 
 RM		=	rm -f
 
-NAME		=	minirt
+NAME		=	miniRT
 
 all:		$(NAME)
 
@@ -39,7 +41,10 @@ objs/%.o: srcs/%.c
 			@mkdir -p objs/textures
 			$(CC) $(CFLAGS) -I/usr/include -Imlx_linux -O3 -c $< -o $@
 
-$(NAME): 	$(OBJS)
+$(MLX):
+			@make -C mlx_linux
+
+$(NAME): 	$(OBJS) $(MLX)
 			$(CC) $(CFLAGS) $(OBJS) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -lpthread -o $(NAME)
 
 clean:

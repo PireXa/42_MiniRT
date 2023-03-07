@@ -21,7 +21,7 @@ void	camera_parser1(char **params, t_data *data, int m, int lcnt)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d :"
-				" camera origin not valid\n", lcnt));
+				" camera origin not valid\033[0m\n", lcnt));
 	}
 	data->scene->cameras[m].origin.x = ft_atof(sub_params[0]);
 	data->scene->cameras[m].origin.y = ft_atof(sub_params[1]);
@@ -38,7 +38,7 @@ void	camera_parser2(char **params, t_data *data, int m, int lcnt)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d :"
-				" camera normal not valid\n", lcnt));
+				" camera normal not valid\033[0m\n", lcnt));
 	}
 	data->scene->cameras[m].normal.x = ft_atof(sub_params[0]);
 	data->scene->cameras[m].normal.y = ft_atof(sub_params[1]);
@@ -53,6 +53,11 @@ int	camera_parser(char **params, t_data *data, int m, int lcnt)
 	{
 		camera_parser1(params, data, m, lcnt);
 		camera_parser2(params, data, m, lcnt);
+		if (!params[3] || ft_atof(params[3]) < 0 || ft_atof(params[3]) > 180)
+		{
+			free_all(data, printf("\033[31mError\nLine %d :"
+					" camera fov not valid\033[0m\n", lcnt));
+		}
 		data->scene->cameras[m].fov = ft_atof(params[3]);
 		data->scene->cameras[m].view_matrix
 			= set_cam_wrld_mtrx(data->scene->cameras[m],

@@ -23,6 +23,8 @@ float	ft_atof(char *str)
 	decimal = 0;
 	sign = 1;
 	i = 0;
+	if (ft_strncmp(str, "0", 2) == 0)
+		return (0.00001f);
 	if (str[i] == '-')
 	{
 		sign = -1;

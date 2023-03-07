@@ -19,18 +19,18 @@ void	clean_slate(t_data *g)
 
 char	checkcode(char *line)
 {
-	if (ft_strncmp(line, "sp", 3) == 0)
+	if (ft_strncmp(line, "sp\0", 3) == 0)
 		return ('1');
-	else if (ft_strncmp(line, "pl", 3) == 0)
+	else if (ft_strncmp(line, "pl\0", 3) == 0)
 		return ('2');
-	else if (ft_strncmp(line, "cy", 3) == 0)
+	else if (ft_strncmp(line, "cy\0", 3) == 0)
 		return ('3');
-	else if (ft_strncmp(line, "l", 2) == 0)
+	else if (ft_strncmp(line, "l\0", 2) == 0)
 		return ('4');
-	else if (ft_strncmp(line, "c", 2) == 0)
+	else if (ft_strncmp(line, "c\0", 2) == 0)
 		return ('5');
 	else
-		return ('-');
+		return ('0');
 }
 
 void	transform_cameras2(t_data *data, char code[3], int n)
@@ -66,6 +66,7 @@ void	transform_cameras(t_data *data, char code[3], int n, float value)
 {
 	transform_cameras1(data, code, n, value);
 	transform_cameras2(data, code, n);
+	re_render(data);
 }
 
 void	transform(t_data *data, char code[3], int n, float value)

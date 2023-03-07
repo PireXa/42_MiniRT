@@ -21,7 +21,7 @@ void	plane_parser1(char **params, t_data *data, int j, int line_count)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d : plane point "
-				"coordinates not valid\n", line_count));
+				"coordinates not valid\033[0m\n", line_count));
 	}
 	data->scene->planes[j].point.x = ft_atof(sub_params[0]);
 	data->scene->planes[j].point.y = ft_atof(sub_params[1]);
@@ -32,7 +32,7 @@ void	plane_parser1(char **params, t_data *data, int j, int line_count)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d : plane normal "
-				"not valid\n", line_count));
+				"not valid\033[0m\n", line_count));
 	}
 	data->scene->planes[j].normal.x = ft_atof(sub_params[0]);
 	data->scene->planes[j].normal.y = ft_atof(sub_params[1]);
@@ -78,8 +78,8 @@ int	plane_parser(char **params, t_data *data, int j, int lcnt)
 		if (double_array_len(sub_params) != 3)
 		{
 			free_double_array(sub_params);
-			free_all(data, printf("Error\nLine %d : plane "
-					"color not valid\n", lcnt));
+			free_all(data, printf("\033[31mError\nLine %d : plane "
+					"color not valid\033[0m\n", lcnt));
 		}
 		data->scene->planes[j].color = rgb_to_int(ft_atoi(sub_params[0]),
 				ft_atoi(sub_params[1]),

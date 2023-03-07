@@ -21,7 +21,7 @@ void	sphere_parser1(char **params, t_data *data, int i, int linecount)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d : sphere center "
-				"coordinates not valid\n", linecount));
+				"coordinates not valid\033[0m\n", linecount));
 	}
 	data->scene->spheres[i].center.x = ft_atof(sub_params[0]);
 	data->scene->spheres[i].center.y = ft_atof(sub_params[1]);
@@ -33,7 +33,7 @@ void	sphere_parser1(char **params, t_data *data, int i, int linecount)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d : sphere "
-				"color not valid\n", linecount));
+				"color not valid\033[0m\n", linecount));
 	}
 	data->scene->spheres[i].color = rgb_to_int(ft_atoi(sub_params[0]),
 			ft_atoi(sub_params[1]),

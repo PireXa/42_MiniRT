@@ -18,6 +18,13 @@ void	put_new_img(t_data *data)
 	data->start_render_time = current_time_millis();
 }
 
+void	re_render(t_data *data)
+{
+	clean_slate(data);
+	multi_threading(data);
+	put_new_img(data);
+}
+
 int	key_press(int key, t_data *data)
 {
 	char		*cmd;
@@ -34,11 +41,14 @@ int	key_press(int key, t_data *data)
 		n = ft_atoi(obj_code[1]);
 		free_editor(obj_code, cmd, data);
 	}
-	key_out(key, data);
-	key_translations(data, key, code, n);
-	key_resize(data, key, code, n);
-	key_rotation(data, key, code, n);
-	key_height(data, key, code, n);
+	else
+	{
+		key_out(key, data);
+		key_translations(data, key, code, n);
+		key_resize(data, key, code, n);
+		key_rotation(data, key, code, n);
+		key_height(data, key, code, n);
+	}
 	return (0);
 }
 

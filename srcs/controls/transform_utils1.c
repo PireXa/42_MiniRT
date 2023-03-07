@@ -36,6 +36,7 @@ void	transform_sphere(t_data *data, char code[3], int n, float value)
 		else if (code[2] == '6')
 			data->scene->spheres[n].center.y -= value;
 	}
+	re_render(data);
 }
 
 void	transform_plane1(t_data *data, char code[3], int n, float value)
@@ -83,6 +84,7 @@ void	transform_plane(t_data *data, char code[3], int n, float valute)
 		transform_plane1(data, code, n, valute);
 	else if (code[1] == '3')
 		transform_plane2(data, code, n);
+	re_render(data);
 }
 
 void	transform_lights(t_data *data, char code[3], int n, float value)
@@ -109,4 +111,5 @@ void	transform_lights(t_data *data, char code[3], int n, float value)
 		else if (code[2] == '6')
 			data->scene->lights[n].origin.y -= value;
 	}
+	re_render(data);
 }

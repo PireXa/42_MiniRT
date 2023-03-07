@@ -21,7 +21,7 @@ void	cylinder_parser1(char **params, t_data *data, int k, int line_count)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d : "
-				"cylinder base center not valid\n", line_count));
+				"cylinder base center not valid\033[0m\n", line_count));
 	}
 	data->scene->cylinders[k].base_center.x = ft_atof(sub_params[0]);
 	data->scene->cylinders[k].base_center.y = ft_atof(sub_params[1]);
@@ -39,7 +39,7 @@ void	cylinder_parser2(char **params, t_data *data, int k, int line_count)
 	{
 		free_double_array(sub_params);
 		free_all(data, printf("\033[31mError\nLine %d : "
-				"cylinder normal not valid\n", line_count));
+				"cylinder axis not valid\033[0m\n", line_count));
 	}
 	v1.x = ft_atof(sub_params[0]);
 	v1.y = ft_atof(sub_params[1]);
@@ -86,7 +86,7 @@ int	cylinder_parser(char **params, t_data *data, int k, int line_count)
 		sub_params = ft_split(params[5], ',');
 		if (double_array_len(sub_params) != 3)
 			exit(printf("\033[31mError\nLine %d : cylinder color "
-					"not valid\n", line_count));
+					"not valid\033[0m\n", line_count));
 		data->scene->cylinders[k].color = rgb_to_int(ft_atoi(sub_params[0]),
 				ft_atoi(sub_params[1]),
 				ft_atoi(sub_params[2]));
