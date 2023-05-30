@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MINIRT                                             :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rdas-nev <rdas-nev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 4242/42/42 42:42:42 by rdas-nev          #+#    #+#             */
-/*   Updated: 4242/42/42 42:42:42 by rdas-nev         ###   ########.fr       */
+/*   Updated: 2023/05/30 12:51:35 by fde-albe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	validate_obj(char *param, t_data *data, int lcount, char *line)
 		&& ft_strncmp(param, "L", 2) && ft_strncmp(param, "sp", 3)
 		&& ft_strncmp(param, "pl", 3) && ft_strncmp(param, "cy", 3)
 		&& ft_strncmp(param, "tr", 3) && ft_strncmp(param, "\n", 2)
-		&& ft_strncmp(param, "#", 1))
+		&& ft_strncmp(param, "#", 1) && ft_strncmp(param, "R", 2))
 	{
 		free_all(data, printf("\033[31mError\nInvalid "
 				"object at line %d\033[0m\n", lcount));
