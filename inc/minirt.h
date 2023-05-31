@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MINIRT                                             :+:      :+:    :+:   */
+/*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rdas-nev <rdas-nev@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 4242/42/42 42:42:42 by rdas-nev          #+#    #+#             */
-/*   Updated: 4242/42/42 42:42:42 by rdas-nev         ###   ########.fr       */
+/*   Updated: 2023/05/31 11:07:00 by fde-albe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@
 
 /*# define WIND_W 100.00f
 # define WIND_H 50.00f*/
-# define WIND_W 840.00f
-# define WIND_H 680.00f
+/*# define WIND_W 840.00f
+# define WIND_H 680.00f*/
 /*# define WIND_W 1920.00f
 # define WIND_H 1080.00f*/
+# define WIND_W 3840.00f
+# define WIND_H 2160.00f
 # define BACKGROUND1 0xF525E0
 # define BACKGROUND2 0x03CFFC
 # define LUMENS 10000
